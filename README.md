@@ -1,5 +1,5 @@
 <!-- badges: start --> 
-[![docs](https://github.com/IMMM-SFA/khan-etal_2022_im3gcamusa/actions/workflows/docs.yaml/badge.svg?branch=main)](https://github.com/IMMM-SFA/khan-etal_2022_im3gcamusa/actions/workflows/docs.yaml)
+[![docs](https://github.com/JGCRI/khan-etal_2022_im3gcamusa/actions/workflows/docs.yaml/badge.svg?branch=main)](https://github.com/JGCRI/khan-etal_2022_im3gcamusa/actions/workflows/docs.yaml)
 _Zenodo badge to go here_
 <!-- badges: end -->
 # khan-etal_2022_tethysSSPRCP
@@ -8,5 +8,5 @@ Meta-repository for: *Khan, Z., Thompson, I., Vernon, C., 2022. A global gridded
 
 <br>
 <p align="center">
-<a href="https://immm-sfa.github.io/khan-etal_2022_tethysSSPRCP/articles/vignette_metarepo.html" target="_blank"><img src="https://github.com/JGCRI/jgcricolors/blob/main/vignettes/button_metarepo.PNG?raw=true" height="60"/></a>
+<a href="https://jgcri.github.io/khan-etal_2022_tethysSSPRCP/articles/vignette_metarepo.html" target="_blank"><img src="https://github.com/JGCRI/jgcricolors/blob/main/vignettes/button_metarepo.PNG?raw=true" height="60"/></a>
 </p>
