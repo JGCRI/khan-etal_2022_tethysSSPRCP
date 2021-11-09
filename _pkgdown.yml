@@ -1,0 +1,13 @@
+title: khan_etal_2022_tethysSSPRCP
+
+navbar:
+  type: inverse
+  left:
+    - icon: fa-home
+      href: index.html
+    - text: "Meta Repository"
+      icon: fas fa-book
+      href: articles/vignette_metarepo.html
+      
+toc:
+  depth: 3
