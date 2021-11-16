@@ -13,9 +13,11 @@ Suggests:
     rmarkdown,
     knitr,
 	pander,
-	kableExtra
+	kableExtra,
+	ggplot2
 VignetteBuilder: 
     knitr,
 	pander,
-	kableExtra
+	kableExtra,
+	ggplot2
 Config/testthat/edition: 3
