@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • khan_etal_2022_tethysSSPRCP</title>
+<title>generate_figures — generate_figures • khan_etal_2022_tethysSSPRCP</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="generate_figures — generate_figures" />
+<meta property="og:description" content="Generate package figures" />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -109,48 +110,41 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>generate_figures</h1>
+    <small class="dont-index">Source: <a href='https://github.com/JGCRI/khan-etal_2022_tethysSSPRCP/blob/master/R/generate_figures.R'><code>R/generate_figures.R</code></a></small>
+    <div class="hidden name"><code>generate_figures.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Generate package figures</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>generate_figures</span><span class='op'>(</span>folder <span class='op'>=</span> <span class='cn'>NULL</span>, temporal_scale <span class='op'>=</span> <span class='st'>"annual"</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="generate_figures.html">generate_figures()</a></code> </p>
-        </td>
-        <td><p>generate_figures</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="khanetal2022tethysSSPRCP.html">khanetal2022tethysSSPRCP</a></code> </p>
-        </td>
-        <td><p>khanetal2022tethysSSPRCP</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>folder</th>
+      <td><p>Default = NULL. Path to folder with tethys outputs</p></td>
+    </tr>
+    <tr>
+      <th>temporal_scale</th>
+      <td><p>Default = "annual". Option between "annual", "monthly" or "all"</p></td>
+    </tr>
     </table>
-  </div>
 
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/JGCRI/khan-etal_2022_tethysSSPRCP'>khanetal2022tethysSSPRCP</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>khanetal2022tethysSSPRCP</span><span class='fu'>::</span><span class='fu'>generate_figures</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Starting generate_figures ..."</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Figure saved as : my_file_name.png."</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "generate_figures completed succesfuly."</span>
+</pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
