@@ -5,8 +5,8 @@
 # Install and Restart
 
 
-folder_i="my/folder"
+folder_i="C:\\Users\\thom927\\Documents\\Data\\tethysDemeterOutputs"
 temporal_scale_i = "annual"
 
-generate_figures(folder = folder,
+df = generate_figures(folder = folder_i,
                  temporal_scale = temporal_scale_i)
