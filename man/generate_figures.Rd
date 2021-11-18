@@ -15,7 +15,9 @@ generate_figures(folder = NULL, temporal_scale = "annual")
 Generate package figures
 }
 \examples{
+\dontrun{
 library(khanetal2022tethysSSPRCP)
 khanetal2022tethysSSPRCP::generate_figures()
+}
 }
 \keyword{figures}

@@ -6,16 +6,22 @@
 #' @param temporal_scale Default = "annual". Option between "annual", "monthly" or "all"
 #' @keywords figures
 #' @export
+#' @importFrom magrittr %>%
 #' @examples
+#'\dontrun{
 #' library(khanetal2022tethysSSPRCP)
 #' khanetal2022tethysSSPRCP::generate_figures()
+#'}
 
 
 generate_figures <- function(folder=NULL,
                              temporal_scale = "annual") {
+  NULL -> year -> value -> GCM
 
   # Initialize
   print("Starting generate_figures ...")
+
+
 
   # Check if folder exists
 
@@ -31,65 +37,13 @@ generate_figures <- function(folder=NULL,
     # Aggregated to all grid cells (sector = total)
 
     # Example script
-    ssp_names = c("SSP 1", "SSP 2", "SSP 3", "SSP 4", "SSP 5")
-    rcp_names = c("RCP 2.6", "RCP 4.5", "RCP 6.0", "RCP 8.5")
-    gcm_names = c("gfdl", "hadgem", "ipsl", "miroc", "noresm")
 
-    forbidden = c("ssp3_rcp26",
-                  "ssp1_rcp85",
-                  "ssp2_rcp85",
-                  "ssp3_rcp85",
-                  "ssp4_rcp85",
-                  "rcp85_hadgem",
-                  "rcp85_ipsl",
-                  "rcp85_miroc",
-                  "rcp85_noresm")
-
-    nvalid = 71*19 # 71 valid ssp-rcp-gcm combos x 19 years
-    SSPS = character(nvalid)
-    RCPS = character(nvalid)
-    GCMS = character(nvalid)
-    X = integer(nvalid)
-    Y = double(nvalid)
-
-    counter = 1
-    for (ssp in ssp_names){
-      for (rcp in rcp_names){
-        for (gcm in gcm_names){
-          subfolder = tolower((gsub(" |\\.", "",paste(ssp,rcp,gcm,sep="_"))))
-          bad = FALSE
-          for (name in forbidden){
-            if (grepl(name,subfolder,fixed=TRUE)){
-              bad = TRUE
-            }
-          }
-          if (!bad){
-            SSPS[counter:(counter+18)]=ssp
-            RCPS[counter:(counter+18)]=rcp
-            GCMS[counter:(counter+18)]=gcm
-            X[counter:(counter+18)] = seq(2010, 2100, by=5)
-            filename = paste0(folder,"\\",subfolder,"\\wdtotal_km3peryr.csv")
-            csv_data = read.csv(filename)
-            Y[counter:(counter+18)] = colSums(csv_data[6:ncol(csv_data)])
-            counter = counter + 19
-            print(paste(subfolder, "complete", (counter-1)/19))
-          }
-        }
-      }
-    }
-
-    datax <- data.frame(
-      ssps = SSPS,
-      rcps = RCPS,
-      gcms = GCMS,
-      x = X,
-      y = Y
-    ); datax
+    datax <- build_df(folder)
 
     p1 <- ggplot2::ggplot(data = datax,
-                          ggplot2::aes(x = x, y = y, group = gcms)) +
-      ggplot2::geom_line(ggplot2::aes(color=gcms)) +
-      ggplot2::facet_grid(rcps~ssps,scales="fixed") +
+                          ggplot2::aes(x = year, y = value, group = GCM)) +
+      ggplot2::geom_line(ggplot2::aes(color=GCM)) +
+      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
       ggplot2::ggtitle("Global Annual Water Withdrawal by SSP-RCP-GCM") +
       ggplot2::xlab("Year") +
       ggplot2::ylab(bquote(Water~ Withdrawal ~ (km^3 ~ per ~ year)))
@@ -113,5 +67,40 @@ generate_figures <- function(folder=NULL,
 
   # Initialize
   print("generate_figures completed succesfuly!")
-  return(datax)
   } # Close generate_figures function
+
+
+
+build_df <- function(folder=NULL, temporal_scale = "annual") {
+  NULL -> SSP -> RCP -> GCM -> name -> temp -> n -> year
+  combos <- tidyr::crossing(SSP = c("SSP 1", "SSP 2", "SSP 3", "SSP 4", "SSP 5"),
+                            RCP = c("RCP 2.6", "RCP 4.5", "RCP 6.0", "RCP 8.5"),
+                            GCM = c("gfdl", "hadgem", "ipsl", "miroc", "noresm")
+  )
+
+  combos <- dplyr::filter(combos, !(SSP=="SSP 3" & RCP=="RCP 2.6") & # if rcp26, exclude ssp3
+                            !(SSP!="SSP 5" & RCP=="RCP 8.5") & # if rcp85, must use ssp5
+                            !(RCP=="RCP 8.5" & GCM!="gfdl") # if rcp85, must use gfdl
+  )
+
+  annual <- tidyr::crossing(combos, year=seq(2010,2100,by=5)) # each year for each combo
+
+  folders <- dplyr::transmute(combos, name=tolower(
+    (gsub(" |\\.", "",paste(SSP,RCP,GCM,sep="_"))))) # eg ssp1_rcp26_gfdl
+
+  paths <- dplyr::transmute(folders, path=paste0(
+    folder, "\\", name, "\\wdtotal_km3peryr.csv"))[[1]]
+
+  #paths <- list.files(path=folder, full.names = TRUE, recursive = TRUE, pattern="*.csv")
+  DT <- do.call(rbind, lapply(paths, function(x){colSums(data.table::fread(x, drop=1:5))}))
+  dplyr::as_tibble(DT)%>%
+    dplyr::mutate(n=1:dplyr::n())%>%
+    tidyr::gather(key="year", value="value", -n)%>%
+    dplyr::arrange(n)%>%
+    dplyr::select(-n,-year)%>%
+    dplyr::bind_cols(annual) ->
+    df
+  #df <- cbind(annual, stack(data.frame(t(DT)))[1])
+
+  return(df)
+}
