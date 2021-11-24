@@ -4,12 +4,7 @@
 \alias{generate_figures}
 \title{generate_figures}
 \usage{
-generate_figures(
-  folder = NULL,
-  sectors = "total",
-  gcm = "all",
-  temporal_scale = "annual"
-)
+generate_figures(folder = NULL, temporal_scale = "annual")
 }
 \arguments{
 \item{folder}{Default = NULL. Path to folder with tethys outputs}

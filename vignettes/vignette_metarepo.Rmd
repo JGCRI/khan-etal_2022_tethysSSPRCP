@@ -130,29 +130,29 @@ data.frame(
 knitr::include_graphics("vignetteFigs/workflow_summary.jpg")
 ```
 
-## Workflow 1 - Scenarios
+# Workflow 1 - Scenarios
 Workflow 1 can be divided into three parts: 
 
 * A. SSPs
 * B. RCPs
 * C. GCMs
 
-### Workflow 1A - SSPs
-### Workflow 1B - RCPs
-### Workflow 1C - GCMs
+## Workflow 1A - SSPs
+## Workflow 1B - RCPs
+## Workflow 1C - GCMs
 
-## Workflow 2 - Model Runs
+# Workflow 2 - Model Runs
 Workflow 2 can be divided into three parts: 
 
 * A. GCAM
 * B. Xanthos
 * C. Demeter
 
-### Workflow 2A - GCAM
-### Workflow 2B - Xanthos
-### Workflow 2C - Demeter
+## Workflow 2A - GCAM
+## Workflow 2B - Xanthos
+## Workflow 2C - Demeter
 
-## Workflow 3 - Spatial Downscaling
+# Workflow 3 - Spatial Downscaling
 Workflow 3 can be divided into three parts: 
 
 * A. Nonagricultural Sectors
@@ -162,11 +162,11 @@ Workflow 3 can be divided into three parts:
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Total Annual Water Withdrawal"}
 knitr::include_graphics("vignetteFigs/annualtotals.png")
 ```
-### Workflow 3A - Nonagricultural Sectors
-### Workflow 3B - Livestock
-### Workflow 3C - Irrigation
+## Workflow 3A - Nonagricultural Sectors
+## Workflow 3B - Livestock
+## Workflow 3C - Irrigation
 
-## Workflow 4 - Temporal Downscaling
+# Workflow 4 - Temporal Downscaling
 Workflow 4 can be divided into four parts: 
 
 * A. Livestock, Manufacturing, and Mining
@@ -174,9 +174,9 @@ Workflow 4 can be divided into four parts:
 * C. Electricity Generation
 * D. Irrigation
 
-### Workflow 4A - Livestock, Manufacturing, and Mining
-### Workflow 4B - Domestic
-### Workflow 4C - Electricity Generation
-### Workflow 4D - Irrigation
+## Workflow 4A - Livestock, Manufacturing, and Mining
+## Workflow 4B - Domestic
+## Workflow 4C - Electricity Generation
+## Workflow 4D - Irrigation
 
-## Workflow 5 - Results
+# Workflow 5 - Results
