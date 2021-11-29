@@ -1,7 +1,7 @@
 #' generate_figures
 #'
 #' Generate package figures
-#'
+#' @param data Default = NULL. rds file of preprocessed data, overrides folder
 #' @param folder Default = NULL. Path to folder with tethys outputs
 #' @param temporal_scale Default = "annual". Option between "annual", "monthly" or "all"
 #' @keywords figures
@@ -15,8 +15,23 @@
 
 
 generate_figures <- function(folder=NULL,
+                             data=NULL,
                              temporal_scale="annual") {
   NULL -> Year -> Value -> GCM -> Sector -> SSP -> RCP
+
+  other_pal = c("Domestic"="dodgerblue",
+                "Electricity"="lavender",
+                "Manufacturing"="#cef4d1",
+                "Mining"="grey75",
+                "Irrigation"="forestgreen",
+                "Livestock"="goldenrod2")
+
+  sectors_pal = c("Domestic"="royalblue4",
+                  "Electricity"="cadetblue",
+                  "Manufacturing"="steelblue",
+                  "Mining"="lightblue",
+                  "Irrigation"="seagreen",
+                  "Livestock"="yellowgreen")
 
   # Initialize
   print("Starting generate_figures ...")
@@ -26,27 +41,22 @@ generate_figures <- function(folder=NULL,
   # Check if required files exist (sectors total, irr etc.)
 
 
-
   if(grepl("annual|all",temporal_scale,ignore.case=T)){
 
     # get all annual data
-    annual_data <- all_combos()
-    #annual_data <- dplyr::filter(annual_data, (names(Sector) == "total")|(names(Sector) == "irr")) # uncomment for testing on my local files
-    files <- dplyr::transmute(annual_data, paste0(
-      folder, "/", names(SSP), "_",names(RCP), "_", GCM,
-      "/wd", names(Sector), "_km3peryr.csv"))[[1]]
 
-    print(paste0("Loading data from ", length(files), " files ..."))
-    pb = utils::txtProgressBar(min=0, max=length(files), style=3)
-    values <- data.table::rbindlist(lapply(1:length(files), function(i){ # stacks long
-      utils::setTxtProgressBar(pb, i); return(data.frame(
-        Value=colSums(data.table::fread(files[i], drop=1:5))) # sums of year columns
-      )}))
-    close(pb)
-    print("Data loaded")
-
-    annual_data <- tidyr::crossing(annual_data, Year=seq(2010,2100,by=5)) # each year for each combo
-    annual_data <- dplyr::bind_cols(annual_data, values) # SSP, RCP, GCM, Sector, Year; Value
+    if (is.null(data)) {
+      if (is.null(folder)) {
+        print("Provide prepared .rds file or tethys outputs folder")
+      } else {
+        print(paste("Preparing raw tethys data from", folder))
+        annual_data <- prepare_data(folder)
+        print("To speed up subsequent runs, use data='annual_data.rds'")
+      }
+    } else {
+      print(paste("Reading data from", data))
+      annual_data <- readRDS(data)
+    }
 
     # Annual plots
 
@@ -87,6 +97,7 @@ generate_figures <- function(folder=NULL,
                                        y = Value,
                                        group = interaction(GCM, Sector))) +
       ggplot2::geom_line(ggplot2::aes(color=Sector)) +
+      ggplot2::scale_color_manual(values=my_pal) +
       ggplot2::facet_grid(RCP~SSP,scales="fixed") +
       ggplot2::ggtitle("Global Annual Water Withdrawal by SSP-RCP-GCM and Sector") +
       ggplot2::xlab("Year") +
@@ -104,21 +115,24 @@ generate_figures <- function(folder=NULL,
     # X axis: Years
     # Aggregated to all grid cells (sectors = dom,elec,mfg,min,irr,liv)
 
+    # ggprotos common to all figures 3
+    base_fig3 <- list(ggplot2::aes(x = Year, y = Value, fill = Sector),
+      ggplot2::geom_bar(position="stack", stat="identity"),
+      ggplot2::facet_grid(RCP~SSP,scales="fixed"),
+      ggplot2::scale_fill_manual(values=sectors_pal),
+      ggplot2::xlab("Year"),
+      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))),
+      ggplot2::theme_bw(),
+      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5))
+      )
+
     print("Building Figure 3a")
     data3a <-  dplyr::filter(annual_data, (GCM=="gfdl") &
                                (names(Sector)!="total") &
                                (names(Sector)!="nonag"))
-    p3a <- ggplot2::ggplot(data = data3a,
-                          ggplot2::aes(x = Year,
-                                       y = Value,
-                                       fill = Sector)) +
-      ggplot2::geom_bar(position="stack", stat="identity") +
-      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+    p3a <- ggplot2::ggplot(data = data3a) +
       ggplot2::ggtitle("Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: gfdl") +
-      ggplot2::xlab("Year") +
-      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))) +
-      ggplot2::theme_bw() +
-      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p3a
+      base_fig3; p3a
     ggplot2::ggsave(filename = "figure3a.png",
                     plot = p3a,
                     width = 13,
@@ -128,17 +142,9 @@ generate_figures <- function(folder=NULL,
     data3b <-  dplyr::filter(annual_data, (GCM=="hadgem") &
                                (names(Sector)!="total") &
                                (names(Sector)!="nonag"))
-    p3b <- ggplot2::ggplot(data = data3b,
-                           ggplot2::aes(x = Year,
-                                        y = Value,
-                                        fill = Sector)) +
-      ggplot2::geom_bar(position="stack", stat="identity") +
-      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+    p3b <- ggplot2::ggplot(data = data3b) +
       ggplot2::ggtitle("Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: hadgem") +
-      ggplot2::xlab("Year") +
-      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))) +
-      ggplot2::theme_bw() +
-      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p3b
+      base_fig3; p3b
     ggplot2::ggsave(filename = "figure3b.png",
                     plot = p3b,
                     width = 13,
@@ -148,17 +154,9 @@ generate_figures <- function(folder=NULL,
     data3c <-  dplyr::filter(annual_data, (GCM=="ipsl") &
                                (names(Sector)!="total") &
                                (names(Sector)!="nonag"))
-    p3c <- ggplot2::ggplot(data = data3c,
-                           ggplot2::aes(x = Year,
-                                        y = Value,
-                                        fill = Sector)) +
-      ggplot2::geom_bar(position="stack", stat="identity") +
-      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+    p3c <- ggplot2::ggplot(data = data3c) +
       ggplot2::ggtitle("Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: ipsl") +
-      ggplot2::xlab("Year") +
-      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))) +
-      ggplot2::theme_bw() +
-      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p3c
+      base_fig3; p3c
     ggplot2::ggsave(filename = "figure3c.png",
                     plot = p3c,
                     width = 13,
@@ -168,17 +166,9 @@ generate_figures <- function(folder=NULL,
     data3d <-  dplyr::filter(annual_data, (GCM=="miroc") &
                                (names(Sector)!="total") &
                                (names(Sector)!="nonag"))
-    p3d <- ggplot2::ggplot(data = data3d,
-                           ggplot2::aes(x = Year,
-                                        y = Value,
-                                        fill = Sector)) +
-      ggplot2::geom_bar(position="stack", stat="identity") +
-      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+    p3d <- ggplot2::ggplot(data = data3d) +
       ggplot2::ggtitle("Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: miroc") +
-      ggplot2::xlab("Year") +
-      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))) +
-      ggplot2::theme_bw() +
-      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p3d
+      base_fig3; p3d
     ggplot2::ggsave(filename = "figure3d.png",
                     plot = p3d,
                     width = 13,
@@ -188,17 +178,9 @@ generate_figures <- function(folder=NULL,
     data3e <-  dplyr::filter(annual_data, (GCM=="noresm") &
                                (names(Sector)!="total") &
                                (names(Sector)!="nonag"))
-    p3e <- ggplot2::ggplot(data = data3e,
-                           ggplot2::aes(x = Year,
-                                        y = Value,
-                                        fill = Sector)) +
-      ggplot2::geom_bar(position="stack", stat="identity") +
-      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+    p3e <- ggplot2::ggplot(data = data3e) +
       ggplot2::ggtitle("Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: noresm") +
-      ggplot2::xlab("Year") +
-      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))) +
-      ggplot2::theme_bw() +
-      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p3e
+      base_fig3; p3e
     ggplot2::ggsave(filename = "figure3e.png",
                     plot = p3e,
                     width = 13,
@@ -217,6 +199,33 @@ generate_figures <- function(folder=NULL,
 
 
 ## helpers and other functions below
+
+prepare_data <- function(folder=NULL, outfile="annual_data.rds") {
+  annual_data <- all_combos()
+  #annual_data <- dplyr::filter(annual_data, (names(Sector) == "total")|(names(Sector) == "irr")) # uncomment for testing on my local files
+  files <- dplyr::transmute(annual_data, paste0(
+    folder, "/", names(SSP), "_",names(RCP), "_", GCM,
+    "/wd", names(Sector), "_km3peryr.csv"))[[1]]
+
+  print(paste0("Preparing data from ", length(files), " files ..."))
+  time_start <- Sys.time()
+  values <- data.table::rbindlist(lapply(1:length(files), function(i){ # stacks long
+    if (i %% 50 == 0) { # progress update at arbitrary interval
+      time_remaining <- (length(files)/i-1)*(Sys.time()-time_start)
+      print(paste0("Progress: ", round(100*i/length(files), digits=2),
+                  "%, Estimated time remaining: ", format(time_remaining)))
+    }
+    return(data.frame(Value=colSums(data.table::fread(files[i], drop=1:5)))) # sums of year columns
+    }))
+  print("Data loaded")
+
+  annual_data <- tidyr::crossing(annual_data, Year=seq(2010,2100,by=5)) # each year for each combo
+  annual_data <- dplyr::bind_cols(annual_data, values) # SSP, RCP, GCM, Sector, Year; Value
+  saveRDS(annual_data, file = outfile)
+  print(paste("Annual totals saved to", outfile))
+  return (annual_data)
+}
+
 
 # all valid ssp-rcp-gcm-sector (including total, nonag sectors)
 all_combos <- function() {
@@ -249,99 +258,4 @@ all_combos <- function() {
                             !(RCP=="RCP 8.5" & GCM!="gfdl") # if rcp85, must use gfdl
   )
   return(combos)
-}
-
-filter_combos <- function (combos, sector, gcm) {
-  NULL -> Sector -> GCM
-  # filter to only relevant sectors or gcms
-  if (sector=="all") {
-    combos <- dplyr::filter(combos, (names(Sector)!="total") &
-                              (names(Sector)!="nonag"))
-  } else if (is.element(sector, c("dom","elec","irr","liv","mfg","min","nonag","total"))) {
-    combos <- dplyr::filter(combos, (names(Sector)==sector))
-  }
-
-  if (is.element(gcm, c("gfdl", "hadgem", "ipsl", "miroc", "noresm"))) {
-    combos <- dplyr::filter(combos, (GCM==gcm))
-  }
-  return (combos)
-}
-
-# make list of file paths for given ssp-rcp-gcm-sector combos
-get_paths <- function(folder=NULL, combos) {
-  NULL -> SSP -> RCP -> GCM -> Sector
-  files <- dplyr::transmute(combos, paste0(
-    folder, "/", names(SSP), "_",names(RCP), "_", GCM,
-    "/wd", names(Sector), "_km3peryr.csv"))[[1]]
-  return(files)
-}
-
-# builds figure from arguments using given data or loaded from folder
-build_fig <- function(folder=NULL,
-                     data=NULL,
-                     timeStep="annual",
-                     gcm="all",
-                     sector="all",
-                     stacked=F,
-                     color="gcm") {
-  NULL -> SSP -> RCP -> Sector -> Year -> Value -> GCM
-  if (is.null(data)) {
-    if (is.null(folder)) {
-      print("No data or folder supplied. Not good.")
-    } else {
-      print("No data supplied, loading from folder.")
-      combos <- all_combos()
-      combos <- filter_combos(combos, sector=sector, gcm=gcm)
-      files <- get_paths(folder, combos) # list of file paths
-
-      print(paste0("Loading data from ", length(files), " files ..."))
-      values <- data.table::rbindlist(lapply(files, function(x){ # stacks long
-        data.frame(Value=colSums(data.table::fread(x, drop=1:5)))})) # sums of year columns
-      print("Data loaded")
-
-      annual <- tidyr::crossing(combos, Year=seq(2010,2100,by=5)) # each year for each combo
-      data <- cbind(annual, values) # SSP, RCP, GCM, Sector, Year; Value
-    }
-  } else {
-    print("Filtering preexisting data")
-    data <- filter_combos(data, sector=sector, gcm=gcm)
-  }
-  print("computing summary data")
-  if (gcm=="avg") {
-    print("Computing mean of 5 GCMs ...")
-    data <- dplyr::group_by(data, SSP, RCP, Sector, Year)
-    data <- dplyr::summarise(data, Value=mean(Value))
-    data <- tibble::add_column(data, GCM=rep("avg", nrow(data)), .after="RCP")
-  }
-  #return(data)
-  print("building figure")
-  p1 <- ggplot2::ggplot(data = data,
-                        ggplot2::aes(x = Year,
-                                     y = Value,
-                                     group = interaction(GCM, Sector))) +
-    ggplot2::facet_grid(RCP~SSP,scales="fixed") +
-    ggplot2::ggtitle("Global Annual Water Withdrawal by SSP-RCP-GCM") +
-    ggplot2::theme_gray() +
-    ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5))
-
-  if (timeStep=="annual") {
-    p1 <- p1 + ggplot2::xlab("Year") +
-      ggplot2::ylab(bquote(Water~ Withdrawal ~ (km^3 ~ per ~ year)))
-  } else if (timeStep=="monthly") {
-    p1 <- p1 + ggplot2::xlab("Month") +
-      ggplot2::ylab(bquote(Water~ Withdrawal ~ (km^3 ~ per ~ month)))
-  }
-
-  if (stacked) {
-    p1 <- p1 + ggplot2::geom_area()
-  } else {
-    p1 <- p1 + ggplot2::geom_line()
-  }
-
-  if (color=="gcm") {
-    p1 <- p1 + ggplot2::aes(color=GCM)
-  } else if (color=="sector") {
-    p1 <- p1 + ggplot2::aes(color=Sector)
-  }
-  return (p1)
 }
