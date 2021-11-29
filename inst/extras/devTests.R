@@ -27,7 +27,15 @@ sector <- c(rep("Domestic", 5),
 year <- rep(seq(2010,2030,by=5), 6)
 value <- runif(30)
 dummy <- data.frame(sector, year, value)
+
+sector_pal = c("Domestic"="royalblue4",
+               "Electricity"="yellow3",
+               "Manufacturing"="steelblue",
+               "Mining"="cadetblue3",
+               "Irrigation"="palegreen4",
+               "Livestock"="yellowgreen")
+
 p1 <- ggplot2::ggplot(dummy, ggplot2::aes(fill=sector, y=value, x=year)) +
   ggplot2::geom_bar(position="stack", stat="identity") +
-  ggplot2::scale_fill_manual(values=sectors_pal); p1
+  ggplot2::scale_fill_manual(values=sector_pal); p1
 

@@ -19,19 +19,19 @@ generate_figures <- function(folder=NULL,
                              temporal_scale="annual") {
   NULL -> Year -> Value -> GCM -> Sector -> SSP -> RCP
 
-  other_pal = c("Domestic"="dodgerblue",
-                "Electricity"="lavender",
-                "Manufacturing"="#cef4d1",
-                "Mining"="grey75",
-                "Irrigation"="forestgreen",
-                "Livestock"="goldenrod2")
+  gcm_pal = c("gfdl" = "gold",
+              "hadgem" = "darkorange",
+              "ipsl" = "red3",
+              "miroc" = "deeppink",
+              "noresm" = "darkviolet")
 
-  sectors_pal = c("Domestic"="royalblue4",
-                  "Electricity"="cadetblue",
-                  "Manufacturing"="steelblue",
-                  "Mining"="lightblue",
-                  "Irrigation"="seagreen",
-                  "Livestock"="yellowgreen")
+  sector_pal = c("Domestic"="royalblue4",
+                 "Electricity"="yellow3",
+                 "Manufacturing"="steelblue",
+                 "Mining"="cadetblue3",
+                 "Irrigation"="palegreen4",
+                 "Livestock"="yellowgreen")
+
 
   # Initialize
   print("Starting generate_figures ...")
@@ -73,6 +73,7 @@ generate_figures <- function(folder=NULL,
                                        y = Value,
                                        group = GCM)) +
       ggplot2::geom_line(ggplot2::aes(color=GCM)) +
+      ggplot2::scale_color_manual(values=gcm_pal) +
       ggplot2::facet_grid(RCP~SSP,scales="fixed") +
       ggplot2::ggtitle("Total Global Annual Water Withdrawal by SSP-RCP-GCM") +
       ggplot2::xlab("Year") +
@@ -97,7 +98,7 @@ generate_figures <- function(folder=NULL,
                                        y = Value,
                                        group = interaction(GCM, Sector))) +
       ggplot2::geom_line(ggplot2::aes(color=Sector)) +
-      ggplot2::scale_color_manual(values=my_pal) +
+      ggplot2::scale_color_manual(values=sector_pal) +
       ggplot2::facet_grid(RCP~SSP,scales="fixed") +
       ggplot2::ggtitle("Global Annual Water Withdrawal by SSP-RCP-GCM and Sector") +
       ggplot2::xlab("Year") +
@@ -119,7 +120,7 @@ generate_figures <- function(folder=NULL,
     base_fig3 <- list(ggplot2::aes(x = Year, y = Value, fill = Sector),
       ggplot2::geom_bar(position="stack", stat="identity"),
       ggplot2::facet_grid(RCP~SSP,scales="fixed"),
-      ggplot2::scale_fill_manual(values=sectors_pal),
+      ggplot2::scale_fill_manual(values=sector_pal),
       ggplot2::xlab("Year"),
       ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))),
       ggplot2::theme_bw(),
