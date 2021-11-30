@@ -191,6 +191,11 @@ generate_figures <- function(folder=NULL,
   # Monthly plots
   if(grepl("monthly|all",temporal_scale,ignore.case=T)){
     prepare_monthly(folder)
+
+    # months x axis,
+  }
+  # Maps
+  if(grepl("maps|all",temporal_scale,ignore.case=T)){
   }
 
   # Initialize
@@ -248,7 +253,7 @@ prepare_monthly <- function(folder=NULL, outfile="monthly_data.rds") {
   monthly_data <- tidyr::crossing(monthly_data, Year=2010:2100, Month=1:12) # each year and month for each combo
   monthly_data <- dplyr::bind_cols(monthly_data, values) # SSP, RCP, GCM, Sector, Year; Value
   saveRDS(monthly_data, file = outfile)
-  print(paste("Monhtly totals saved to", outfile))
+  print(paste("Monthly totals saved to", outfile))
   return (monthly_data)
 }
 
