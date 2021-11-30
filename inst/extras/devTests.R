@@ -8,7 +8,7 @@
 folder_i="C:/Users/thom927/Documents/Data/tethysDemeterOutputs"
 data_i="annual_data.rds"
 
-out <- generate_figures(data = data_i,
+out <- generate_figures(data = "monthly1.rds",
                         folder = folder_i,
                         temporal_scale = "annual")
 

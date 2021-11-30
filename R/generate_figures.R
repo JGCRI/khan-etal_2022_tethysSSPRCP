@@ -190,7 +190,7 @@ generate_figures <- function(folder=NULL,
 
   # Monthly plots
   if(grepl("monthly|all",temporal_scale,ignore.case=T)){
-
+    prepare_monthly(folders)
   }
 
   # Initialize
@@ -225,6 +225,32 @@ prepare_data <- function(folder=NULL, outfile="annual_data.rds") {
   saveRDS(annual_data, file = outfile)
   print(paste("Annual totals saved to", outfile))
   return (annual_data)
+}
+
+prepare_monthly <- function(folder=NULL, outfile="monthly_data.rds") {
+  monthly_data <- all_combos()
+  monthly_data <- dplyr::filter(monthly_data, (names(Sector) != "total") & (names(Sector) != "nonag"))
+  files <- dplyr::transmute(monthly_data, paste0(
+    folder, "/", names(SSP), "_",names(RCP), "_", GCM,
+    "/twd", names(Sector), "_km3permonth.csv"))[[1]]
+
+  print(paste0("Preparing data from ", length(files), " files ..."))
+  time_start <- Sys.time()
+  values <- data.table::rbindlist(lapply(1:length(files), function(i){ # stacks long
+    if (i %% 50 == 0) { # progress update at arbitrary interval
+      time_remaining <- (length(files)/i-1)*(Sys.time()-time_start)
+      print(paste0("Progress: ", round(100*i/length(files), digits=2),
+                   "%, Estimated time remaining: ", format(time_remaining)))
+    }
+    return(data.frame(Value=colSums(data.table::fread(files[i], drop=1:5)))) # sums of year columns
+  }))
+  print("Data loaded")
+
+  monthly_data <- tidyr::crossing(monthly_data, Year=2010:2100, Month=1:12) # each year and month for each combo
+  monthly_data <- dplyr::bind_cols(monthly_data, values) # SSP, RCP, GCM, Sector, Year; Value
+  saveRDS(monthly_data, file = outfile)
+  print(paste("Monhtly totals saved to", outfile))
+  return (monthly_data)
 }
 
 
