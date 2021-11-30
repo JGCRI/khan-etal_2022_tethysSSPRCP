@@ -8,9 +8,9 @@
 folder_i="C:/Users/thom927/Documents/Data/tethysDemeterOutputs"
 data_i="annual_data.rds"
 
-out <- generate_figures(data = "monthly1.rds",
+out <- generate_figures(#data = "monthly1.rds",
                         folder = folder_i,
-                        temporal_scale = "annual")
+                        temporal_scale = "monthly")
 
 mydata <- data.table::fread(paste0(folder_i, "/ssp1_rcp26_gfdl/wdtotal_km3peryr.csv"),
                             select=c(2,3,6,24), check.names = F)

@@ -190,12 +190,11 @@ generate_figures <- function(folder=NULL,
 
   # Monthly plots
   if(grepl("monthly|all",temporal_scale,ignore.case=T)){
-    prepare_monthly(folders)
+    prepare_monthly(folder)
   }
 
   # Initialize
   print("generate_figures completed succesfuly!")
-  return(annual_data)
 } # Close generate_figures function
 
 
