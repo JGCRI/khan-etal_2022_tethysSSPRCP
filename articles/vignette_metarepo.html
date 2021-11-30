@@ -393,319 +393,113 @@ zenodo link
 <!-------------------------->
 <p align="center">
 <img src="vignetteFigs/divider.png"></p>
-<p align="center">
-<img src="vignetteFigs/im3_gcamusa_workflow_summary.jpg" alt="alt text" width="100%"><br><br> Figure 1: Summary of experiment workflows
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/workflow_summary.jpg" alt="Workflow Summary" width="40%"><p class="caption">
+Workflow Summary
 </p>
-<div id="workflow-0---test-modifying-the-vignette-file" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-0---test-modifying-the-vignette-file" class="anchor"></a>Workflow 0 - Test Modifying the Vignette File</h2>
 </div>
-<div id="workflow-1---climate-impacts-runoff" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-1---climate-impacts-runoff" class="anchor"></a>Workflow 1 - Climate Impacts Runoff</h2>
-<p><br></p>
-<p align="center">
-<img src="vignetteFigs/im3_gcamusa_workflow_1_climate_impacts_runoff.jpg" alt="alt text" width="80%"><br><br> Figure 2: Workflow 1: Climate Impacts Runoff
-</p>
-<p><br></p>
+</div>
+<div id="workflow-1---scenarios" class="section level1">
+<h1 class="hasAnchor">
+<a href="#workflow-1---scenarios" class="anchor"></a>Workflow 1 - Scenarios</h1>
 <p>Workflow 1 can be divided into three parts:</p>
 <ul>
-<li>A. Climate Impacts Runoff US Basins</li>
-<li>B. Climate Impacts Runoff Global Basins</li>
-<li>C. Climate Impacts Runoff Combine US and Global</li>
+<li>A. SSPs</li>
+<li>B. RCPs</li>
+<li>C. GCMs</li>
 </ul>
-<div id="table-workflow-1a---climate-impacts-runoff-us-basins" class="section level3">
-<h3 class="hasAnchor">
-<a href="#table-workflow-1a---climate-impacts-runoff-us-basins" class="anchor"></a><strong>Table: Workflow 1A - Climate Impacts Runoff US Basins</strong>
-</h3>
-<table class="table">
-<colgroup>
-<col width="10%">
-<col width="44%">
-<col width="45%">
-</colgroup>
-<thead><tr class="header">
-<th>Step</th>
-<th>Description</th>
-<th>Location</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>WRF Outputs Raw</td>
-<td><ul>
-<li>RCP 4.5, 8.5, hot and cool</li>
-<li>hourly, 1979_01 to 2099_12</li>
-<li>12km x 12km resolution</li>
-<li>Temperature (deg C)</li>
-<li>Minimum temperature (deg C)</li>
-<li>Wind speed (m/s)</li>
-<li>Relative humidity (%)</li>
-<li>GLW (W/m2)</li>
-<li>SWDOWN (W/m2)</li>
-</ul></td>
-<td>(NERSC) /global/cfs/cdirs/m2702/gsharing</td>
-</tr>
-<tr class="even">
-<td>wrf_to_xanthos</td>
-<td><ul>
-<li>wrf_to_xanthos_preprocess_historical.sh</li>
-<li>wrf_to_xanthos_preprocess_ssp585_hot_near.sh</li>
-<li>wrf_to_xanthos_preprocess_ssp585_hot_far.sh</li>
-<li>wrf_to_xanthos_process_historical.sh</li>
-<li>wrf_to_xanthos_process_ssp585_hot_near.sh</li>
-<li>wrf_to_xanthos_process_ssp585_hot_far.sh</li>
-<li>wrf_to_xanthos_combine_historical_ssp585_hot_near_far.sh</li>
-</ul></td>
-<td><ul>
-<li>(NERSC) /global/cfs/cdirs/m2702/gcamusa/wrf_to_xanthos</li>
-<li>(Repo) <a href="https://github.com/IMMM-SFA/khan-etal_2022_im3gcamusa/scripts" class="uri">https://github.com/IMMM-SFA/khan-etal_2022_im3gcamusa/scripts</a>
-</li>
-</ul></td>
-</tr>
-<tr class="odd">
-<td>xanthos</td>
-<td>wrf_to_xanthos_combine_historical_ssp585_hot_near_far_us_global_xanthos.sh</td>
-<td><ul>
-<li>(NERSC) /global/cfs/cdirs/m2702/gcamusa/wrf_to_xanthos</li>
-<li>(NERSC) /global/cfs/cdirs/m2702/gcamusa/wrf_to_xanthos/xanthos_files/example/output</li>
-<li>(Repo) <a href="https://github.com/IMMM-SFA/khan-etal_2022_im3gcamusa/scripts" class="uri">https://github.com/IMMM-SFA/khan-etal_2022_im3gcamusa/scripts</a>
-</li>
-</ul></td>
-</tr>
-</tbody>
-</table>
-<p>Workflow 1A results in WRF outputs being processed and run through Xanthos to produce runoff in mm per month for US Basins to be combined with Non-US Basins runoff results from Workflow 1B.</p>
+<div id="workflow-1a---ssps" class="section level2">
+<h2 class="hasAnchor">
+<a href="#workflow-1a---ssps" class="anchor"></a>Workflow 1A - SSPs</h2>
 </div>
-<div id="table-workflow-1b---climate-impacts-runoff-global-basins" class="section level3">
-<h3 class="hasAnchor">
-<a href="#table-workflow-1b---climate-impacts-runoff-global-basins" class="anchor"></a><strong>Table: Workflow 1B - Climate Impacts Runoff Global Basins</strong>
-</h3>
-<table class="table">
-<thead><tr class="header">
-<th>Step</th>
-<th>Description</th>
-<th>Scripts</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>xxx</td>
-<td>xxx</td>
-<td>xxxx</td>
-</tr>
-<tr class="even">
-<td>xxx</td>
-<td>xxx</td>
-<td>xxxx</td>
-</tr>
-</tbody>
-</table>
-<p>Some diagnostics from workflow 1b.</p>
+<div id="workflow-1b---rcps" class="section level2">
+<h2 class="hasAnchor">
+<a href="#workflow-1b---rcps" class="anchor"></a>Workflow 1B - RCPs</h2>
+</div>
+<div id="workflow-1c---gcms" class="section level2">
+<h2 class="hasAnchor">
+<a href="#workflow-1c---gcms" class="anchor"></a>Workflow 1C - GCMs</h2>
+</div>
+</div>
+<div id="workflow-2---model-runs" class="section level1">
+<h1 class="hasAnchor">
+<a href="#workflow-2---model-runs" class="anchor"></a>Workflow 2 - Model Runs</h1>
+<p>Workflow 2 can be divided into three parts:</p>
 <ul>
-<li>Sensitivity Analysis across GCMs</li>
+<li>A. GCAM</li>
+<li>B. Xanthos</li>
+<li>C. Demeter</li>
 </ul>
+<div id="workflow-2a---gcam" class="section level2">
+<h2 class="hasAnchor">
+<a href="#workflow-2a---gcam" class="anchor"></a>Workflow 2A - GCAM</h2>
 </div>
-<div id="table-workflow-1c---climate-impacts-runoff-combine-us-and-global" class="section level3">
-<h3 class="hasAnchor">
-<a href="#table-workflow-1c---climate-impacts-runoff-combine-us-and-global" class="anchor"></a><strong>Table: Workflow 1C - Climate Impacts Runoff Combine US and Global</strong>
-</h3>
-<table class="table">
-<colgroup>
-<col width="18%">
-<col width="35%">
-<col width="46%">
-</colgroup>
-<thead><tr class="header">
-<th>Step</th>
-<th>Description</th>
-<th>Location</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Workflow 1A Outputs</td>
-<td>Runoff mm per month for US Basins.</td>
-<td><ul>
-<li>/pic/projects/im3/gcamusa/climateimpacts/runoff/outputs_workflow1a</li>
-<li>Copied from (NERSC) /global/cfs/cdirs/m2702/gcamusa/wrf_to_xanthos/xanthos_files/example/output</li>
-</ul></td>
-</tr>
-<tr class="even">
-<td>Workflow 1B Outputs</td>
-<td>Runoff mm per month for Non-US Basins.</td>
-<td><ul>
-<li>/pic/projects/im3/gcamusa/climateimpacts/runoff/outputs_workflow1b</li>
-<li>Copied from (PIC) /pic/projects/im3/gcamusa/climateimpacts/raw_global_runoff_files</li>
-</ul></td>
-</tr>
-<tr class="odd">
-<td>Combine US and Non-US runoff</td>
-<td><ul>
-<li>xanthos_process_us_global_ssp585hotter_gcmChosen.sh</li>
-<li>xanthos_combine_us_global_ssp585hotter_gcmChosen.R</li>
-</ul></td>
-<td>/pic/projects/im3/gcamusa/climateimpacts/runoff</td>
-</tr>
-<tr class="even">
-<td>Extrapolate 2099 to 2100</td>
-<td><ul>
-<li>xanthos_extrapolate_2099to2100_ssp585hotter_gcmChosen.R</li>
-</ul></td>
-<td>/pic/projects/im3/gcamusa/climateimpacts/runoff</td>
-</tr>
-<tr class="odd">
-<td>Smoothing</td>
-<td><ul>
-<li>xanthos_smooth5trail_2099to2100_ssp585hotter_gcmChosen.R</li>
-</ul></td>
-<td>/pic/projects/im3/gcamusa/climateimpacts/runoff</td>
-</tr>
-<tr class="even">
-<td>Convert to XML</td>
-<td><ul>
-<li>xanthos_convert2xml_ssp585hotter_gcmChosen.R</li>
-</ul></td>
-<td>/pic/projects/im3/gcamusa/climateimpacts/runoff</td>
-</tr>
-</tbody>
-</table>
-<p>Some diagnostics from workflow 1c.</p>
+<div id="workflow-2b---xanthos" class="section level2">
+<h2 class="hasAnchor">
+<a href="#workflow-2b---xanthos" class="anchor"></a>Workflow 2B - Xanthos</h2>
+</div>
+<div id="workflow-2c---demeter" class="section level2">
+<h2 class="hasAnchor">
+<a href="#workflow-2c---demeter" class="anchor"></a>Workflow 2C - Demeter</h2>
+</div>
+</div>
+<div id="workflow-3---spatial-downscaling" class="section level1">
+<h1 class="hasAnchor">
+<a href="#workflow-3---spatial-downscaling" class="anchor"></a>Workflow 3 - Spatial Downscaling</h1>
+<p>Workflow 3 can be divided into three parts:</p>
 <ul>
-<li>Compare Global vs WRF Xanthos Runoff for U.S. Basins</li>
-<li>Smoothed Outputs</li>
+<li>A. Nonagricultural Sectors</li>
+<li>B. Livestock</li>
+<li>C. Irrigation</li>
 </ul>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/annualtotals.png" alt="Total Annual Water Withdrawal" width="100%"><p class="caption">
+Total Annual Water Withdrawal
+</p>
 </div>
-</div>
-<div id="workflow-2" class="section level2">
+<div id="workflow-3a---nonagricultural-sectors" class="section level2">
 <h2 class="hasAnchor">
-<a href="#workflow-2" class="anchor"></a>Workflow 2</h2>
+<a href="#workflow-3a---nonagricultural-sectors" class="anchor"></a>Workflow 3A - Nonagricultural Sectors</h2>
 </div>
-<div id="workflow-3" class="section level2">
+<div id="workflow-3b---livestock" class="section level2">
 <h2 class="hasAnchor">
-<a href="#workflow-3" class="anchor"></a>Workflow 3</h2>
+<a href="#workflow-3b---livestock" class="anchor"></a>Workflow 3B - Livestock</h2>
 </div>
-<div id="workflow-4" class="section level2">
+<div id="workflow-3c---irrigation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#workflow-4" class="anchor"></a>Workflow 4</h2>
+<a href="#workflow-3c---irrigation" class="anchor"></a>Workflow 3C - Irrigation</h2>
 </div>
-<div id="workflow-5" class="section level2">
+</div>
+<div id="workflow-4---temporal-downscaling" class="section level1">
+<h1 class="hasAnchor">
+<a href="#workflow-4---temporal-downscaling" class="anchor"></a>Workflow 4 - Temporal Downscaling</h1>
+<p>Workflow 4 can be divided into four parts:</p>
+<ul>
+<li>A. Livestock, Manufacturing, and Mining</li>
+<li>B. Domestic</li>
+<li>C. Electricity Generation</li>
+<li>D. Irrigation</li>
+</ul>
+<div id="workflow-4a---livestock-manufacturing-and-mining" class="section level2">
 <h2 class="hasAnchor">
-<a href="#workflow-5" class="anchor"></a>Workflow 5</h2>
+<a href="#workflow-4a---livestock-manufacturing-and-mining" class="anchor"></a>Workflow 4A - Livestock, Manufacturing, and Mining</h2>
 </div>
-<div id="workflow-6" class="section level2">
+<div id="workflow-4b---domestic" class="section level2">
 <h2 class="hasAnchor">
-<a href="#workflow-6" class="anchor"></a>Workflow 6</h2>
+<a href="#workflow-4b---domestic" class="anchor"></a>Workflow 4B - Domestic</h2>
 </div>
-<div id="workflow-7" class="section level2">
+<div id="workflow-4c---electricity-generation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#workflow-7" class="anchor"></a>Workflow 7</h2>
-<div id="table-workflow-7---final-gcam-usa-runs" class="section level3">
-<h3 class="hasAnchor">
-<a href="#table-workflow-7---final-gcam-usa-runs" class="anchor"></a><strong>Table: Workflow 7 - Final GCAM-USA Runs</strong>
-</h3>
-<table class="table">
-<colgroup>
-<col width="18%">
-<col width="35%">
-<col width="46%">
-</colgroup>
-<thead><tr class="header">
-<th>Step</th>
-<th>Description</th>
-<th>Location</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Workflow 1A Outputs</td>
-<td>Runoff mm per month for US Basins.</td>
-<td><ul>
-<li>/pic/projects/im3/gcamusa/climateimpacts/runoff/outputs_workflow1a</li>
-<li>Copied from (NERSC) /global/cfs/cdirs/m2702/gcamusa/wrf_to_xanthos/xanthos_files/example/output</li>
-</ul></td>
-</tr>
-<tr class="even">
-<td>Workflow 1B Outputs</td>
-<td>Runoff mm per month for Non-US Basins.</td>
-<td><ul>
-<li>/pic/projects/im3/gcamusa/climateimpacts/runoff/outputs_workflow1b</li>
-<li>Copied from (PIC) /pic/projects/im3/gcamusa/climateimpacts/raw_global_runoff_files</li>
-</ul></td>
-</tr>
-<tr class="odd">
-<td>Combine US and Non-US runoff</td>
-<td><ul>
-<li>xanthos_process_us_global_ssp585hotter_gcmChosen.sh</li>
-<li>xanthos_combine_us_global_ssp585hotter_gcmChosen.R</li>
-</ul></td>
-<td>/pic/projects/im3/gcamusa/climateimpacts/runoff</td>
-</tr>
-<tr class="even">
-<td>Extrapolate 2099 to 2100</td>
-<td><ul>
-<li>xanthos_extrapolate_2099to2100_ssp585hotter_gcmChosen.R</li>
-</ul></td>
-<td>/pic/projects/im3/gcamusa/climateimpacts/runoff</td>
-</tr>
-<tr class="odd">
-<td>Smoothing</td>
-<td><ul>
-<li>xanthos_smooth5trail_2099to2100_ssp585hotter_gcmChosen.R</li>
-</ul></td>
-<td>/pic/projects/im3/gcamusa/climateimpacts/runoff</td>
-</tr>
-<tr class="even">
-<td>Convert to XML</td>
-<td><ul>
-<li>xanthos_convert2xml_ssp585hotter_gcmChosen.R</li>
-</ul></td>
-<td>/pic/projects/im3/gcamusa/climateimpacts/runoff</td>
-</tr>
-</tbody>
-</table>
+<a href="#workflow-4c---electricity-generation" class="anchor"></a>Workflow 4C - Electricity Generation</h2>
 </div>
-<div id="table-workflow-7b---intermediate-gcam-usa-run-riagnostics" class="section level3">
-<h3 class="hasAnchor">
-<a href="#table-workflow-7b---intermediate-gcam-usa-run-riagnostics" class="anchor"></a><strong>Table: Workflow 7b - Intermediate GCAM-USA Run Riagnostics</strong>
-</h3>
-<table class="table">
-<colgroup>
-<col width="33%">
-<col width="33%">
-<col width="33%">
-</colgroup>
-<thead><tr class="header">
-<th>Step</th>
-<th>Description</th>
-<th>Location</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>ssp235_noclimate</td>
-<td>ssp235_noclimate</td>
-<td>ssp235_noclimate</td>
-</tr>
-<tr class="even">
-<td>ssp235_climateRunoff_rcp85hotter</td>
-<td>ssp235_climateRunoff_rcp85hotter</td>
-<td>ssp235_climateRunoff_rcp85hotter</td>
-</tr>
-<tr class="odd">
-<td>ssp235_hddcdd_rcp85hotter</td>
-<td>ssp235_hddcdd_rcp85hotter</td>
-<td>ssp235_hddcdd_rcp85hotter</td>
-</tr>
-<tr class="even">
-<td>ssp235_agyields_rcp85hotter</td>
-<td>ssp235_agyields_rcp85hotter</td>
-<td>ssp235_agyields_rcp85hotter</td>
-</tr>
-<tr class="odd">
-<td>ssp235_rcp85hotter</td>
-<td>ssp235_rcp85hotter</td>
-<td>ssp235_rcp85hotter</td>
-</tr>
-</tbody>
-</table>
+<div id="workflow-4d---irrigation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#workflow-4d---irrigation" class="anchor"></a>Workflow 4D - Irrigation</h2>
 </div>
 </div>
+<div id="workflow-5---results" class="section level1">
+<h1 class="hasAnchor">
+<a href="#workflow-5---results" class="anchor"></a>Workflow 5 - Results</h1>
 </div>
   </div>
 
