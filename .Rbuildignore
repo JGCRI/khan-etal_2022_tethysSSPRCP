@@ -6,3 +6,5 @@
 ^pkgdown$
 ^scripts$
 ^figures$
+^_config.yml$
+^presentations$

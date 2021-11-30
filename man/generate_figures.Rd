@@ -4,10 +4,12 @@
 \alias{generate_figures}
 \title{generate_figures}
 \usage{
-generate_figures(folder = NULL, temporal_scale = "annual")
+generate_figures(folder = NULL, data = NULL, temporal_scale = "annual")
 }
 \arguments{
 \item{folder}{Default = NULL. Path to folder with tethys outputs}
+
+\item{data}{Default = NULL. rds file of preprocessed data, overrides folder}
 
 \item{temporal_scale}{Default = "annual". Option between "annual", "monthly" or "all"}
 }
@@ -15,7 +17,9 @@ generate_figures(folder = NULL, temporal_scale = "annual")
 Generate package figures
 }
 \examples{
+\dontrun{
 library(khanetal2022tethysSSPRCP)
 khanetal2022tethysSSPRCP::generate_figures()
+}
 }
 \keyword{figures}
