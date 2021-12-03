@@ -55,8 +55,8 @@ data.frame(
              "Demeter runs"),
   `Used by` = c("Tethys",
                 "Tethys"),
-  Location = c("zenodo link",
-               "zenodo link")
+  Location = c("https://data.pnnl.gov/dataset/13224",
+               "https://data.pnnl.gov/dataset/13192")
     ) %>% 
   kbl() %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
@@ -96,7 +96,9 @@ knitr::include_graphics("vignetteFigs/workflow_summary.jpg")
 # Workflow 1 - Scenarios
 This dataset contains water withdrawal projections under a range of socioeconomic and climate scenarios. Combinations of five Shared Socioeconomic Pathways (SSPs 1-5) and four Representative Concentration Pathways (RCPs 2.6, 4.5, 6, and 8.5) are used. However, RCP 2.6 is not considered possible under SSP 3, and RCP 8.5 is only considered possible for SSP 5. This leaves 15 valid SSP-RCP combinations, shown in the diagram below.
 
-Chart showing combinations
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Workflow 1"}
+knitr::include_graphics("vignetteFigs/workflow1.jpg")
+```
 
 For each valid SSP-RCP combination, five General Circulation Models (GCMs) are used, with the exception of SSP 5-RCP 8.5, which only uses one (Find out why). This gives a grand total of 71 SSP-RCP-GCM combinations, which are fed into the models.
 
@@ -104,8 +106,16 @@ For each valid SSP-RCP combination, five General Circulation Models (GCMs) are u
 (Comment on GCAM, Xanthos, Demeter)
 GCAM is run for each SSP-RCP-GCM combination. The GCAM outputs are at the resolution of 32 geopolitical regions, and 235 water basins, with 5-year timesteps. The sectoral water withdrawal outputs from GCAM are the primary inputs to Tethys, which will be downscaled to the target resolution. Crop outputs from GCAM are sent to Demeter for downscaling, to be used by Tethys for the irrigation sector.
 
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Workflow 2"}
+knitr::include_graphics("vignetteFigs/workflow2.jpg")
+```
+
 # Workflow 3 - Spatial Downscaling
 Withdrawal data for each sector is downscaled spatially first, from 32 regions or 235 basins to 0.5 degree grids. Of the 259,200 possible grid cells at this resolution (360 x 720), only the 67,420 cells categorized as land are considered (since nobody is withdrawing water from the bottom of the ocean).
+
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Workflow 3"}
+knitr::include_graphics("vignetteFigs/workflow3.jpg")
+```
 
 Different downscaling methods are used for different sectors. For spatial downscaling, the workflow is divided into three parts:
 
@@ -125,6 +135,10 @@ Uses Demeter outputs.
 
 # Workflow 4 - Temporal Downscaling
 At this stage the data has been downscaled spatially to 0.5 degree grids, but is still in 5-year timesteps. First, linear interpolation is applied to produce annual data. Then, downscaling algorithms are applied to each sector to produce monthly data with seasonal variation.
+
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Workflow 4"}
+knitr::include_graphics("vignetteFigs/workflow4.jpg")
+```
 
 For spatial downscaling, the workflow is divided into four parts:
 
