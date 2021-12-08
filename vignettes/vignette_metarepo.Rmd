@@ -100,7 +100,7 @@ This dataset contains water withdrawal projections under a range of socioeconomi
 knitr::include_graphics("vignetteFigs/workflow1.jpg")
 ```
 
-For each valid SSP-RCP combination, five General Circulation Models (GCMs) are used, with the exception of SSP 5-RCP 8.5, which only uses one (Find out why). This gives a grand total of 71 SSP-RCP-GCM combinations, which are fed into the models.
+For each valid SSP-RCP combination, five General Circulation Models (GCMs). This gives a grand total of 75 SSP-RCP-GCM combinations, which are fed into the models.
 
 # Workflow 2 - Model Runs
 (Comment on GCAM, Xanthos, Demeter)
@@ -115,6 +115,9 @@ Withdrawal data for each sector is downscaled spatially first, from 32 regions o
 
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Workflow 3"}
 knitr::include_graphics("vignetteFigs/workflow3.jpg")
+```
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Spatial Workflow"}
+knitr::include_graphics("vignetteFigs/spatialworkflow.png")
 ```
 
 Different downscaling methods are used for different sectors. For spatial downscaling, the workflow is divided into three parts:
@@ -138,6 +141,10 @@ At this stage the data has been downscaled spatially to 0.5 degree grids, but is
 
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Workflow 4"}
 knitr::include_graphics("vignetteFigs/workflow4.jpg")
+```
+
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Temporal Workflow"}
+knitr::include_graphics("vignetteFigs/temporalworkflow.png")
 ```
 
 For spatial downscaling, the workflow is divided into four parts:
@@ -185,7 +192,19 @@ knitr::include_graphics("vignetteFigs/figure3e.png")
 ```
 
 ## Monthly
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Monthly Example"}
+knitr::include_graphics("vignetteFigs/figure4a.png")
+```
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Without Irrigation"}
+knitr::include_graphics("vignetteFigs/figure4b.png")
+```
 
 ## Maps
 
-
+# Validation
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="GCAM inputs vs grids Reaggregated"}
+knitr::include_graphics("vignetteFigs/validation1.png")
+```
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Annual vs Reaggregated Monthly"}
+knitr::include_graphics("vignetteFigs/validation2.png")
+```
