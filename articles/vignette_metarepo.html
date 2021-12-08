@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">khan_etal_2022_tethysSSPRCP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0</span>
       </span>
     </div>
 
@@ -53,7 +55,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/JGCRI/khan-etal_2022_tethysSSPRCP/">
+  <a href="https://github.com/JGCRI/khan-etal_2022_tethysSSPRCP/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -75,7 +77,7 @@
       <h1 data-toc-skip></h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/JGCRI/khan-etal_2022_tethysSSPRCP/blob/master/vignettes/vignette_metarepo.Rmd"><code>vignettes/vignette_metarepo.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JGCRI/khan-etal_2022_tethysSSPRCP/blob/HEAD/vignettes/vignette_metarepo.Rmd" class="external-link"><code>vignettes/vignette_metarepo.Rmd</code></a></small>
       <div class="hidden name"><code>vignette_metarepo.Rmd</code></div>
 
     </div>
@@ -84,9 +86,9 @@
     
 <!-------------------------->
 <!-------------------------->
-<div id="citation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#citation" class="anchor"></a>Citation</h1>
+<div class="section level1">
+<h1 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h1>
 <!-------------------------->
 <!-------------------------->
 <p align="center">
@@ -95,14 +97,14 @@
 <!-------------------------->
 <!-------------------------->
 </div>
-<div id="models-used" class="section level1">
-<h1 class="hasAnchor">
-<a href="#models-used" class="anchor"></a>Models Used</h1>
+<div class="section level1">
+<h1 id="models-used">Models Used<a class="anchor" aria-label="anchor" href="#models-used"></a>
+</h1>
 <!-------------------------->
 <!-------------------------->
 <p align="center">
 <img src="vignetteFigs/divider.png"></p>
-<table class="table table table-striped table-hover table-condensed table-responsive">
+<table class="table table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
 Model
@@ -120,155 +122,34 @@ Language
 Link
 </th>
 </tr></thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td style="text-align:left;">
-WRF
+Tethys
 </td>
 <td style="text-align:left;">
-<ul><li></ul>
+v1.3.0?
 </td>
 <td style="text-align:left;">
-Climate simulation model
-</td>
-<td style="text-align:left;">
-<ul><li></ul>
-</td>
-<td style="text-align:left;">
-<a href="https://www.mmm.ucar.edu/weather-research-and-forecasting-model" class="uri">https://www.mmm.ucar.edu/weather-research-and-forecasting-model</a>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GCAM
-</td>
-<td style="text-align:left;">
-gcam v5.3 (branch gcam-usa-im3)
-</td>
-<td style="text-align:left;">
-Global Change Analysis Model. Human-earth systems dynamic model.
-</td>
-<td style="text-align:left;">
-C++/R
-</td>
-<td style="text-align:left;">
-<a href="https://stash.pnnl.gov/projects/JGCRI/repos/gcam-core/browse?at=refs%2Fheads%2Fzk%2Ffeature%2Fgcam-usa-im3" class="uri">https://stash.pnnl.gov/projects/JGCRI/repos/gcam-core/browse?at=refs%2Fheads%2Fzk%2Ffeature%2Fgcam-usa-im3</a>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Xanthos
-</td>
-<td style="text-align:left;">
-xanthos v2.4.1
-</td>
-<td style="text-align:left;">
-Water runoff emulator at 0.5 degree grids and monthly timesteps.
+Spatiotemporal downscaling model for global water use
 </td>
 <td style="text-align:left;">
 Python
 </td>
 <td style="text-align:left;">
-<a href="https://github.com/JGCRI/xanthos" class="uri">https://github.com/JGCRI/xanthos</a>
+<a href="https://jgcri.github.io/tethys/" class="external-link uri">https://jgcri.github.io/tethys/</a>
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Helios
-</td>
-<td style="text-align:left;">
-helios v1.0.0
-</td>
-<td style="text-align:left;">
-Gridded Heating and cooling degree day calculator at multiple spatial and temporal resolution.
-</td>
-<td style="text-align:left;">
-R
-</td>
-<td style="text-align:left;">
-Helios
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GGCMI
-</td>
-<td style="text-align:left;">
-ggcmi v1.0.0
-</td>
-<td style="text-align:left;">
-Emulators to model agricultural yield impacts in response to climate
-</td>
-<td style="text-align:left;">
-?
-</td>
-<td style="text-align:left;">
-GGCMI
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-rpackageutils
-</td>
-<td style="text-align:left;">
-rpackageutils v1.0.0
-</td>
-<td style="text-align:left;">
-Utility functions to process, aggregate and reformat data.
-</td>
-<td style="text-align:left;">
-R
-</td>
-<td style="text-align:left;">
-<a href="https://github.com/JGCRI/rpackageutils" class="uri">https://github.com/JGCRI/rpackageutils</a>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-im3components
-</td>
-<td style="text-align:left;">
-im3components v1.0.0
-</td>
-<td style="text-align:left;">
-Functions to process data between different IM3 models.
-</td>
-<td style="text-align:left;">
-R/Python
-</td>
-<td style="text-align:left;">
-<a href="https://github.com/IMMM-SFA/im3components" class="uri">https://github.com/IMMM-SFA/im3components</a>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-gcamextractor
-</td>
-<td style="text-align:left;">
-gcamextractor
-</td>
-<td style="text-align:left;">
-Model to extract and process data from GCAM output databases.
-</td>
-<td style="text-align:left;">
-R
-</td>
-<td style="text-align:left;">
-<a href="https://github.com/JGCRI/gcamextractor" class="uri">https://github.com/JGCRI/gcamextractor</a>
-</td>
-</tr>
-</tbody>
+</tr></tbody>
 </table>
 <!--------------------------><!-------------------------->
 </div>
-<div id="data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#data" class="anchor"></a>Data</h1>
+<div class="section level1">
+<h1 id="data-inputs">Data Inputs<a class="anchor" aria-label="anchor" href="#data-inputs"></a>
+</h1>
 <!-------------------------->
 <!-------------------------->
 <p align="center">
 <img src="vignetteFigs/divider.png"></p>
-<table class="table table table-striped table-hover table-condensed table-responsive">
+<table class="table table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
 Data
@@ -286,109 +167,77 @@ Location
 <tbody>
 <tr>
 <td style="text-align:left;">
-WRF Outputs
-</td>
-<td style="text-align:left;">
-WRF runs
-</td>
-<td style="text-align:left;">
-Xanthos, Helios, GGCMI
-</td>
-<td style="text-align:left;">
-(NERSC) /global/cfs/cdirs/m2702/gsharing
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Xanthos Outputs
-</td>
-<td style="text-align:left;">
-Xanthos runs (Workflow 1)
-</td>
-<td style="text-align:left;">
-GCAM
-</td>
-<td style="text-align:left;">
-zenodo link
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Helios Outputs
-</td>
-<td style="text-align:left;">
-Helios runs (Workflow 2)
-</td>
-<td style="text-align:left;">
-GCAM
-</td>
-<td style="text-align:left;">
-zenodo link
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GGCMI Outputs
-</td>
-<td style="text-align:left;">
-GGCMI runs (Workflow 3)
-</td>
-<td style="text-align:left;">
-GCAM
-</td>
-<td style="text-align:left;">
-zenodo link
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Population US States
-</td>
-<td style="text-align:left;">
-xxx
-</td>
-<td style="text-align:left;">
-GCAM
-</td>
-<td style="text-align:left;">
-zenodo link
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Population Gridded
-</td>
-<td style="text-align:left;">
-xxx
-</td>
-<td style="text-align:left;">
-GCAM
-</td>
-<td style="text-align:left;">
-zenodo link
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 GCAM Outputs
 </td>
 <td style="text-align:left;">
-GCAM runs (Workflow 7)
+GCAM runs
 </td>
 <td style="text-align:left;">
-<ul><li></ul>
+Tethys
 </td>
 <td style="text-align:left;">
-zenodo link
+<a href="https://data.pnnl.gov/dataset/13224" class="external-link uri">https://data.pnnl.gov/dataset/13224</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Demeter Outputs
+</td>
+<td style="text-align:left;">
+Demeter runs
+</td>
+<td style="text-align:left;">
+Tethys
+</td>
+<td style="text-align:left;">
+<a href="https://data.pnnl.gov/dataset/13192" class="external-link uri">https://data.pnnl.gov/dataset/13192</a>
 </td>
 </tr>
 </tbody>
 </table>
 <!--------------------------><!-------------------------->
 </div>
-<div id="workflows" class="section level1">
-<h1 class="hasAnchor">
-<a href="#workflows" class="anchor"></a>Workflows</h1>
+<div class="section level1">
+<h1 id="data-outputs">Data Outputs<a class="anchor" aria-label="anchor" href="#data-outputs"></a>
+</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="vignetteFigs/divider.png"></p>
+<table class="table table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+Data
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Used.by
+</th>
+<th style="text-align:left;">
+Location
+</th>
+</tr></thead>
+<tbody><tr>
+<td style="text-align:left;">
+Tethys Outputs
+</td>
+<td style="text-align:left;">
+Tethys runs
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+zenodo link
+</td>
+</tr></tbody>
+</table>
+<!--------------------------><!-------------------------->
+</div>
+<div class="section level1">
+<h1 id="workflows">Workflows<a class="anchor" aria-label="anchor" href="#workflows"></a>
+</h1>
 <!-------------------------->
 <!-------------------------->
 <p align="center">
@@ -399,107 +248,179 @@ Workflow Summary
 </p>
 </div>
 </div>
-<div id="workflow-1---scenarios" class="section level1">
-<h1 class="hasAnchor">
-<a href="#workflow-1---scenarios" class="anchor"></a>Workflow 1 - Scenarios</h1>
-<p>Workflow 1 can be divided into three parts:</p>
-<ul>
-<li>A. SSPs</li>
-<li>B. RCPs</li>
-<li>C. GCMs</li>
-</ul>
-<div id="workflow-1a---ssps" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-1a---ssps" class="anchor"></a>Workflow 1A - SSPs</h2>
+<div class="section level1">
+<h1 id="workflow-1---scenarios">Workflow 1 - Scenarios<a class="anchor" aria-label="anchor" href="#workflow-1---scenarios"></a>
+</h1>
+<p>This dataset contains water withdrawal projections under a range of socioeconomic and climate scenarios. Combinations of five Shared Socioeconomic Pathways (SSPs 1-5) and four Representative Concentration Pathways (RCPs 2.6, 4.5, 6, and 8.5) are used. However, RCP 2.6 is not considered possible under SSP 3, and RCP 8.5 is only considered possible for SSP 5. This leaves 15 valid SSP-RCP combinations, shown in the diagram below.</p>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/workflow1.jpg" alt="Workflow 1" width="100%"><p class="caption">
+Workflow 1
+</p>
 </div>
-<div id="workflow-1b---rcps" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-1b---rcps" class="anchor"></a>Workflow 1B - RCPs</h2>
+<p>For each valid SSP-RCP combination, five General Circulation Models (GCMs). This gives a grand total of 75 SSP-RCP-GCM combinations, which are fed into the models.</p>
 </div>
-<div id="workflow-1c---gcms" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-1c---gcms" class="anchor"></a>Workflow 1C - GCMs</h2>
-</div>
-</div>
-<div id="workflow-2---model-runs" class="section level1">
-<h1 class="hasAnchor">
-<a href="#workflow-2---model-runs" class="anchor"></a>Workflow 2 - Model Runs</h1>
-<p>Workflow 2 can be divided into three parts:</p>
-<ul>
-<li>A. GCAM</li>
-<li>B. Xanthos</li>
-<li>C. Demeter</li>
-</ul>
-<div id="workflow-2a---gcam" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-2a---gcam" class="anchor"></a>Workflow 2A - GCAM</h2>
-</div>
-<div id="workflow-2b---xanthos" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-2b---xanthos" class="anchor"></a>Workflow 2B - Xanthos</h2>
-</div>
-<div id="workflow-2c---demeter" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-2c---demeter" class="anchor"></a>Workflow 2C - Demeter</h2>
+<div class="section level1">
+<h1 id="workflow-2---model-runs">Workflow 2 - Model Runs<a class="anchor" aria-label="anchor" href="#workflow-2---model-runs"></a>
+</h1>
+<p>(Comment on GCAM, Xanthos, Demeter) GCAM is run for each SSP-RCP-GCM combination. The GCAM outputs are at the resolution of 32 geopolitical regions, and 235 water basins, with 5-year timesteps. The sectoral water withdrawal outputs from GCAM are the primary inputs to Tethys, which will be downscaled to the target resolution. Crop outputs from GCAM are sent to Demeter for downscaling, to be used by Tethys for the irrigation sector.</p>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/workflow2.jpg" alt="Workflow 2" width="100%"><p class="caption">
+Workflow 2
+</p>
 </div>
 </div>
-<div id="workflow-3---spatial-downscaling" class="section level1">
-<h1 class="hasAnchor">
-<a href="#workflow-3---spatial-downscaling" class="anchor"></a>Workflow 3 - Spatial Downscaling</h1>
-<p>Workflow 3 can be divided into three parts:</p>
+<div class="section level1">
+<h1 id="workflow-3---spatial-downscaling">Workflow 3 - Spatial Downscaling<a class="anchor" aria-label="anchor" href="#workflow-3---spatial-downscaling"></a>
+</h1>
+<p>Withdrawal data for each sector is downscaled spatially first, from 32 regions or 235 basins to 0.5 degree grids. Of the 259,200 possible grid cells at this resolution (360 x 720), only the 67,420 cells categorized as land are considered (since nobody is withdrawing water from the bottom of the ocean).</p>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/workflow3.jpg" alt="Workflow 3" width="100%"><p class="caption">
+Workflow 3
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/spatialworkflow.png" alt="Spatial Workflow" width="100%"><p class="caption">
+Spatial Workflow
+</p>
+</div>
+<p>Different downscaling methods are used for different sectors. For spatial downscaling, the workflow is divided into three parts:</p>
 <ul>
 <li>A. Nonagricultural Sectors</li>
 <li>B. Livestock</li>
 <li>C. Irrigation</li>
 </ul>
+<div class="section level2">
+<h2 id="workflow-3a---nonagricultural-sectors">Workflow 3A - Nonagricultural Sectors<a class="anchor" aria-label="anchor" href="#workflow-3a---nonagricultural-sectors"></a>
+</h2>
+<p>For nonagricultural sectors (domestic, electricity, manufacturing, and mining), water withdrawal in each grid cell is assumed to be proportional to that cell’s population. (equation, supporting files, function name)</p>
+</div>
+<div class="section level2">
+<h2 id="workflow-3b---livestock">Workflow 3B - Livestock<a class="anchor" aria-label="anchor" href="#workflow-3b---livestock"></a>
+</h2>
+<p>Gridded global maps of livestock in six types (cattle, buffalo, sheep, goats, pigs and poultry) are used as a proxy to downscale livestock water withdrawal.</p>
+</div>
+<div class="section level2">
+<h2 id="workflow-3c---irrigation">Workflow 3C - Irrigation<a class="anchor" aria-label="anchor" href="#workflow-3c---irrigation"></a>
+</h2>
+<p>Uses Demeter outputs.</p>
+</div>
+</div>
+<div class="section level1">
+<h1 id="workflow-4---temporal-downscaling">Workflow 4 - Temporal Downscaling<a class="anchor" aria-label="anchor" href="#workflow-4---temporal-downscaling"></a>
+</h1>
+<p>At this stage the data has been downscaled spatially to 0.5 degree grids, but is still in 5-year timesteps. First, linear interpolation is applied to produce annual data. Then, downscaling algorithms are applied to each sector to produce monthly data with seasonal variation.</p>
 <div class="figure" style="text-align: center">
-<img src="vignetteFigs/annualtotals.png" alt="Total Annual Water Withdrawal" width="100%"><p class="caption">
-Total Annual Water Withdrawal
+<img src="vignetteFigs/workflow4.jpg" alt="Workflow 4" width="100%"><p class="caption">
+Workflow 4
 </p>
 </div>
-<div id="workflow-3a---nonagricultural-sectors" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-3a---nonagricultural-sectors" class="anchor"></a>Workflow 3A - Nonagricultural Sectors</h2>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/temporalworkflow.png" alt="Temporal Workflow" width="100%"><p class="caption">
+Temporal Workflow
+</p>
 </div>
-<div id="workflow-3b---livestock" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-3b---livestock" class="anchor"></a>Workflow 3B - Livestock</h2>
-</div>
-<div id="workflow-3c---irrigation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-3c---irrigation" class="anchor"></a>Workflow 3C - Irrigation</h2>
-</div>
-</div>
-<div id="workflow-4---temporal-downscaling" class="section level1">
-<h1 class="hasAnchor">
-<a href="#workflow-4---temporal-downscaling" class="anchor"></a>Workflow 4 - Temporal Downscaling</h1>
-<p>Workflow 4 can be divided into four parts:</p>
+<p>For spatial downscaling, the workflow is divided into four parts:</p>
 <ul>
 <li>A. Livestock, Manufacturing, and Mining</li>
 <li>B. Domestic</li>
 <li>C. Electricity Generation</li>
 <li>D. Irrigation</li>
 </ul>
-<div id="workflow-4a---livestock-manufacturing-and-mining" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-4a---livestock-manufacturing-and-mining" class="anchor"></a>Workflow 4A - Livestock, Manufacturing, and Mining</h2>
+<div class="section level2">
+<h2 id="workflow-4a---livestock-manufacturing-and-mining">Workflow 4A - Livestock, Manufacturing, and Mining<a class="anchor" aria-label="anchor" href="#workflow-4a---livestock-manufacturing-and-mining"></a>
+</h2>
+<p>For livestock, manufacturing, and mining, a uniform distribution is applied. The withdrawal for the year is divided between months according to the number of days.</p>
 </div>
-<div id="workflow-4b---domestic" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-4b---domestic" class="anchor"></a>Workflow 4B - Domestic</h2>
+<div class="section level2">
+<h2 id="workflow-4b---domestic">Workflow 4B - Domestic<a class="anchor" aria-label="anchor" href="#workflow-4b---domestic"></a>
+</h2>
+<p>Temporally downscaling domestic withdrawal is based on monthly average temperatures, and the relative withdrawals between warmest and coolest months.</p>
 </div>
-<div id="workflow-4c---electricity-generation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-4c---electricity-generation" class="anchor"></a>Workflow 4C - Electricity Generation</h2>
+<div class="section level2">
+<h2 id="workflow-4c---electricity-generation">Workflow 4C - Electricity Generation<a class="anchor" aria-label="anchor" href="#workflow-4c---electricity-generation"></a>
+</h2>
+<p>Assume water use is proportional to electricity generated. Formula based on HDD, CDD.</p>
 </div>
-<div id="workflow-4d---irrigation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-4d---irrigation" class="anchor"></a>Workflow 4D - Irrigation</h2>
+<div class="section level2">
+<h2 id="workflow-4d---irrigation">Workflow 4D - Irrigation<a class="anchor" aria-label="anchor" href="#workflow-4d---irrigation"></a>
+</h2>
+<p>Monthly weighted irrigation profiles based on region and crop type.</p>
 </div>
 </div>
-<div id="workflow-5---results" class="section level1">
-<h1 class="hasAnchor">
-<a href="#workflow-5---results" class="anchor"></a>Workflow 5 - Results</h1>
+<div class="section level1">
+<h1 id="workflow-5---results">Workflow 5 - Results<a class="anchor" aria-label="anchor" href="#workflow-5---results"></a>
+</h1>
+<div class="section level2">
+<h2 id="annual">Annual<a class="anchor" aria-label="anchor" href="#annual"></a>
+</h2>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/figure1.png" alt="Total Annual Water Withdrawal by SSP-RCP-GCM" width="100%"><p class="caption">
+Total Annual Water Withdrawal by SSP-RCP-GCM
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/figure2.png" alt="Global Annual Water Withdrawal by SSP-RCP-GCM and Sector" width="100%"><p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-GCM and Sector
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/figure3a.png" alt="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: gfdl" width="100%"><p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: gfdl
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/figure3b.png" alt="TGlobal Annual Water Withdrawal by SSP-RCP-Sector, GCM: hadgem" width="100%"><p class="caption">
+TGlobal Annual Water Withdrawal by SSP-RCP-Sector, GCM: hadgem
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/figure3c.png" alt="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: ipsl" width="100%"><p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: ipsl
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/figure3d.png" alt="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: miroc" width="100%"><p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: miroc
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/figure3e.png" alt="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: noresm" width="100%"><p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: noresm
+</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="monthly">Monthly<a class="anchor" aria-label="anchor" href="#monthly"></a>
+</h2>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/figure4a.png" alt="Monthly Example" width="100%"><p class="caption">
+Monthly Example
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/figure4b.png" alt="Without Irrigation" width="100%"><p class="caption">
+Without Irrigation
+</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="maps">Maps<a class="anchor" aria-label="anchor" href="#maps"></a>
+</h2>
+</div>
+</div>
+<div class="section level1">
+<h1 id="validation">Validation<a class="anchor" aria-label="anchor" href="#validation"></a>
+</h1>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/validation1.png" alt="GCAM inputs vs grids Reaggregated" width="100%"><p class="caption">
+GCAM inputs vs grids Reaggregated
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="vignetteFigs/validation2.png" alt="Annual vs Reaggregated Monthly" width="100%"><p class="caption">
+Annual vs Reaggregated Monthly
+</p>
+</div>
 </div>
   </div>
 
@@ -514,11 +435,13 @@ Total Annual Water Withdrawal
 
 
       <footer><div class="copyright">
-  <p>Developed by Zarrar Khan.</p>
+  <p></p>
+<p>Developed by Zarrar Khan.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -526,6 +449,8 @@ Total Annual Water Withdrawal
 
   
 
+
+  
 
   </body>
 </html>
