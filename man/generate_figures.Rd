@@ -4,14 +4,19 @@
 \alias{generate_figures}
 \title{generate_figures}
 \usage{
-generate_figures(folder = NULL, data = NULL, temporal_scale = "annual")
+generate_figures(
+  folder = NULL,
+  annual_rds = NULL,
+  monthly_rds = NULL,
+  temporal_scale = "annual"
+)
 }
 \arguments{
 \item{folder}{Default = NULL. Path to folder with tethys outputs}
 
-\item{data}{Default = NULL. rds file of preprocessed data, overrides folder}
-
 \item{temporal_scale}{Default = "annual". Option between "annual", "monthly" or "all"}
+
+\item{data}{Default = NULL. rds file of preprocessed data, overrides folder}
 }
 \description{
 Generate package figures

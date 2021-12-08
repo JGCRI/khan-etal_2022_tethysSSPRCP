@@ -13,25 +13,24 @@
 #' khanetal2022tethysSSPRCP::generate_figures()
 #'}
 
-
 generate_figures <- function(folder=NULL,
-                             data=NULL,
+                             annual_rds=NULL,
+                             monthly_rds=NULL,
                              temporal_scale="annual") {
   NULL -> Year -> Value -> GCM -> Sector -> SSP -> RCP
+
+  water_pal = c("Domestic"="dodgerblue",
+                "Electricity"="darkslateblue",
+                "Manufacturing"="#cef4d1",
+                "Mining"="grey75",
+                "Irrigation"="forestgreen",
+                "Livestock"="goldenrod2")
 
   gcm_pal = c("gfdl" = "gold",
               "hadgem" = "darkorange",
               "ipsl" = "red3",
               "miroc" = "deeppink",
               "noresm" = "darkviolet")
-
-  sector_pal = c("Domestic"="royalblue4",
-                 "Electricity"="yellow3",
-                 "Manufacturing"="steelblue",
-                 "Mining"="cadetblue3",
-                 "Irrigation"="palegreen4",
-                 "Livestock"="yellowgreen")
-
 
   # Initialize
   print("Starting generate_figures ...")
@@ -45,17 +44,17 @@ generate_figures <- function(folder=NULL,
 
     # get all annual data
 
-    if (is.null(data)) {
+    if (is.null(annual_rds)) {
       if (is.null(folder)) {
         print("Provide prepared .rds file or tethys outputs folder")
       } else {
         print(paste("Preparing raw tethys data from", folder))
-        annual_data <- prepare_data(folder)
-        print("To speed up subsequent runs, use data='annual_data.rds'")
+        annual_data <- prepare_annual(folder)
+        print("To speed up subsequent runs, use annual_rds='annual_data.rds'")
       }
     } else {
-      print(paste("Reading data from", data))
-      annual_data <- readRDS(data)
+      print(paste("Reading data from", annual_rds))
+      annual_data <- readRDS(annual_rds)
     }
 
     # Annual plots
@@ -98,7 +97,7 @@ generate_figures <- function(folder=NULL,
                                        y = Value,
                                        group = interaction(GCM, Sector))) +
       ggplot2::geom_line(ggplot2::aes(color=Sector)) +
-      ggplot2::scale_color_manual(values=sector_pal) +
+      ggplot2::scale_color_manual(values=water_pal) +
       ggplot2::facet_grid(RCP~SSP,scales="fixed") +
       ggplot2::ggtitle("Global Annual Water Withdrawal by SSP-RCP-GCM and Sector") +
       ggplot2::xlab("Year") +
@@ -120,7 +119,7 @@ generate_figures <- function(folder=NULL,
     base_fig3 <- list(ggplot2::aes(x = Year, y = Value, fill = Sector),
       ggplot2::geom_bar(position="stack", stat="identity"),
       ggplot2::facet_grid(RCP~SSP,scales="fixed"),
-      ggplot2::scale_fill_manual(values=sector_pal),
+      ggplot2::scale_fill_manual(values=water_pal),
       ggplot2::xlab("Year"),
       ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))),
       ggplot2::theme_bw(),
@@ -190,8 +189,249 @@ generate_figures <- function(folder=NULL,
 
   # Monthly plots
   if(grepl("monthly|all",temporal_scale,ignore.case=T)){
-    prepare_monthly(folder)
+    # get all monthly data
+
+    if (is.null(monthly_rds)) {
+      if (is.null(folder)) {
+        print("Provide prepared .rds file or tethys outputs folder")
+      } else {
+        print(paste("Preparing raw tethys data from", folder))
+        monthly_data <- prepare_monthly(folder)
+        print("To speed up subsequent runs, use monthly_rds='monthly_data.rds'")
+      }
+    } else {
+      print(paste("Reading data from", monthly_rds))
+      monthly_data <- readRDS(monthly_rds)
+    }
+
+    # all sectors
+    print("Building Figure 4a")
+    data4a <- dplyr::filter(monthly_data, (GCM=="gfdl")&(Year %in% c(2010, 2100)))
+    data4a <- dplyr::mutate(data4a, Year=factor(Year), Month=factor(Month, labels=month.abb))
+    p4a <- ggplot2::ggplot(data = data4a,
+                          ggplot2::aes(x = Month,
+                                       y = Value,
+                                       group = interaction(GCM, Sector, Year))) +
+      ggplot2::geom_line(ggplot2::aes(linetype=Year, color=Sector)) +
+      ggplot2::scale_color_manual(values=water_pal) +
+      ggplot2::scale_linetype_manual(values=c("solid", "longdash"))+
+      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+      ggplot2::ggtitle("Global Monthly Water Withdrawal by Year") +
+      ggplot2::xlab("Month") +
+      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p4a
+    ggplot2::ggsave(filename =  "figure4a.png",
+                    plot = p4a,
+                    width = 13,
+                    height = 10) # save plot
+
+    # non-irrigation
+    print("Building Figure 4b")
+    data4b <- dplyr::filter(monthly_data, (Sector!= "Irrigation")&(GCM=="gfdl")&(Year %in% c(2010, 2100)))
+    data4b <- dplyr::mutate(data4b, Year=factor(Year), Month=factor(Month, labels=month.abb))
+    p4b <- ggplot2::ggplot(data = data4b,
+                           ggplot2::aes(x = Month,
+                                        y = Value,
+                                        group = interaction(GCM, Sector, Year))) +
+      ggplot2::geom_line(ggplot2::aes(linetype=Year, color=Sector)) +
+      ggplot2::scale_color_manual(values=water_pal) +
+      ggplot2::scale_linetype_manual(values=c("solid", "longdash"))+
+      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+      ggplot2::ggtitle("Global Monthly Water Withdrawal by Year") +
+      ggplot2::xlab("Month") +
+      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p4b
+    ggplot2::ggsave(filename =  "figure4b.png",
+                    plot = p4b,
+                    width = 13,
+                    height = 10) # save plot
   }
+
+  # Workflow illustrations
+  if(grepl("workflow|all",temporal_scale,ignore.case=T)){
+    # using ssp1_rcp26_gfdl, 2010 to show spatial downscaling
+    library(rmap)
+
+    ssp_rcp_gcm <- "ssp1_rcp26_gfdl"
+    data_year <- 2010
+    secNames <- c("Domestic", "Electricity", "Irrigation", "Livestock", "Manufacturing", "Mining")
+
+    print("Starting spatial downscaling example map ...")
+
+    basinRegion <- dplyr::distinct(rmap::mapIntersectGCAMBasin32Reg@data[c("subRegion_GCAMBasin", "subRegion_GCAMReg32")])
+
+    # In order to plot with rmap facets, need to use the same map for all sectors,
+    # and mapIntersectGCAMBasin32Reg is the "common denominator"
+    # Irrigation data is actually region intersect basin scale, all others are region scale
+    # For non-irrigation, each region_X_basin value is SET to the region's total value,
+    # so the value displayed does not represent the value of the basin
+    region_data <- readRDS("region_data.rds")
+
+    region_data <- dplyr::full_join(tidyr::crossing(basinRegion, class=secNames), region_data)
+    region_data <- dplyr::arrange(region_data, subRegion_GCAMReg32, class) # sort so that below works
+    region_data <- tidyr::fill(region_data, value, .direction = "up") # sets all basin intersections to region's total withdrawal
+    region_data <- tidyr::drop_na(region_data) # get rid of region only rows
+
+    region_data <- dplyr::mutate(region_data, .keep="unused", subRegion=paste0(
+      subRegion_GCAMBasin, "_X_", subRegion_GCAMReg32))
+
+    # read grid data
+
+    print("Loading grid data")
+    files <- paste0(folder, "/", ssp_rcp_gcm, "/wd",
+                    c("dom", "elec", "irr", "liv", "mfg", "min"), "_km3peryr.csv")
+    grid_data <- data.table::rbindlist(lapply(files, function(x){ # stacks long
+      return (data.table::fread(x, select=c(2, 3, 6+(data_year-2010)/5),
+                                col.names=c("lon", "lat", "value"))) }))
+    grid_data <- dplyr::bind_cols(class=rep(secNames, each=67420), grid_data)
+
+    # make the figures
+    print("Building spatial workflow figure")
+    region_map <- rmap::map(data=region_data, ncol=3, shape=rmap::mapIntersectGCAMBasin32Reg, background = T, save=F, show=F)
+    grid_map <- rmap::map(data=grid_data, ncol=3, overLayer = rmap::mapIntersectGCAMBasin32Reg, background = T, save=F, show=F)
+    spatial_wf <- cowplot::plot_grid(region_map[[1]], grid_map[[1]], ncol=1)
+
+    ggplot2::ggsave(filename = "spatialworkflow.png",
+                    plot = spatial_wf,
+                    width = 13,
+                    height = 10) # save plot
+    print("Spatial workflow figure complete")
+
+
+    # Temporal Workflow
+
+    annual_data <- readRDS("annual_data.rds")
+    dataA <- dplyr::filter(annual_data, (SSP=="SSP 1") & (RCP=="RCP 2.6") &
+                             (GCM=="gfdl") &
+                             (Year %in% c(2010)) &
+                           (names(Sector)!="total") &
+                             (names(Sector)!="nonag"))
+    dataA <- dplyr::mutate(dataA, Year=factor(Year))
+    pA <- ggplot2::ggplot(data=dataA,
+                          ggplot2::aes(x = Year, y = Value, fill = Sector))+
+      ggplot2::geom_bar(position="dodge", stat="identity")+
+      ggplot2::scale_fill_manual(values=water_pal)+
+      ggplot2::ggtitle("Annual Water Withdrawal by Sector (2010)")+
+      ggplot2::xlab("Year")+
+      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year)))+
+      ggplot2::theme_bw()+
+      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5));pA
+
+    monthly_data <- readRDS("monthly_data.rds")
+    dataB <- dplyr::filter(monthly_data, (SSP=="SSP 1") & (RCP=="RCP 2.6") &
+                             (GCM=="gfdl") &
+                             (Year %in% c(2010)))
+    dataB <- dplyr::mutate(dataB, Year=factor(Year), Month=factor(Month, labels=month.abb))
+    pB <- ggplot2::ggplot(data=dataB,
+                          ggplot2::aes(x = Month, y = Value, fill = Sector))+
+      ggplot2::geom_bar(position="dodge", stat="identity")+
+      ggplot2::scale_fill_manual(values=water_pal)+
+      ggplot2::ggtitle("Monthly Water Withdrawal by Sector (2010)")+
+      ggplot2::xlab("Month")+
+      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ month)))+
+      ggplot2::theme_bw()+
+      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5));pB
+    temporal_wf <- cowplot::plot_grid(pA, pB)
+    ggplot2::ggsave(filename = "temporalworkflow.png",
+                    plot = temporal_wf,
+                    width = 13,
+                    height = 10) # save plot
+  }
+
+  # validation plots
+  if(grepl("validation|all",temporal_scale,ignore.case=T)){
+
+    # Regions/Basins vs grid cells reaggregated to basins
+
+    # get region data
+    region_data <- readRDS("region_data.rds")
+    region_data <- dplyr::mutate(region_data,
+                                 subRegion = dplyr::case_when(
+                                   class == "Irrigation" ~ subRegion_GCAMBasin,
+                                   TRUE ~ subRegion_GCAMReg32)
+                                 )
+
+    region_data <- dplyr::group_by(region_data, subRegion, sector=class)
+    region_data <- dplyr::summarise(region_data, regionValue=sum(value))
+
+    # get grid data
+    gridLookup <- readRDS("gridLookup.rds")
+    files <- paste0(folder, "/", "ssp1_rcp26_gfdl", "/wd",
+                    c("dom", "elec", "irr", "liv", "mfg", "min"), "_km3peryr.csv")
+    grid_data <- data.table::rbindlist(lapply(files, function(x){ # stacks long
+      return (data.table::fread(x, select=c(1, 6),
+                                col.names=c("GRID_ID", "value"))) }))
+    grid_data <- dplyr::bind_cols(sector=rep(
+      c("Domestic", "Electricity", "Irrigation", "Livestock", "Manufacturing", "Mining"), each=67420), grid_data)
+    # this line breaks, but not when I run line by line
+    grid_data <- dplyr::mutate(grid_data, subRegion=dplyr::case_when(
+      sector == "Irrigation" ~ gridLookup[GRID_ID]$basinName,
+      TRUE ~ gridLookup[GRID_ID]$regionName))
+
+    grid_data <- dplyr::filter(grid_data, subRegion!="No Region")
+    grid_data <- dplyr::group_by(grid_data, sector, subRegion)
+    grid_data <- dplyr::summarise(grid_data, gridValue=sum(value))
+
+    region_vs_grid <- dplyr::full_join(region_data, grid_data)
+    region_vs_grid <- tidyr::drop_na(region_vs_grid)
+    region_vs_grid <- dplyr::mutate(region_vs_grid, diff=(gridValue-regionValue), reldiff=(gridValue-regionValue)/regionValue)
+
+    # a point represents a GCAM region (or basin) and sector (ssp1_rcp26_gfdl, 2010 only)
+    v1 <- ggplot2::ggplot(region_vs_grid,
+                          ggplot2::aes(x=gridValue, y=regionValue, color=sector)) +
+      ggplot2::geom_point(shape=3) +
+      ggplot2::scale_color_manual(values=water_pal) +
+      ggplot2::ggtitle("Regional GCAM Outputs vs Reaggregated Tethys Outputs") +
+      ggplot2::xlab(bquote("Water Withdrawal - Tethys Reaggregated " ~ (km^3 ~ per ~ year))) +
+      ggplot2::ylab(bquote("Water Withdrawal - GCAM Outputs " ~ (km^3 ~ per ~ year)))
+
+    ggplot2::ggsave(filename =  "validation1.png",
+                    plot = v1,
+                    width = 13,
+                    height = 10) # save plot
+
+    v1b <- ggplot2::ggplot(region_vs_grid,
+                          ggplot2::aes(x=regionValue, y=reldiff, color=sector)) +
+      ggplot2::geom_point(shape=3) +
+      ggplot2::ggtitle("Relative Change: GCAM Regions to Tethys") +
+      ggplot2::xlab(bquote("Water Withdrawal - GCAM Outputs " ~ (km^3 ~ per ~ year))) +
+      ggplot2::ylab("Relative Change");
+
+    ggplot2::ggsave(filename =  "validation1b.png",
+                    plot = v1b,
+                    width = 13,
+                    height = 10) # save plot
+
+    # annual to monthly (Temporal Downscaling Step)
+    annual <- readRDS("annual_data.rds")
+    annual <- dplyr::filter(annual, (names(Sector)!="total") &
+                              (names(Sector)!="nonag"))
+    monthly <- readRDS("monthly_data.rds")
+    monthly <- dplyr::filter(monthly, Year %% 5 == 0)
+    monthly <- dplyr::group_by(monthly, SSP, RCP, GCM, Sector, Year)
+    monthly <- dplyr::summarise(monthly, reagg= sum(Value))
+    annual_vs_monthly <- dplyr::full_join(annual, monthly)
+    annual_vs_monthly <- dplyr::mutate(annual_vs_monthly, diff=reagg-Value, reldiff=(reagg-Value)/Value)
+
+    # each point represents total withdrawal by sector (global) in a year
+    v2 <- ggplot2::ggplot(annual_vs_monthly,
+                          ggplot2::aes(x=Value, y=reagg, color = Sector)) +
+      ggplot2::geom_point(shape=3) +
+      ggplot2::theme_bw() +
+      ggplot2::scale_color_manual(values=water_pal) +
+      ggplot2::ggtitle("Tethys Annual vs Tethys Monthly Reaggregated") +
+      ggplot2::xlab(bquote("Annual " ~ (km^3 ~ per ~ year))) +
+      ggplot2::ylab(bquote("Monthly Reaggregated " ~ (km^3 ~ per ~ year))); v2
+    ggplot2::ggsave(filename =  "validation2.png",
+                    plot = v2,
+                    width = 13,
+                    height = 10) # save plot
+
+    }
+
+
 
   # Initialize
   print("generate_figures completed succesfuly!")
@@ -200,9 +440,8 @@ generate_figures <- function(folder=NULL,
 
 ## helpers and other functions below
 
-prepare_data <- function(folder=NULL, outfile="annual_data.rds") {
+prepare_annual <- function(folder=NULL, outfile="annual_data.rds") {
   annual_data <- all_combos()
-  #annual_data <- dplyr::filter(annual_data, (names(Sector) == "total")|(names(Sector) == "irr")) # uncomment for testing on my local files
   files <- dplyr::transmute(annual_data, paste0(
     folder, "/", names(SSP), "_",names(RCP), "_", GCM,
     "/wd", names(Sector), "_km3peryr.csv"))[[1]]
@@ -248,8 +487,69 @@ prepare_monthly <- function(folder=NULL, outfile="monthly_data.rds") {
   monthly_data <- tidyr::crossing(monthly_data, Year=2010:2100, Month=1:12) # each year and month for each combo
   monthly_data <- dplyr::bind_cols(monthly_data, values) # SSP, RCP, GCM, Sector, Year; Value
   saveRDS(monthly_data, file = outfile)
-  print(paste("Monhtly totals saved to", outfile))
+  print(paste("Monthly totals saved to", outfile))
   return (monthly_data)
+}
+
+prepare_GCAM <- function(GCAM_withdrawals_csv=NULL, outfile="region_data.rds") {
+  subReg_to_map <- tibble::deframe(rmap::mappings("mappingGCAMBasins"))
+  subReg_to_map <- setNames(names(subReg_to_map), subReg_to_map)
+
+  scenarios <- dplyr::transmute(all_combos(), paste0(
+    names(SSP), "_",names(RCP), "_", GCM))
+  scenarios <- dplyr:::distinct(scenarios)[[1]]
+
+  print("Loading GCAM data")
+  region_data <- tibble::as_tibble(data.table::fread(GCAM_withdrawals_csv, select=c(2,3,5,6,7)))
+
+  print("Filtering to dataset scenarios and years")
+  region_data <- dplyr::filter(region_data, 2010<=year & year<=2100 & is.element(scenario, scenarios))
+
+  # further filter (only need this scenario-year right now)
+  region_data <- dplyr::filter(region_data, scenario=="ssp1_rcp26_gfdl" & year == 2010)
+  region_data <- dplyr::mutate(region_data, .keep="unused", .after="scenario",
+                               subRegion_GCAMBasin = dplyr::case_when(
+                                 grepl("water_td_irr_", input) ~ subReg_to_map[gsub("water_td_irr_|_W", "", input)],
+                                 TRUE ~ NA_character_),
+                               subRegion_GCAMReg32 = sub("-", "_", region), # need "EU_12", not "EU-12"
+                               class = dplyr::case_when(
+                                 grepl("water_td_dom_", input) ~ "Domestic",
+                                 grepl("water_td_elec_", input) ~ "Electricity",
+                                 grepl("water_td_irr_", input) ~ "Irrigation",
+                                 grepl("water_td_an_", input) ~ "Livestock",
+                                 grepl("water_td_ind_", input) ~ "Manufacturing",
+                                 grepl("water_td_pri_", input) ~ "Mining"))
+  region_data <- dplyr::group_by(region_data, subRegion_GCAMBasin, subRegion_GCAMReg32, class)
+  region_data <- dplyr::summarise(region_data, value=sum(value))
+
+  saveRDS(region_data, file = outfile)
+  print(paste("GCAM data saved to", outfile))
+  return (region_data)
+}
+
+build_gridLookup <- function() {
+  basinIDs <- data.table::fread("basin.csv", col.names="basinID")
+  regionIDs <- data.table::fread("region32_grids.csv", col.names="regionID")
+
+  # correct Arkansas_White_Red_Basin to Arkansas_White_Red, etc,
+  basinID_to_basinName <- gsub("_Basin$", "", tibble::deframe(data.table::fread(
+    "gcam_basin_lookup.csv", select=c(1,2))[order(basin_id)]))
+  basinID_to_basinName["102"] <- "Hamun_i_Mashkel" # from "HamuniMashkel"
+  basinID_to_basinName["109"] <- "Hong_Red_River" # from "Hong_(Red_River)"
+
+  # correct EU-12 to EU_12,
+  regionID_to_regionName <- gsub("-", "_", tibble::deframe(data.table::fread(
+    "RgnNames.csv", select=c(2,1))[order(region_id)]))
+
+
+  gridLookup <- dplyr::bind_cols(gridID=1:67420, basinIDs, regionIDs)
+  gridLookup <- dplyr::mutate(gridLookup, basinName = basinID_to_basinName[as.character(basinID)],
+                              regionName=dplyr::case_when(
+                                regionID == 0 ~ "No Region",
+                                TRUE ~ regionID_to_regionName[as.character(regionID)]
+                              ))
+  saveRDS(gridLookup, file = "gridLookup.rds")
+  return(gridLookup)
 }
 
 
@@ -280,8 +580,7 @@ all_combos <- function() {
                                        total = "Total")
   )
   combos <- dplyr::filter(combos, !(SSP=="SSP 3" & RCP=="RCP 2.6") & # if rcp26, exclude ssp3
-                            !(SSP!="SSP 5" & RCP=="RCP 8.5") & # if rcp85, must use ssp5
-                            !(RCP=="RCP 8.5" & GCM!="gfdl") # if rcp85, must use gfdl
+                            !(SSP!="SSP 5" & RCP=="RCP 8.5") # if rcp85, must use ssp5
   )
   return(combos)
 }
