@@ -347,15 +347,14 @@ generate_figures <- function(folder=NULL,
 
     # get region data
     region_data <- readRDS("region_data.rds")
-    region_data <- dplyr::mutate(region_data,
-                                 subRegion = dplyr::case_when(
+    region_data <- dplyr::mutate(region_data, subRegion = dplyr::case_when(
                                    class == "Irrigation" ~ subRegion_GCAMBasin,
-                                   TRUE ~ subRegion_GCAMReg32)
-                                 )
+                                   TRUE ~ subRegion_GCAMReg32))
 
     region_data <- dplyr::group_by(region_data, subRegion, sector=class)
     region_data <- dplyr::summarise(region_data, regionValue=sum(value))
 
+    print("Loading grid data")
     # get grid data
     gridLookup <- readRDS("gridLookup.rds")
     files <- paste0(folder, "/", "ssp1_rcp26_gfdl", "/wd",
@@ -363,12 +362,17 @@ generate_figures <- function(folder=NULL,
     grid_data <- data.table::rbindlist(lapply(files, function(x){ # stacks long
       return (data.table::fread(x, select=c(1, 6),
                                 col.names=c("GRID_ID", "value"))) }))
-    grid_data <- dplyr::bind_cols(sector=rep(
-      c("Domestic", "Electricity", "Irrigation", "Livestock", "Manufacturing", "Mining"), each=67420), grid_data)
-    # this line breaks, but not when I run line by line
+    grid_data <- dplyr::bind_cols(sector=rep(c("Domestic",
+                                               "Electricity",
+                                               "Irrigation",
+                                               "Livestock",
+                                               "Manufacturing",
+                                               "Mining"), each=67420),
+                                  grid_data)
+
     grid_data <- dplyr::mutate(grid_data, subRegion=dplyr::case_when(
-      sector == "Irrigation" ~ gridLookup[GRID_ID]$basinName,
-      TRUE ~ gridLookup[GRID_ID]$regionName))
+      sector == "Irrigation" ~ gridLookup$basinName[GRID_ID],
+      TRUE ~ gridLookup$regionName[GRID_ID]))
 
     grid_data <- dplyr::filter(grid_data, subRegion!="No Region")
     grid_data <- dplyr::group_by(grid_data, sector, subRegion)
@@ -382,6 +386,7 @@ generate_figures <- function(folder=NULL,
     v1 <- ggplot2::ggplot(region_vs_grid,
                           ggplot2::aes(x=gridValue, y=regionValue, color=sector)) +
       ggplot2::geom_point(shape=3) +
+      ggplot2::theme_bw() +
       ggplot2::scale_color_manual(values=water_pal) +
       ggplot2::ggtitle("Regional GCAM Outputs vs Reaggregated Tethys Outputs") +
       ggplot2::xlab(bquote("Water Withdrawal - Tethys Reaggregated " ~ (km^3 ~ per ~ year))) +

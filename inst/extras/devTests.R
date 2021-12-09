@@ -10,5 +10,9 @@ GCAM_withdrawals_csv = "C:/Users/thom927/Documents/Data/GrahamGCAM/water_withdra
 out <- generate_figures(annual_rds = "annual_data.rds",
                         monthly_rds = "monthly_data.rds",
                         folder = "C:/Users/thom927/Documents/Data/tethysDemeterOutputs",
-                        temporal_scale = "annual")
+                        temporal_scale = "workflow")
 
+cropfile = "crops_twdirr_biomass_km3permonth.csv"
+df <- data.table::fread(cropfile, drop=1:5)
+a <- data.table::melt(df)
+b <- tibble::as_tibble(a)

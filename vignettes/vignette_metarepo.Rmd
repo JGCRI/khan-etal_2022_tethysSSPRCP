@@ -147,7 +147,7 @@ knitr::include_graphics("vignetteFigs/workflow4.jpg")
 knitr::include_graphics("vignetteFigs/temporalworkflow.png")
 ```
 
-For spatial downscaling, the workflow is divided into four parts:
+For temporal downscaling, the workflow is divided into four parts:
 
 * A. Livestock, Manufacturing, and Mining
 * B. Domestic
@@ -199,12 +199,16 @@ knitr::include_graphics("vignetteFigs/figure4a.png")
 knitr::include_graphics("vignetteFigs/figure4b.png")
 ```
 
-## Maps
+## Regional
 
 # Validation
+
+## Spatial
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="GCAM inputs vs grids Reaggregated"}
 knitr::include_graphics("vignetteFigs/validation1.png")
 ```
+
+## Temporal
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Annual vs Reaggregated Monthly"}
 knitr::include_graphics("vignetteFigs/validation2.png")
 ```
