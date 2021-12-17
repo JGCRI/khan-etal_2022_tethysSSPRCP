@@ -15,7 +15,7 @@ resourse_files:
 <!-------------------------->
 <p align="center"> <img src="vignetteFigs/divider.png"></p>
 
-Khan, Z., Thompson, I., Vernon, C., 2022. A global gridded monthly water withdrawal dataset for multiple sectors from 2015 to 2100 at 0.5° resolution under a range of socioeconomic and climate scenarios. (In progress) Journal_TBD, DOI: XXXX
+Khan, Z., Thompson, I., Vernon, C., 2022. A global gridded monthly water withdrawal dataset for multiple sectors from 2010 to 2100 at 0.5° resolution under a range of socioeconomic and climate scenarios. (In progress) Journal_TBD, DOI: XXXX
 
 <!-------------------------->
 <!-------------------------->
@@ -144,6 +144,10 @@ knitr::include_graphics("vignetteFigs/workflow4.jpg")
 ```
 
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Temporal Workflow"}
+knitr::include_graphics("vignetteFigs/temporalworkflow1.png")
+```
+
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Temporal Workflow"}
 knitr::include_graphics("vignetteFigs/temporalworkflow.png")
 ```
 
@@ -167,6 +171,7 @@ Assume water use is proportional to electricity generated. Formula based on HDD,
 Monthly weighted irrigation profiles based on region and crop type.
 
 # Workflow 5 - Results
+The below summary figures provide a qualitative overview of the data at a glance.
 
 ## Annual
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Total Annual Water Withdrawal by SSP-RCP-GCM"}
@@ -175,21 +180,25 @@ knitr::include_graphics("vignetteFigs/figure1.png")
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-GCM and Sector"}
 knitr::include_graphics("vignetteFigs/figure2.png")
 ```
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: gfdl"}
-knitr::include_graphics("vignetteFigs/figure3a.png")
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-GCM and Crop"}
+knitr::include_graphics("vignetteFigs/figure6.png")
 ```
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="TGlobal Annual Water Withdrawal by SSP-RCP-Sector, GCM: hadgem"}
-knitr::include_graphics("vignetteFigs/figure3b.png")
-```
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: ipsl"}
-knitr::include_graphics("vignetteFigs/figure3c.png")
-```
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: miroc"}
-knitr::include_graphics("vignetteFigs/figure3d.png")
-```
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: noresm"}
-knitr::include_graphics("vignetteFigs/figure3e.png")
-```
+
+<!-- # ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: gfdl"} -->
+<!-- # knitr::include_graphics("vignetteFigs/figure3a.png") -->
+<!-- # ``` -->
+<!-- # ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="TGlobal Annual Water Withdrawal by SSP-RCP-Sector, GCM: hadgem"} -->
+<!-- # knitr::include_graphics("vignetteFigs/figure3b.png") -->
+<!-- # ``` -->
+<!-- # ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: ipsl"} -->
+<!-- # knitr::include_graphics("vignetteFigs/figure3c.png") -->
+<!-- # ``` -->
+<!-- # ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: miroc"} -->
+<!-- # knitr::include_graphics("vignetteFigs/figure3d.png") -->
+<!-- # ``` -->
+<!-- # ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: noresm"} -->
+<!-- # knitr::include_graphics("vignetteFigs/figure3e.png") -->
+<!-- #``` -->
 
 ## Monthly
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Monthly Example"}
@@ -198,17 +207,49 @@ knitr::include_graphics("vignetteFigs/figure4a.png")
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Without Irrigation"}
 knitr::include_graphics("vignetteFigs/figure4b.png")
 ```
-
-## Regional
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Selected Crops"}
+knitr::include_graphics("vignetteFigs/figure5.png")
+```
 
 # Validation
+In order for the downscaling to be considered valid, it must preserve the total amount of water withdrawn within each sector, for each subregion and year. Of course, some small differences are inevitable due to the nature of floating point calculations, but the outputs should be consistent with the inputs.
+
+It should be noted that being consistent with the inputs is merely a necessary condition, and does not in and of itself mean that the outputs will match observed values. This discussion is outside the scope of this paper. For comments justification on the downscaling algorithms and assumptions made, refer to the references.
 
 ## Spatial
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="GCAM inputs vs grids Reaggregated"}
 knitr::include_graphics("vignetteFigs/validation1.png")
 ```
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="GCAM inputs vs grids Reaggregated"}
+knitr::include_graphics("vignetteFigs/validation2.png")
+```
 
 ## Temporal
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Annual vs Reaggregated Monthly"}
-knitr::include_graphics("vignetteFigs/validation2.png")
+knitr::include_graphics("vignetteFigs/validation3.png")
 ```
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Annual vs Reaggregated Monthly"}
+knitr::include_graphics("vignetteFigs/validation4.png")
+```
+
+# Regional Spotlights
+We have selected the following regions from literature to explore in more detail, as a way of showing the full resolution of this data set and the kinds of analyses it allows for.
+
+## Indus
+Placeholder Text
+
+Make the text longer so I can see how
+
+The webpage looks
+
+at the bottom
+
+more
+
+## Nile
+Placeholder Text
+
+## Colorado
+Placeholder Text
+
+

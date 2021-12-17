@@ -32,6 +32,20 @@ generate_figures <- function(folder=NULL,
               "miroc" = "deeppink",
               "noresm" = "darkviolet")
 
+  crop_pal = c("Corn" = "gold3",
+               "FiberCrop" = "gold4",
+               "MiscCrop" = "darkorange4",
+               "OilCrop" = "gray20",
+               "OtherGrain" = "indianred2",
+               "PalmFruit" = "firebrick3",
+               "Rice" = "steelblue2",
+               "Root_Tuber" = "mediumpurple",
+               "SugarCrop" = "yellow2",
+               "Wheat" = "burlywood",
+               "FodderHerb" = "darkseagreen4",
+               "FodderGrass" = "mediumseagreen",
+               "biomass" = "#00931d")
+
   # Initialize
   print("Starting generate_figures ...")
 
@@ -185,6 +199,25 @@ generate_figures <- function(folder=NULL,
                     plot = p3e,
                     width = 13,
                     height = 10) # save plot
+
+    data6 <- readRDS("annual_crops.rds")
+    p6 <- ggplot2::ggplot(data = data6,
+                          ggplot2::aes(x = Year,
+                                       y = Value,
+                                       group = interaction(GCM, Crop))) +
+      ggplot2::geom_line(ggplot2::aes(color=Crop)) + #linetype=GCM
+      ggplot2::scale_color_manual(values=crop_pal) +
+      #ggplot2::scale_linetype_manual(values=c("solid", "longdash", "dashed", "dotdash", "dotted"))+
+      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+      ggplot2::ggtitle("Annual Crop Water Withdrawal by SSP-RCP-GCM") +
+      ggplot2::xlab("Year") +
+      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p6
+    ggplot2::ggsave(filename =  "figure6.png",
+                    plot = p6,
+                    width = 13,
+                    height = 10) # save plot
   }
 
   # Monthly plots
@@ -247,6 +280,32 @@ generate_figures <- function(folder=NULL,
                     plot = p4b,
                     width = 13,
                     height = 10) # save plot
+
+    # Crops
+    monthly_crops <- readRDS("monthly_crops.rds")
+
+    filter_out_crops <- c("PalmFruit", "FodderGrass", "Root_Tuber", "FodderHerb", "OtherGrain")
+    filter_crops <- c("Rice", "Wheat", "FiberCrop", "SugarCrop", "biomass")
+    data5 <- dplyr::filter(monthly_crops, GCM == "gfdl" & Year %in% c(2010, 2100) &
+                             Crop %in% filter_crops)
+    data5 <- dplyr::mutate(data5, Year=factor(Year), Month=factor(Month, labels=month.abb))
+    p5 <- ggplot2::ggplot(data = data5,
+                           ggplot2::aes(x = Month,
+                                        y = Value,
+                                        group = interaction(GCM, Crop, Year))) +
+      ggplot2::geom_line(ggplot2::aes(linetype=Year, color=Crop)) +
+      ggplot2::scale_color_manual(values=crop_pal[names(crop_pal) %in% filter_crops]) +
+      ggplot2::scale_linetype_manual(values=c("solid", "longdash"))+
+      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+      ggplot2::ggtitle("Global Monthly Water Withdrawal by Year, Selected Crops") +
+      ggplot2::xlab("Month") +
+      ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p5
+    ggplot2::ggsave(filename =  "figure5.png",
+                    plot = p5,
+                    width = 13,
+                    height = 10)
   }
 
   # Workflow illustrations
@@ -268,14 +327,16 @@ generate_figures <- function(folder=NULL,
     # For non-irrigation, each region_X_basin value is SET to the region's total value,
     # so the value displayed does not represent the value of the basin
     region_data <- readRDS("region_data.rds")
+    region_data <- dplyr::filter(region_data, scenario==ssp_rcp_gcm, year==2010)
 
     region_data <- dplyr::full_join(tidyr::crossing(basinRegion, class=secNames), region_data)
     region_data <- dplyr::arrange(region_data, subRegion_GCAMReg32, class) # sort so that below works
-    region_data <- tidyr::fill(region_data, value, .direction = "up") # sets all basin intersections to region's total withdrawal
+    region_data <- tidyr::fill(region_data, scenario, year, value, .direction = "up") # sets all basin intersections to region's total withdrawal
     region_data <- tidyr::drop_na(region_data) # get rid of region only rows
 
     region_data <- dplyr::mutate(region_data, .keep="unused", subRegion=paste0(
       subRegion_GCAMBasin, "_X_", subRegion_GCAMReg32))
+
 
     # read grid data
 
@@ -289,9 +350,9 @@ generate_figures <- function(folder=NULL,
 
     # make the figures
     print("Building spatial workflow figure")
-    region_map <- rmap::map(data=region_data, ncol=3, shape=rmap::mapIntersectGCAMBasin32Reg, background = T, save=F, show=F)
-    grid_map <- rmap::map(data=grid_data, ncol=3, overLayer = rmap::mapIntersectGCAMBasin32Reg, background = T, save=F, show=F)
-    spatial_wf <- cowplot::plot_grid(region_map[[1]], grid_map[[1]], ncol=1)
+    region_map <- rmap::map(data=region_data, title="Before Spatial Downscaling", ncol=3, shape=rmap::mapIntersectGCAMBasin32Reg, background = T, save=F, show=F)
+    grid_map <- rmap::map(data=grid_data, title="After Spatial Downscaling", ncol=3, overLayer = rmap::mapCountries, background = T, save=F, show=F)
+    spatial_wf <- region_map$map_param_KMEANS / grid_map$map_param_KMEANS #cowplot::plot_grid(region_map[[1]], grid_map[[1]], ncol=1)
 
     ggplot2::ggsave(filename = "spatialworkflow.png",
                     plot = spatial_wf,
@@ -302,6 +363,23 @@ generate_figures <- function(folder=NULL,
 
     # Temporal Workflow
 
+    # Annual and monthly maps, using ssp1_rcp26_gfdl, 2010, irrigation
+    annual_grid_data <- data.table::fread(paste0(folder,"/ssp1_rcp26_gfdl/wdirr_km3peryr.csv"),
+                                          select=c(2, 3, 6), col.names=c("lon", "lat", "value"))
+    monthly_grid_data <- data.table::fread(paste0(folder,"/ssp1_rcp26_gfdl/twdirr_km3permonth.csv"),
+                                          select=c(2, 3, 6:17), col.names=c("lon", "lat", month.abb))
+    monthly_grid_data <- data.table::melt(monthly_grid_data, measure.vars=month.abb, variable.name="scenario")
+
+    annual_map <- rmap::map(annual_grid_data, overLayer=rmap::mapCountries, background=T, save=F, show=F)
+    monthly_map <- rmap::map(monthly_grid_data, overLayer=rmap::mapCountries, background=T, save=F, show=F)
+    temporal_wf1 <- annual_map$map_param_KMEANS / monthly_map$map_param_KMEANS
+    ggplot2::ggsave(filename = "temporalworkflow1.png",
+                    plot = temporal_wf1,
+                    width = 13,
+                    height = 10) # save plot
+
+
+    # annual graph, monthly graph
     annual_data <- readRDS("annual_data.rds")
     dataA <- dplyr::filter(annual_data, (SSP=="SSP 1") & (RCP=="RCP 2.6") &
                              (GCM=="gfdl") &
@@ -343,96 +421,134 @@ generate_figures <- function(folder=NULL,
   # validation plots
   if(grepl("validation|all",temporal_scale,ignore.case=T)){
 
-    # Regions/Basins vs grid cells reaggregated to basins
+    # Validation  1: Spatial Downscaling
+    # 1 point for each ssp-rcp-gcm (75) x GCAM Year (19) x Sector (6)
+    # x-axis: total water withdrawal for that point (sum over GCAM regions/basins)
+    # y-axis: total water withdrawal for that point (sum over 67420 Tethys grids)
 
-    # get region data
-    region_data <- readRDS("region_data.rds")
-    region_data <- dplyr::mutate(region_data, subRegion = dplyr::case_when(
-                                   class == "Irrigation" ~ subRegion_GCAMBasin,
-                                   TRUE ~ subRegion_GCAMReg32))
-
-    region_data <- dplyr::group_by(region_data, subRegion, sector=class)
-    region_data <- dplyr::summarise(region_data, regionValue=sum(value))
+    GCAM_data <- readRDS("region_data.rds")
+    GCAM_data <- dplyr::group_by(GCAM_data, scenario, Year=year, Sector=class)
+    GCAM_data <- dplyr::summarise(GCAM_data, GCAM_Value=sum(value))
 
     print("Loading grid data")
     # get grid data
-    gridLookup <- readRDS("gridLookup.rds")
-    files <- paste0(folder, "/", "ssp1_rcp26_gfdl", "/wd",
-                    c("dom", "elec", "irr", "liv", "mfg", "min"), "_km3peryr.csv")
-    grid_data <- data.table::rbindlist(lapply(files, function(x){ # stacks long
-      return (data.table::fread(x, select=c(1, 6),
-                                col.names=c("GRID_ID", "value"))) }))
-    grid_data <- dplyr::bind_cols(sector=rep(c("Domestic",
-                                               "Electricity",
-                                               "Irrigation",
-                                               "Livestock",
-                                               "Manufacturing",
-                                               "Mining"), each=67420),
-                                  grid_data)
+    spatial_data <- readRDS("annual_data.rds")
+    spatial_data <- dplyr::filter(spatial_data, Sector!="Total"&Sector!="Non-Agriculture")
+    spatial_data <- dplyr::mutate(spatial_data, .keep="unused", .before="Sector",
+                                  scenario=paste0(names(SSP), "_", names(RCP), "_", GCM))
 
-    grid_data <- dplyr::mutate(grid_data, subRegion=dplyr::case_when(
-      sector == "Irrigation" ~ gridLookup$basinName[GRID_ID],
-      TRUE ~ gridLookup$regionName[GRID_ID]))
+    GCAM_vs_spatial <- dplyr::full_join(GCAM_data, spatial_data)
+    GCAM_vs_spatial <- dplyr::mutate(GCAM_vs_spatial, diff=(Value-GCAM_Value), reldiff=(Value-GCAM_Value)/GCAM_Value)
 
-    grid_data <- dplyr::filter(grid_data, subRegion!="No Region")
-    grid_data <- dplyr::group_by(grid_data, sector, subRegion)
-    grid_data <- dplyr::summarise(grid_data, gridValue=sum(value))
-
-    region_vs_grid <- dplyr::full_join(region_data, grid_data)
-    region_vs_grid <- tidyr::drop_na(region_vs_grid)
-    region_vs_grid <- dplyr::mutate(region_vs_grid, diff=(gridValue-regionValue), reldiff=(gridValue-regionValue)/regionValue)
-
-    # a point represents a GCAM region (or basin) and sector (ssp1_rcp26_gfdl, 2010 only)
-    v1 <- ggplot2::ggplot(region_vs_grid,
-                          ggplot2::aes(x=gridValue, y=regionValue, color=sector)) +
+    v1 <- ggplot2::ggplot(GCAM_vs_spatial,
+                          ggplot2::aes(x=GCAM_Value, y=Value, color=Sector)) +
       ggplot2::geom_point(shape=3) +
+      ggplot2::coord_fixed() +
       ggplot2::theme_bw() +
       ggplot2::scale_color_manual(values=water_pal) +
-      ggplot2::ggtitle("Regional GCAM Outputs vs Reaggregated Tethys Outputs") +
-      ggplot2::xlab(bquote("Water Withdrawal - Tethys Reaggregated " ~ (km^3 ~ per ~ year))) +
-      ggplot2::ylab(bquote("Water Withdrawal - GCAM Outputs " ~ (km^3 ~ per ~ year)))
-
+      ggplot2::ggtitle("GCAM vs Spatially Downscaled") +
+      ggplot2::xlab(bquote("GCAM Water Withdrawal " ~ (km^3 ~ per ~ year))) +
+      ggplot2::ylab(bquote("Spatially Downscaled, Reaggregated " ~ (km^3 ~ per ~ year)))
     ggplot2::ggsave(filename =  "validation1.png",
                     plot = v1,
                     width = 13,
                     height = 10) # save plot
 
-    v1b <- ggplot2::ggplot(region_vs_grid,
-                          ggplot2::aes(x=regionValue, y=reldiff, color=sector)) +
+    # Validation  2: Spatial Downscaling - Crops
+    # 1 point for each ssp-rcp-gcm (75) x GCAM Year (19) x Crop (13)
+    # x-axis: total water withdrawal for that point (sum over GCAM regions/basins)
+    # y-axis: total water withdrawal for that point (sum over 67420 Tethys grids)
+
+    GCAM_crops <- readRDS("region_crops.rds")
+    GCAM_crops <- dplyr::rename(GCAM_crops, GCAM_Value=Value)
+    GCAM_crops <- dplyr::group_by(GCAM_crops, scenario, Crop, Year)
+    GCAM_crops <- dplyr::summarise(GCAM_crops, GCAM_Value=sum(GCAM_Value))
+
+    annual_crops <- readRDS("annual_crops.rds")
+    annual_crops <- dplyr::mutate(annual_crops, .keep="unused", .before="Crop",
+                                  scenario=paste0(names(SSP), "_", names(RCP), "_", GCM))
+
+    GCAM_vs_spatial_crops <- dplyr::full_join(GCAM_crops, annual_crops)
+    GCAM_vs_spatial_crops <- dplyr::mutate(GCAM_vs_spatial_crops, difference=Value-GCAM_Value)
+    GCAM_vs_spatial_crops <- dplyr::mutate(GCAM_vs_spatial_crops, .keep="unused", .before="Crop",
+                                           SSP = substr(scenario, 1, 4),
+                                           RCP = substr(scenario, 6, 10),
+                                           GCM = substr(scenario, 12, 17))
+
+    v2 <- ggplot2::ggplot(GCAM_vs_spatial_crops, ggplot2::aes(x=GCAM_Value,
+                                                              y=Value,
+                                                              color = Crop)) +
       ggplot2::geom_point(shape=3) +
-      ggplot2::ggtitle("Relative Change: GCAM Regions to Tethys") +
-      ggplot2::xlab(bquote("Water Withdrawal - GCAM Outputs " ~ (km^3 ~ per ~ year))) +
-      ggplot2::ylab("Relative Change");
-
-    ggplot2::ggsave(filename =  "validation1b.png",
-                    plot = v1b,
-                    width = 13,
-                    height = 10) # save plot
-
-    # annual to monthly (Temporal Downscaling Step)
-    annual <- readRDS("annual_data.rds")
-    annual <- dplyr::filter(annual, (names(Sector)!="total") &
-                              (names(Sector)!="nonag"))
-    monthly <- readRDS("monthly_data.rds")
-    monthly <- dplyr::filter(monthly, Year %% 5 == 0)
-    monthly <- dplyr::group_by(monthly, SSP, RCP, GCM, Sector, Year)
-    monthly <- dplyr::summarise(monthly, reagg= sum(Value))
-    annual_vs_monthly <- dplyr::full_join(annual, monthly)
-    annual_vs_monthly <- dplyr::mutate(annual_vs_monthly, diff=reagg-Value, reldiff=(reagg-Value)/Value)
-
-    # each point represents total withdrawal by sector (global) in a year
-    v2 <- ggplot2::ggplot(annual_vs_monthly,
-                          ggplot2::aes(x=Value, y=reagg, color = Sector)) +
-      ggplot2::geom_point(shape=3) +
+      ggplot2::coord_fixed() +
       ggplot2::theme_bw() +
-      ggplot2::scale_color_manual(values=water_pal) +
-      ggplot2::ggtitle("Tethys Annual vs Tethys Monthly Reaggregated") +
-      ggplot2::xlab(bquote("Annual " ~ (km^3 ~ per ~ year))) +
-      ggplot2::ylab(bquote("Monthly Reaggregated " ~ (km^3 ~ per ~ year))); v2
+      ggplot2::scale_color_manual(values=crop_pal) +
+      ggplot2::ggtitle("GCAM vs Spatially Downscaled (Crops)") +
+      ggplot2::xlab(bquote("GCAM Water Withdrawal " ~ (km^3 ~ per ~ year))) +
+      ggplot2::ylab(bquote("Spatially Downscaled, Reaggregated " ~ (km^3 ~ per ~ year)))
     ggplot2::ggsave(filename =  "validation2.png",
                     plot = v2,
                     width = 13,
                     height = 10) # save plot
+
+
+    # Validation  3: Temporal Downscaling
+    # 1 point for each ssp-rcp-gcm (75) x GCAM Year (19) x Sector (6)
+    # x-axis: total water withdrawal for that point (sum over 67420 Tethys grids)
+    # y-axis: total water withdrawal for that point (sum over 67420 Tethys grids, 12 months)
+    annual_data <- readRDS("annual_data.rds")
+    annual_data <- dplyr::filter(annual_data, (names(Sector)!="total") &
+                              (names(Sector)!="nonag"))
+
+    monthly_data <- readRDS("monthly_data.rds")
+    monthly_data <- dplyr::filter(monthly_data, Year %% 5 == 0)
+    monthly_data <- dplyr::group_by(monthly_data, SSP, RCP, GCM, Sector, Year)
+    monthly_data <- dplyr::summarise(monthly_data, monthly_Value = sum(Value))
+    annual_vs_monthly <- dplyr::full_join(annual_data, monthly_data)
+    annual_vs_monthly <- dplyr::mutate(annual_vs_monthly, diff=monthly_Value-Value, reldiff=(monthly_Value-Value)/Value)
+
+    # each point represents total withdrawal by sector (global) in a year
+    v3 <- ggplot2::ggplot(annual_vs_monthly,
+                          ggplot2::aes(x=Value, y=monthly_Value, color = Sector)) +
+      ggplot2::geom_point(shape=3) +
+      ggplot2::coord_fixed() +
+      ggplot2::theme_bw() +
+      ggplot2::scale_color_manual(values=water_pal) +
+      ggplot2::ggtitle("Tethys Annual vs Tethys Monthly") +
+      ggplot2::xlab(bquote("Tethys Annual Withdrawal" ~ (km^3 ~ per ~ year))) +
+      ggplot2::ylab(bquote("Tethys Monthly Withdrawal, Reaggregated " ~ (km^3 ~ per ~ year)))
+    ggplot2::ggsave(filename =  "validation3.png",
+                    plot = v3,
+                    width = 13,
+                    height = 10) # save plot
+
+
+
+    # Validation  4: Temporal Downscaling (Crops)
+    # 1 point for each ssp-rcp-gcm (75) x GCAM Year (19) x Crop (13)
+    # x-axis: total water withdrawal for that point (sum over 67420 Tethys grids)
+    # y-axis: total water withdrawal for that point (sum over 67420 Tethys grids, 12 months)
+    annual <- readRDS("annual_crops.rds")
+    monthly <- readRDS("monthly_crops.rds")
+    monthly <- dplyr::filter(monthly, Year %% 5 == 0)
+    monthly <- dplyr::group_by(monthly, SSP, RCP, GCM, Crop, Year)
+    monthly <- dplyr::summarise(monthly, reagg= sum(Value))
+    annual_vs_monthly <- dplyr::full_join(annual, monthly)
+    annual_vs_monthly <- dplyr::mutate(annual_vs_monthly, diff=reagg-Value, reldiff=(reagg-Value)/Value)
+
+    # each point represents total withdrawal by crop (global) in a year
+    v4 <- ggplot2::ggplot(annual_vs_monthly,
+                          ggplot2::aes(x=Value, y=reagg, color = Crop)) +
+      ggplot2::geom_point(shape=3) +
+      ggplot2::theme_bw() +
+      ggplot2::scale_color_manual(values=crop_pal) +
+      ggplot2::ggtitle("Tethys Annual vs Tethys Monthly (Crops)") +
+      ggplot2::xlab(bquote("Tethys Annual Withdrawal" ~ (km^3 ~ per ~ year))) +
+      ggplot2::ylab(bquote("Tethys Monthly Withdrawal, Reaggregated " ~ (km^3 ~ per ~ year)))
+    ggplot2::ggsave(filename =  "validation4.png",
+                    plot = v4,
+                    width = 13,
+                    height = 10) # save plot
+
 
     }
 
@@ -485,7 +601,7 @@ prepare_monthly <- function(folder=NULL, outfile="monthly_data.rds") {
       print(paste0("Progress: ", round(100*i/length(files), digits=2),
                    "%, Estimated time remaining: ", format(time_remaining)))
     }
-    return(data.frame(Value=colSums(data.table::fread(files[i], drop=1:5)))) # sums of year columns
+    return(data.frame(Value=colSums(data.table::fread(files[i], drop=1:5)))) # sums of month columns
   }))
   print("Data loaded")
 
@@ -494,6 +610,92 @@ prepare_monthly <- function(folder=NULL, outfile="monthly_data.rds") {
   saveRDS(monthly_data, file = outfile)
   print(paste("Monthly totals saved to", outfile))
   return (monthly_data)
+}
+
+prepare_annual_crops <- function(folder=NULL, outfile="annual_crops.rds") {
+  crop_names = c("biomass",
+                 "Corn",
+                 "FiberCrop",
+                 "FodderGrass",
+                 "FodderHerb",
+                 "MiscCrop",
+                 "OilCrop",
+                 "OtherGrain",
+                 "PalmFruit",
+                 "Rice",
+                 "Root_Tuber",
+                 "SugarCrop",
+                 "Wheat")
+  annual_crops <- dplyr::distinct(dplyr::select(all_combos(), -Sector)) # rewrite all_combos to handle this
+  annual_crops <- tidyr::crossing(annual_crops, Crop = crop_names)
+
+  # uncomment for local testing
+  annual_crops <- dplyr::filter(annual_crops, SSP == "SSP 1" & RCP == "RCP 2.6" & GCM == "gfdl")
+
+  files <- dplyr::transmute(annual_crops, paste0(
+    folder, "/", names(SSP), "_",names(RCP), "_", GCM,
+    "/crops_wdirr_", Crop, "_km3peryr.csv"))[[1]]
+
+  print(paste0("Preparing data from ", length(files), " files ..."))
+  time_start <- Sys.time()
+  values <- data.table::rbindlist(lapply(1:length(files), function(i){ # stacks long
+    if (i %% 13 == 0) { # progress update at arbitrary interval
+      time_remaining <- (length(files)/i-1)*(Sys.time()-time_start)
+      print(paste0("Progress: ", round(100*i/length(files), digits=2),
+                   "%, Estimated time remaining: ", format(time_remaining)))
+    }
+    return(data.frame(Value=colSums(data.table::fread(files[i], drop=1:5)))) # sums of year columns
+  }))
+  print("Data loaded")
+
+  annual_crops <- tidyr::crossing(annual_crops, Year=seq(2010,2100,by=5)) # each year for each combo
+  annual_crops <- dplyr::bind_cols(annual_crops, values) # SSP, RCP, GCM, Crop, Year; Value
+  saveRDS(annual_crops, file = outfile)
+  print(paste("Annual crop totals saved to", outfile))
+  return (annual_crops)
+}
+
+prepare_monthly_crops <- function(folder=NULL, outfile="monthly_crops.rds") {
+  crop_names = c("biomass",
+                 "Corn",
+                 "FiberCrop",
+                 "FodderGrass",
+                 "FodderHerb",
+                 "MiscCrop",
+                 "OilCrop",
+                 "OtherGrain",
+                 "PalmFruit",
+                 "Rice",
+                 "Root_Tuber",
+                 "SugarCrop",
+                 "Wheat")
+  monthly_crops <- dplyr::distinct(dplyr::select(all_combos(), -Sector)) # rewrite all_combos to handle this
+  monthly_crops <- tidyr::crossing(monthly_crops, Crop = crop_names)
+
+  # uncomment for local testing
+  monthly_crops <- dplyr::filter(monthly_crops, SSP == "SSP 1" & RCP == "RCP 2.6" & GCM == "gfdl")
+
+  files <- dplyr::transmute(monthly_crops, paste0(
+    folder, "/", names(SSP), "_",names(RCP), "_", GCM,
+    "/crops_twdirr_", Crop, "_km3permonth.csv"))[[1]]
+
+  print(paste0("Preparing data from ", length(files), " files ..."))
+  time_start <- Sys.time()
+  values <- data.table::rbindlist(lapply(1:length(files), function(i){ # stacks long
+    if (i %% 13 == 0) { # progress update at arbitrary interval
+      time_remaining <- (length(files)/i-1)*(Sys.time()-time_start)
+      print(paste0("Progress: ", round(100*i/length(files), digits=2),
+                   "%, Estimated time remaining: ", format(time_remaining)))
+    }
+    return(data.frame(Value=colSums(data.table::fread(files[i], drop=1:5)))) # sums of year columns
+  }))
+  print("Data loaded")
+
+  monthly_crops <- tidyr::crossing(monthly_crops, Year=2010:2100, Month=1:12) # each year and month for each combo
+  monthly_crops <- dplyr::bind_cols(monthly_crops, values) # SSP, RCP, GCM, Crop, Year: Value
+  saveRDS(monthly_crops, file = outfile)
+  print(paste("Monthly crop totals saved to", outfile))
+  return (monthly_crops)
 }
 
 prepare_GCAM <- function(GCAM_withdrawals_csv=NULL, outfile="region_data.rds") {
@@ -511,7 +713,8 @@ prepare_GCAM <- function(GCAM_withdrawals_csv=NULL, outfile="region_data.rds") {
   region_data <- dplyr::filter(region_data, 2010<=year & year<=2100 & is.element(scenario, scenarios))
 
   # further filter (only need this scenario-year right now)
-  region_data <- dplyr::filter(region_data, scenario=="ssp1_rcp26_gfdl" & year == 2010)
+  #region_data <- dplyr::filter(region_data, scenario=="ssp1_rcp26_gfdl" & year == 2010)
+
   region_data <- dplyr::mutate(region_data, .keep="unused", .after="scenario",
                                subRegion_GCAMBasin = dplyr::case_when(
                                  grepl("water_td_irr_", input) ~ subReg_to_map[gsub("water_td_irr_|_W", "", input)],
@@ -524,7 +727,7 @@ prepare_GCAM <- function(GCAM_withdrawals_csv=NULL, outfile="region_data.rds") {
                                  grepl("water_td_an_", input) ~ "Livestock",
                                  grepl("water_td_ind_", input) ~ "Manufacturing",
                                  grepl("water_td_pri_", input) ~ "Mining"))
-  region_data <- dplyr::group_by(region_data, subRegion_GCAMBasin, subRegion_GCAMReg32, class)
+  region_data <- dplyr::group_by(region_data, scenario, year, subRegion_GCAMBasin, subRegion_GCAMReg32, class)
   region_data <- dplyr::summarise(region_data, value=sum(value))
 
   saveRDS(region_data, file = outfile)
@@ -532,28 +735,76 @@ prepare_GCAM <- function(GCAM_withdrawals_csv=NULL, outfile="region_data.rds") {
   return (region_data)
 }
 
+prepare_GCAM_crops <- function(GCAM_withdrawals_csv=NULL, outfile="region_crops.rds") {
+  subReg_to_map <- tibble::deframe(rmap::mappings("mappingGCAMBasins"))
+  subReg_to_map <- setNames(names(subReg_to_map), subReg_to_map)
+
+  scenarios <- dplyr::transmute(all_combos(), paste0(
+    names(SSP), "_",names(RCP), "_", GCM))
+  scenarios <- dplyr:::distinct(scenarios)[[1]]
+
+  print("Loading GCAM data")
+  region_crops <- tibble::as_tibble(data.table::fread(GCAM_withdrawals_csv, select=2:7))
+
+  print("Filtering to dataset scenarios and years")
+  region_crops <- dplyr::filter(region_crops, 2010<=year & year<=2100 & is.element(scenario, scenarios))
+
+  # filter to irrigation only
+  region_crops <- dplyr::filter(region_crops, grepl("water_td_irr_", input))
+
+  region_crops <- dplyr::mutate(region_crops, .keep="unused", .after="scenario",
+                               subRegion_GCAMBasin = subReg_to_map[gsub("water_td_irr_|_W", "", input)],
+                               subRegion_GCAMReg32 = sub("-", "_", region), # need "EU_12", not "EU-12"
+                               Crop = dplyr::case_when(
+                                 grepl("biomass", subsector) ~ "biomass",
+                                 TRUE ~ sub("_[^_]+$", "", subsector)) # only part before the final underscore
+  )
+
+  saveRDS(region_crops, file = outfile)
+  print(paste("GCAM data saved to", outfile))
+  return (region_crops)
+}
+
+
 build_gridLookup <- function() {
-  basinIDs <- data.table::fread("basin.csv", col.names="basinID")
-  regionIDs <- data.table::fread("region32_grids.csv", col.names="regionID")
+  basinIDs <- data.table::fread("data/basin.csv", col.names="basinID")
+  regionIDs <- data.table::fread("data/region32_grids.csv", col.names="regionID")
+
+  # some kind of off by 1 error?
+  countryIDs <- data.table::fread("data/country.csv", col.names="countryID") -1
+
+  coordinates <- data.table::fread("data/coordinates.csv",
+                                   col.names=c("gridID",
+                                               "lon",
+                                               "lat",
+                                               "ilon",
+                                               "ilat"))
+
 
   # correct Arkansas_White_Red_Basin to Arkansas_White_Red, etc,
   basinID_to_basinName <- gsub("_Basin$", "", tibble::deframe(data.table::fread(
-    "gcam_basin_lookup.csv", select=c(1,2))[order(basin_id)]))
+    "data/gcam_basin_lookup.csv", select=c(1,2))[order(basin_id)]))
   basinID_to_basinName["102"] <- "Hamun_i_Mashkel" # from "HamuniMashkel"
   basinID_to_basinName["109"] <- "Hong_Red_River" # from "Hong_(Red_River)"
 
   # correct EU-12 to EU_12,
   regionID_to_regionName <- gsub("-", "_", tibble::deframe(data.table::fread(
-    "RgnNames.csv", select=c(2,1))[order(region_id)]))
+    "data/RgnNames.csv", select=c(2,1))[order(region_id)]))
+
+  countryID_to_countryName <- tibble::deframe(data.table::fread(
+    "data/country-names.csv"))
 
 
-  gridLookup <- dplyr::bind_cols(gridID=1:67420, basinIDs, regionIDs)
-  gridLookup <- dplyr::mutate(gridLookup, basinName = basinID_to_basinName[as.character(basinID)],
-                              regionName=dplyr::case_when(
-                                regionID == 0 ~ "No Region",
-                                TRUE ~ regionID_to_regionName[as.character(regionID)]
-                              ))
-  saveRDS(gridLookup, file = "gridLookup.rds")
+  gridLookup <- dplyr::bind_cols(coordinates, basinIDs, regionIDs, countryIDs)
+  gridLookup <- dplyr::mutate(gridLookup,
+                              basinName = basinID_to_basinName[as.character(basinID)],
+                              regionName = regionID_to_regionName[as.character(regionID)],
+                              countryName = countryID_to_countryName[as.character(countryID)])
+  gridLookup <- dplyr::relocate(gridLookup,  basinName, .after=basinID)
+  gridLookup <- dplyr::relocate(gridLookup,  regionName, .after=regionID)
+  gridLookup <- dplyr::relocate(gridLookup,  countryName, .after=countryID)
+
+  saveRDS(gridLookup, file = "rmap_tethys_grid_basin_region_country.rds")
   return(gridLookup)
 }
 
