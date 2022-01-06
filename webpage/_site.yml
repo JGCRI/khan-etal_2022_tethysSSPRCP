@@ -7,7 +7,7 @@ navbar:
       icon: fas fa-book
       href: metarepo.html
     - icon: fab fa-github
-      href: https://github.com/IMMM-SFA/khan-etal_2022_im3gcamusa
+      href: https://github.com/JGCRI/khan-etal_2022_tethysSSPRCP
 
 output:
   html_document:
