@@ -1,6 +1,5 @@
 <!-- badges: start --> 
 [![docs](https://github.com/JGCRI/khan-etal_2022_tethysSSPRCP/actions/workflows/docs.yaml/badge.svg?branch=main)](https://github.com/JGCRI/khan-etal_2022_tethysSSPRCP/actions/workflows/docs.yaml)
-_Zenodo badge to go here_
 <!-- badges: end -->
 # khan-etal_2022_tethysSSPRCP
 
