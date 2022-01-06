@@ -1,5 +1,5 @@
 ---
-pagetitle: khan_etal_2022_im3gcamusa
+pagetitle: SEAsia
 output: 
   html_document:
     toc: true
