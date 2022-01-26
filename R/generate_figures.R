@@ -19,6 +19,8 @@ generate_figures <- function(folder=NULL,
                              temporal_scale="annual") {
   NULL -> Year -> Value -> GCM -> Sector -> SSP -> RCP
 
+  secabbs <- c("dom", "elec", "mfg", "min", "irr", "liv")
+
   water_pal = c("Domestic"="dodgerblue",
                 "Electricity"="darkslateblue",
                 "Manufacturing"="#cef4d1",
@@ -539,6 +541,7 @@ generate_figures <- function(folder=NULL,
     v4 <- ggplot2::ggplot(annual_vs_monthly,
                           ggplot2::aes(x=Value, y=reagg, color = Crop)) +
       ggplot2::geom_point(shape=3) +
+      ggplot2::coord_fixed() +
       ggplot2::theme_bw() +
       ggplot2::scale_color_manual(values=crop_pal) +
       ggplot2::ggtitle("Tethys Annual vs Tethys Monthly (Crops)") +
@@ -552,7 +555,136 @@ generate_figures <- function(folder=NULL,
 
     }
 
+  if(grepl("animations|all",temporal_scale,ignore.case=T)) {
+    gridLookup <- readRDS("rmap_tethys_grid_basin_region_country.rds")
+    files <- paste0(folder, "/", "ssp5_rcp85_gfdl", "/crops_wdirr_",
+                    names(crop_pal), "_km3peryr.csv")
 
+    all_years_raw <- data.table::rbindlist(lapply(files, function(x){
+      return (data.table::fread(x, select=c(1, 6:24))) }))
+    all_years_raw <- dplyr::bind_cols(Crop=rep(names(crop_pal), each=67420), all_years_raw)
+
+
+    all_years <- data.table::melt(all_years_raw, id.vars=c(1,2), variable.name="year")
+    all_years <- tibble::as_tibble(all_years)
+    all_years <- dplyr::filter(all_years, Crop != "biomass")
+    all_years <- dplyr::group_by(all_years, Grid_ID, year)
+    all_years <- dplyr::summarise(all_years, Crop = Crop[which.max(value)],
+                                  max_value=max(value))
+    all_years <- dplyr::ungroup(all_years)
+    all_years <- dplyr::filter(all_years, max_value > 0)
+
+    ay <- dplyr::transmute(all_years,
+                           lon = gridLookup$lon[Grid_ID],
+                           lat = gridLookup$lat[Grid_ID],
+                           value = match(Crop, names(crop_pal)),
+                           year = year,
+                           param="SSP 5, RCP 8.5, gfdl,")
+
+    numeric2Cat_list <-list(numeric2Cat_param = list(c("SSP 5, RCP 8.5, gfdl,")),
+                            numeric2Cat_breaks = list(c(-Inf,1:12+0.5,Inf)),
+                            numeric2Cat_labels = list(names(crop_pal)),
+                            numeric2Cat_palette = list(crop_pal),
+                            numeric2Cat_legendTextSize = list(c(0.7)))
+
+    rm <- rmap::map(ay, background=T, save=T, show =F, animate=T,
+                    numeric2Cat_list = numeric2Cat_list,
+                    underLayer= rmap::mapCountries,
+                    overLayer = rmap::mapCountries,
+                    crop_to_underLayer = T)
+  }
+
+  if(grepl("regions|all",temporal_scale,ignore.case=T)){
+
+    # overview of locations (map)
+    data <- data.frame(subRegion = c("Indus", "Nile", "Upper_Colorado_River"),
+                       value = c(0,0,0))
+    overview_map <- rmap::map(data, background=T, crop = F, save=F, legendShow = F,
+                              labels = T, labelSize = 5, labelColor = "black",
+                              labelRepel = 1,
+                              underLayer = rmap::mapCountries,
+                              overLayer = rmap::mapCountries)
+    ggplot2::ggsave(filename =  "overview_map.png",
+                    plot = overview_map$map_param_KMEANS,
+                    width = 13,
+                    height = 7)
+
+
+    # Maps for Indus basin
+    indus_data2 <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
+                            sectors = c("irr", "biomass"),
+                            basins = "Indus",
+                            years=c(2020,2040,2060,2080,2100))
+    indus_data2 <- dplyr::mutate(indus_data2, value=dplyr::case_when(
+      sector=="biomass"~ -value,
+      T~ value))
+    indus_data2 <- dplyr::group_by(indus_data2, lon, lat, year, month)
+    indus_data2 <- dplyr::summarise(indus_data2, value=sum(value))
+
+    indus_data3 <- dplyr::select(indus_data2, lon, lat, Year=year, Month=month, value)
+    indus_data3 <- dplyr::mutate(indus_data3, Month=factor(month.abb[Month], levels=month.abb))
+    indus_data4 <- dplyr::mutate(indus_data3, value = (value/max(indus_data3$value))^0.2)
+
+
+    rm <- rmap::map(indus_data4, save=T, show=F, background=T, zoom=-0.5, legendType="continuous",
+                    underLayer = rmap::mapGCAMReg32,
+                    overLayer = rmap::mapGCAMReg32,
+                    col="Month", row="Year")
+
+    # crop types
+    indus_data_raw <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
+                               sectors = head(names(crop_pal), -1),
+                               basins = "Indus",
+                               years=c(2020,2040,2060,2080,2100))
+    indus_data <- dplyr::group_by(indus_data_raw, Grid_ID, lon, lat, year, month)
+    indus_data <- dplyr::summarise(indus_data, sector = sector[which.max(value)],
+                                  max_value=max(value))
+    indus_data <- dplyr::ungroup(indus_data)
+    indus_data <- dplyr::filter(indus_data, max_value > 0)
+
+    indus_data <- dplyr::mutate(indus_data, value=match(sector, names(crop_pal)),
+                                month=factor(month.abb[month], levels=month.abb),
+                                param="param")
+    indus_data <- dplyr::select(indus_data, lon, lat, Year=year, Month=month, value, param)
+
+    numeric2Cat_list <-list(numeric2Cat_param = list(c("param")),
+                            numeric2Cat_breaks = list(c(-Inf,1:12+0.5,Inf)),
+                            numeric2Cat_labels = list(names(crop_pal)),
+                            numeric2Cat_palette = list(crop_pal),
+                            numeric2Cat_legendTextSize = list(c(0.7)))
+
+    rm <- rmap::map(indus_data, background=T, save=T, show =F,
+                    numeric2Cat_list = numeric2Cat_list,
+                    underLayer= rmap::mapGCAMReg32,
+                    overLayer = rmap::mapGCAMReg32,
+                    row="Month", col="Year", zoom = -0.5)
+
+
+    # heatmap (year-month)
+    indus_data <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
+                           sectors = names(crop_pal), #c("dom", "elec", "mfg", "min", "irr", "liv"),
+                           basins = "Indus")
+    indus_data <- dplyr::group_by(indus_data, sector, year, month)
+    indus_summary <- dplyr::summarise(indus_data, value=sum(value))
+    indus_summary$month <- factor(indus_summary$month, labels = month.abb)
+
+    hm <- ggplot2::ggplot(indus_summary, ggplot2::aes(x=year,
+                                                      y=month,
+                                                      fill= value)) +
+      ggplot2::geom_tile() +
+      ggplot2::facet_wrap(ggplot2::vars(sector)) +
+      ggplot2::scale_x_continuous(expand=c(0,0)) +
+      ggplot2::scale_y_discrete(limits=rev(levels(indus_summary$month)), expand=c(0,0)) +
+      ggplot2::scale_fill_gradientn(colors=jgcricol()$pal_hot) +
+      ggplot2::theme(panel.background = ggplot2::element_blank(),
+                     plot.background = ggplot2::element_blank()); hm
+
+    ggplot2::ggsave(filename = "heatmap.png",
+                    plot = hm,
+                    width = 13,
+                    height = 7)
+
+  }
 
   # Initialize
   print("generate_figures completed succesfuly!")
@@ -765,7 +897,6 @@ prepare_GCAM_crops <- function(GCAM_withdrawals_csv=NULL, outfile="region_crops.
   return (region_crops)
 }
 
-
 build_gridLookup <- function() {
   basinIDs <- data.table::fread("data/basin.csv", col.names="basinID")
   regionIDs <- data.table::fread("data/region32_grids.csv", col.names="regionID")
@@ -806,6 +937,72 @@ build_gridLookup <- function() {
 
   saveRDS(gridLookup, file = "rmap_tethys_grid_basin_region_country.rds")
   return(gridLookup)
+}
+
+get_data <- function(folder=NULL, scenarios=NULL, sectors=NULL, years=NULL, months=NULL, regions=NULL, basins=NULL, countries=NULL, aggregate=F) {
+  lookup <- rmap::mapping_tethys_grid_basin_region_country
+  crop_names = c("biomass", "Corn", "FiberCrop", "FodderGrass", "FodderHerb",
+                 "MiscCrop", "OilCrop", "OtherGrain", "PalmFruit", "Rice",
+                 "Root_Tuber", "SugarCrop", "Wheat")
+  scenario_list <- rep(scenarios, each=length(sectors))
+  sector_list <- rep(sectors, length(scenarios))
+  if (is.null(years)) {years = 2010:2100}
+  if (is.null(months)) {months = 1:12}
+  if (months[1]==0) {
+    years <- years[years %% 5 == 0]
+    cols <- 6 + (years - 2010)/5
+  } else {
+    cols <- 5+(rep(years, each=length(months)) - 2010)*12 + rep(months, length(years))
+  }
+  filename_after = c("_km3permonth.csv", "_km3peryr.csv")[1 + (months[1] == 0)]
+
+  all_data <- data.table::rbindlist(lapply(1:length(scenario_list), function(i){
+    case <- 1 + (months[1] == 0)*2 + sector_list[i] %in% crop_names # abusing T=1, F=0
+    filename_before = c("/twd", "/crops_twdirr_", "/wd", "/crops_wdirr_")[case]
+    filename <- paste0(folder, "/", scenario_list[i], filename_before, sector_list[i], filename_after)
+    print(filename)
+    file_data <- data.table::fread(filename, select=c(1, cols))
+
+    if (!is.null(regions)) {
+      file_data <- dplyr::filter(file_data, lookup$regionName[Grid_ID] %in% regions)
+    }
+    if (!is.null(basins)) {
+      file_data <- dplyr::filter(file_data, lookup$basinName[Grid_ID] %in% basins)
+    }
+    if (!is.null(countries)) {
+      file_data <- dplyr::filter(file_data, lookup$countryName[Grid_ID] %in% countries)
+    }
+
+    file_data <- dplyr::mutate(file_data, .after="Grid_ID",
+                               region = lookup$regionName[Grid_ID],
+                               basin = lookup$basinName[Grid_ID])
+    if (aggregate) {
+      file_data[,Grid_ID:=NULL]
+      if (sector_list[i] %in% c("dom", "elec", "mfg", "min", "liv")) {
+        file_data$basin = NA_character_
+      }
+      file_data <- file_data[, lapply(.SD, sum), by=list(region, basin)]
+      file_data <- data.table::melt(file_data, id.vars=1:2)
+
+      file_data <- dplyr::filter(file_data, value != 0)
+      file_data <- dplyr::mutate(file_data, .before="value",
+                                 scenario = scenario_list[i],
+                                 sector = sector_list[i],
+                                 year  = as.integer(substr(variable, 1, 4)),
+                                 month = as.integer(substr(variable, 5, 6)))
+    } else {
+      file_data <- data.table::melt(file_data, id.vars=1:3)
+      file_data <- dplyr::mutate(file_data, .before="value",
+                                 lon = lookup$lon[Grid_ID],
+                                 lat = lookup$lat[Grid_ID],
+                                 scenario = scenario_list[i],
+                                 sector = sector_list[i],
+                                 year  = as.integer(substr(variable, 1, 4)),
+                                 month = as.integer(substr(variable, 5, 6)))
+    }
+    file_data <- dplyr::select(file_data, -variable)
+    return (file_data)}))
+  return (all_data)
 }
 
 

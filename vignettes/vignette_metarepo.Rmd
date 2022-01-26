@@ -234,18 +234,17 @@ knitr::include_graphics("vignetteFigs/validation4.png")
 
 # Regional Spotlights
 We have selected the following regions from literature to explore in more detail, as a way of showing the full resolution of this data set and the kinds of analyses it allows for.
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Selected Regions"}
+knitr::include_graphics("vignetteFigs/overview_map.png")
+```
 
 ## Indus
-Placeholder Text
-
-Make the text longer so I can see how
-
-The webpage looks
-
-at the bottom
-
-more
-
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
+knitr::include_graphics("vignetteFigs/WITHOUTBIOMASS.png")
+```
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
+knitr::include_graphics("vignetteFigs/heatmap.png")
+```
 ## Nile
 Placeholder Text
 
