@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>SEAsia</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">khan_etal_2022_tethysSSPRCP</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="metarepo.html">
+    <span class="fas fa-book"></span>
+     
+    Meta Repository
+  </a>
+</li>
+<li>
+  <a href="https://github.com/JGCRI/khan-etal_2022_tethysSSPRCP">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<div class="header_logo">
+<p><img src="images/logo_pnnl_white.png" style="float:right;height:40px;"></p>
+</div>
+<!-------------------------->
+<!-------------------------->
+<div id="citation" class="section level1">
+<h1>Citation</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="images/divider.png">
+</p>
+<p>Khan, Z., Thompson, I., Vernon, C., 2022. A global gridded monthly water withdrawal dataset for multiple sectors from 2015 to 2100 at 0.5° resolution under a range of socioeconomic and climate scenarios. (In progress) Journal_TBD, DOI: XXXX</p>
+<p><br></p>
+<!-------------------------->
+<!-------------------------->
+</div>
+<div id="models-used" class="section level1">
+<h1>Models Used</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="images/divider.png">
+</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Model
+</th>
+<th style="text-align:left;">
+Version
+</th>
+<th style="text-align:left;">
+Description
+</th>
+<th style="text-align:left;">
+Language
+</th>
+<th style="text-align:left;">
+Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Tethys
+</td>
+<td style="text-align:left;">
+v1.3.0?
+</td>
+<td style="text-align:left;">
+Spatiotemporal downscaling model for global water use
+</td>
+<td style="text-align:left;">
+Python
+</td>
+<td style="text-align:left;">
+<a href="https://jgcri.github.io/tethys/" class="uri">https://jgcri.github.io/tethys/</a>
+</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-------------------------->
+<!-------------------------->
+</div>
+<div id="data-inputs" class="section level1">
+<h1>Data Inputs</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="images/divider.png">
+</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Data
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Used.by
+</th>
+<th style="text-align:left;">
+Location
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+GCAM Outputs
+</td>
+<td style="text-align:left;">
+GCAM runs
+</td>
+<td style="text-align:left;">
+Tethys
+</td>
+<td style="text-align:left;">
+<a href="https://data.pnnl.gov/dataset/13224" class="uri">https://data.pnnl.gov/dataset/13224</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Demeter Outputs
+</td>
+<td style="text-align:left;">
+Demeter runs
+</td>
+<td style="text-align:left;">
+Tethys
+</td>
+<td style="text-align:left;">
+<a href="https://data.pnnl.gov/dataset/13192" class="uri">https://data.pnnl.gov/dataset/13192</a>
+</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-------------------------->
+<!-------------------------->
+</div>
+<div id="data-outputs" class="section level1">
+<h1>Data Outputs</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="images/divider.png">
+</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Data
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Used.by
+</th>
+<th style="text-align:left;">
+Location
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Tethys Outputs
+</td>
+<td style="text-align:left;">
+Tethys runs
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+zenodo link
+</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<!-------------------------->
+<!-------------------------->
+</div>
+<div id="workflows" class="section level1">
+<h1>Workflows</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="images/divider.png">
+</p>
+<div class="figure" style="text-align: center">
+<img src="images/workflow_summary.jpg" alt="Workflow Summary" width="40%" />
+<p class="caption">
+Workflow Summary
+</p>
+</div>
+<p><br></p>
+<!-------------------------->
+<!-------------------------->
+</div>
+<div id="workflow-1---scenarios" class="section level1">
+<h1>Workflow 1 - Scenarios</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="images/divider.png">
+</p>
+<p>This dataset contains water withdrawal projections under a range of socioeconomic and climate scenarios. Combinations of five Shared Socioeconomic Pathways (SSPs 1-5) and four Representative Concentration Pathways (RCPs 2.6, 4.5, 6, and 8.5) are used. However, RCP 2.6 is not considered possible under SSP 3, and RCP 8.5 is only considered possible for SSP 5. This leaves 15 valid SSP-RCP combinations, shown in the diagram below.</p>
+<div class="figure" style="text-align: center">
+<img src="images/workflow1.jpg" alt="Workflow 1" width="100%" />
+<p class="caption">
+Workflow 1
+</p>
+</div>
+<p>For each valid SSP-RCP combination, five General Circulation Models (GCMs). This gives a grand total of 75 SSP-RCP-GCM combinations, which are fed into the models.</p>
+<p><br></p>
+<!-------------------------->
+<!-------------------------->
+</div>
+<div id="workflow-2---model-runs" class="section level1">
+<h1>Workflow 2 - Model Runs</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="images/divider.png">
+</p>
+<p>(Comment on GCAM, Xanthos, Demeter) GCAM is run for each SSP-RCP-GCM combination. The GCAM outputs are at the resolution of 32 geopolitical regions, and 235 water basins, with 5-year timesteps. The sectoral water withdrawal outputs from GCAM are the primary inputs to Tethys, which will be downscaled to the target resolution. Crop outputs from GCAM are sent to Demeter for downscaling, to be used by Tethys for the irrigation sector.</p>
+<div class="figure" style="text-align: center">
+<img src="images/workflow2.jpg" alt="Workflow 2" width="100%" />
+<p class="caption">
+Workflow 2
+</p>
+</div>
+<p><br></p>
+<!-------------------------->
+<!-------------------------->
+</div>
+<div id="workflow-3---spatial-downscaling" class="section level1 tabset">
+<h1 class="tabset">Workflow 3 - Spatial Downscaling</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="images/divider.png">
+</p>
+<p>Withdrawal data for each sector is downscaled spatially first, from 32 regions or 235 basins to 0.5 degree grids. Of the 259,200 possible grid cells at this resolution (360 x 720), only the 67,420 cells categorized as land are considered (since nobody is withdrawing water from the bottom of the ocean).</p>
+<div class="figure" style="text-align: center">
+<img src="images/workflow3.jpg" alt="Workflow 3" width="100%" />
+<p class="caption">
+Workflow 3
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="images/spatialworkflow.png" alt="Spatial Workflow" width="100%" />
+<p class="caption">
+Spatial Workflow
+</p>
+</div>
+<p>Different downscaling methods are used for different sectors. For spatial downscaling, the workflow is divided into three parts:</p>
+<ul>
+<li>A. Nonagricultural Sectors</li>
+<li>B. Livestock</li>
+<li>C. Irrigation</li>
+</ul>
+<p><br></p>
+<!-------------------------->
+<div id="workflow-3a---nonagricultural-sectors" class="section level2">
+<h2>Workflow 3A - Nonagricultural Sectors</h2>
+<!-------------------------->
+<p>For nonagricultural sectors (domestic, electricity, manufacturing, and mining), water withdrawal in each grid cell is assumed to be proportional to that cell’s population. (equation, supporting files, function name)</p>
+<p><br></p>
+<!-------------------------->
+</div>
+<div id="workflow-3b---livestock" class="section level2">
+<h2>Workflow 3B - Livestock</h2>
+<!-------------------------->
+<p>Gridded global maps of livestock in six types (cattle, buffalo, sheep, goats, pigs and poultry) are used as a proxy to downscale livestock water withdrawal.</p>
+<p><br></p>
+<!-------------------------->
+</div>
+<div id="workflow-3c---irrigation" class="section level2">
+<h2>Workflow 3C - Irrigation</h2>
+<!-------------------------->
+<p>Uses Demeter outputs.</p>
+<p><br></p>
+<!-------------------------->
+<!-------------------------->
+</div>
+</div>
+<div id="workflow-4---temporal-downscaling" class="section level1 tabset">
+<h1 class="tabset">Workflow 4 - Temporal Downscaling</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="images/divider.png">
+</p>
+<p>At this stage the data has been downscaled spatially to 0.5 degree grids, but is still in 5-year timesteps. First, linear interpolation is applied to produce annual data. Then, downscaling algorithms are applied to each sector to produce monthly data with seasonal variation.</p>
+<div class="figure" style="text-align: center">
+<img src="images/workflow4.jpg" alt="Workflow 4" width="100%" />
+<p class="caption">
+Workflow 4
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="images/temporalworkflow.png" alt="Temporal Workflow" width="100%" />
+<p class="caption">
+Temporal Workflow
+</p>
+</div>
+<p>For spatial downscaling, the workflow is divided into four parts:</p>
+<ul>
+<li>A. Livestock, Manufacturing, and Mining</li>
+<li>B. Domestic</li>
+<li>C. Electricity Generation</li>
+<li>D. Irrigation</li>
+</ul>
+<p><br></p>
+<!-------------------------->
+<div id="workflow-4a---livestock-manufacturing-and-mining" class="section level2">
+<h2>Workflow 4A - Livestock, Manufacturing, and Mining</h2>
+<!-------------------------->
+<p>For livestock, manufacturing, and mining, a uniform distribution is applied. The withdrawal for the year is divided between months according to the number of days.</p>
+<p><br></p>
+<!-------------------------->
+</div>
+<div id="workflow-4b---domestic" class="section level2">
+<h2>Workflow 4B - Domestic</h2>
+<!-------------------------->
+<p>Temporally downscaling domestic withdrawal is based on monthly average temperatures, and the relative withdrawals between warmest and coolest months.</p>
+<p><br></p>
+<!-------------------------->
+</div>
+<div id="workflow-4c---electricity-generation" class="section level2">
+<h2>Workflow 4C - Electricity Generation</h2>
+<!-------------------------->
+<p>Assume water use is proportional to electricity generated. Formula based on HDD, CDD.</p>
+<p><br></p>
+<!-------------------------->
+</div>
+<div id="workflow-4d---irrigation" class="section level2">
+<h2>Workflow 4D - Irrigation</h2>
+<!-------------------------->
+<p>Monthly weighted irrigation profiles based on region and crop type.</p>
+<p><br></p>
+<!-------------------------->
+<!-------------------------->
+</div>
+</div>
+<div id="workflow-5---results" class="section level1">
+<h1>Workflow 5 - Results</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="images/divider.png">
+</p>
+<!-------------------------->
+<div id="annual" class="section level2 tabset">
+<h2 class="tabset">Annual</h2>
+<!-------------------------->
+<div id="total" class="section level3">
+<h3>Total</h3>
+<div class="figure" style="text-align: center">
+<img src="images/figure1.png" alt="Total Annual Water Withdrawal by SSP-RCP-GCM" width="100%" />
+<p class="caption">
+Total Annual Water Withdrawal by SSP-RCP-GCM
+</p>
+</div>
+</div>
+<div id="by-sector" class="section level3">
+<h3>By Sector</h3>
+<div class="figure" style="text-align: center">
+<img src="images/figure2.png" alt="Global Annual Water Withdrawal by SSP-RCP-GCM and Sector" width="100%" />
+<p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-GCM and Sector
+</p>
+</div>
+</div>
+<div id="gcms" class="section level3 tabset tabset-pills">
+<h3 class="tabset tabset-pills">GCMs</h3>
+<div id="gfdl" class="section level4">
+<h4>GFDL</h4>
+<div class="figure" style="text-align: center">
+<img src="images/figure3a.png" alt="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: gfdl" width="100%" />
+<p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: gfdl
+</p>
+</div>
+</div>
+<div id="hadgem" class="section level4">
+<h4>HADGEM</h4>
+<div class="figure" style="text-align: center">
+<img src="images/figure3b.png" alt="TGlobal Annual Water Withdrawal by SSP-RCP-Sector, GCM: hadgem" width="100%" />
+<p class="caption">
+TGlobal Annual Water Withdrawal by SSP-RCP-Sector, GCM: hadgem
+</p>
+</div>
+</div>
+<div id="ipsl" class="section level4">
+<h4>IPSL</h4>
+<div class="figure" style="text-align: center">
+<img src="images/figure3c.png" alt="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: ipsl" width="100%" />
+<p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: ipsl
+</p>
+</div>
+</div>
+<div id="miroc" class="section level4">
+<h4>MIROC</h4>
+<div class="figure" style="text-align: center">
+<img src="images/figure3d.png" alt="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: miroc" width="100%" />
+<p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: miroc
+</p>
+</div>
+</div>
+<div id="noresm" class="section level4">
+<h4>NORESM</h4>
+<div class="figure" style="text-align: center">
+<img src="images/figure3e.png" alt="Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: noresm" width="100%" />
+<p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-Sector, GCM: noresm
+</p>
+</div>
+<!-------------------------->
+</div>
+</div>
+</div>
+<div id="monthly" class="section level2 tabset">
+<h2 class="tabset">Monthly</h2>
+<!-------------------------->
+<div id="all-sectors" class="section level3">
+<h3>All Sectors</h3>
+<div class="figure" style="text-align: center">
+<img src="images/figure4a.png" alt="Monthly Example" width="100%" />
+<p class="caption">
+Monthly Example
+</p>
+</div>
+</div>
+<div id="no-irrigation" class="section level3">
+<h3>No Irrigation</h3>
+<div class="figure" style="text-align: center">
+<img src="images/figure4b.png" alt="Without Irrigation" width="100%" />
+<p class="caption">
+Without Irrigation
+</p>
+</div>
+<!-------------------------->
+</div>
+</div>
+<div id="maps" class="section level2 tabset">
+<h2 class="tabset">Maps</h2>
+<!-------------------------->
+<p><br></p>
+<!-------------------------->
+<!-------------------------->
+</div>
+</div>
+<div id="validation" class="section level1 tabset">
+<h1 class="tabset">Validation</h1>
+<!-------------------------->
+<!-------------------------->
+<p align="center">
+<img src="images/divider.png">
+</p>
+<!-------------------------->
+<div id="spatial" class="section level2">
+<h2>Spatial</h2>
+<!-------------------------->
+<div class="figure" style="text-align: center">
+<img src="images/validation1.png" alt="GCAM inputs vs grids Reaggregated" width="100%" />
+<p class="caption">
+GCAM inputs vs grids Reaggregated
+</p>
+</div>
+<!-------------------------->
+</div>
+<div id="temporal" class="section level2">
+<h2>Temporal</h2>
+<!-------------------------->
+<div class="figure" style="text-align: center">
+<img src="images/validation2.png" alt="Annual vs Reaggregated Monthly" width="100%" />
+<p class="caption">
+Annual vs Reaggregated Monthly
+</p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
