@@ -604,7 +604,7 @@ generate_figures <- function(folder=NULL,
                               labelRepel = 1,
                               underLayer = rmap::mapCountries,
                               overLayer = rmap::mapCountries)
-    ggplot2::ggsave(filename =  "overview_map.png",
+    ggplot2::ggsave(filename =  paste0(images, "overview_map.png"),
                     plot = overview_map$map_param_KMEANS,
                     width = 13,
                     height = 7)
@@ -679,7 +679,7 @@ generate_figures <- function(folder=NULL,
       ggplot2::theme(panel.background = ggplot2::element_blank(),
                      plot.background = ggplot2::element_blank()); hm
 
-    ggplot2::ggsave(filename = "heatmap.png",
+    ggplot2::ggsave(filename = paste0(images, "heatmap.png"),
                     plot = hm,
                     width = 13,
                     height = 7)
