@@ -271,6 +271,11 @@ knitr::include_graphics("images/figure1.png")
 knitr::include_graphics("images/figure2.png")
 ```
 
+### Crops
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-GCM and Sector"}
+knitr::include_graphics("images/figure6.png")
+```
+
 ### GCMs {.tabset .tabset-pills}
 
 #### GFDL
@@ -312,34 +317,57 @@ knitr::include_graphics("images/figure4a.png")
 knitr::include_graphics("images/figure4b.png")
 ```
 
+### Crops
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Without Irrigation"}
+knitr::include_graphics("images/figure5.png")
+```
+
 <!-------------------------->
 ## Maps {.tabset}
 <!-------------------------->
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics("images/facetmapannual.png")
+```
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics("images/facetmapmonthly.png")
+```
 
 <br>
 
 <!-------------------------->
 <!-------------------------->
-# Validation {.tabset}
+# Validation
 <!-------------------------->
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
 
 <!-------------------------->
-## Spatial
+## Spatial {.tabset}
 <!-------------------------->
 
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="GCAM inputs vs grids Reaggregated"}
+### Sectors
+
+```{r, echo=FALSE, out.width="75%", fig.align='center', fig.cap="GCAM inputs vs grids Reaggregated"}
 knitr::include_graphics("images/validation1.png")
+```
+### Crops
+```{r, echo=FALSE, out.width="75%", fig.align='center', fig.cap="GCAM inputs vs grids Reaggregated"}
+knitr::include_graphics("images/validation2.png")
 ```
 
 
 <!-------------------------->
-## Temporal
+## Temporal {.tabset}
 <!-------------------------->
 
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Annual vs Reaggregated Monthly"}
-knitr::include_graphics("images/validation2.png")
+### Sectors
+```{r, echo=FALSE, out.width="75%", fig.align='center', fig.cap="Annual vs Reaggregated Monthly"}
+knitr::include_graphics("images/validation3.png")
+```
+
+### Crops
+```{r, echo=FALSE, out.width="75%", fig.align='center', fig.cap="Annual vs Reaggregated Monthly"}
+knitr::include_graphics("images/validation4.png")
 ```
 
 # Regional Spotlights
@@ -353,9 +381,7 @@ knitr::include_graphics("images/overview_map.png")
 knitr::include_graphics("images/heatmap.png")
 ```
 ## Nile
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
-knitr::include_graphics("images/total.png")
-```
+Placeholder Text
 
 ## Colorado
 Placeholder Text
