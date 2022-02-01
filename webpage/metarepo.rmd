@@ -346,10 +346,10 @@ knitr::include_graphics("images/facetmapmonthly.png")
 <!-------------------------->
 
 ### Sectors
-
 ```{r, echo=FALSE, out.width="75%", fig.align='center', fig.cap="GCAM inputs vs grids Reaggregated"}
 knitr::include_graphics("images/validation1.png")
 ```
+
 ### Crops
 ```{r, echo=FALSE, out.width="75%", fig.align='center', fig.cap="GCAM inputs vs grids Reaggregated"}
 knitr::include_graphics("images/validation2.png")

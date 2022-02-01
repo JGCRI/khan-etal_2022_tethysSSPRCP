@@ -19,7 +19,8 @@ generate_figures <- function(folder=NULL,
                              temporal_scale="annual") {
   NULL -> Year -> Value -> GCM -> Sector -> SSP -> RCP
 
-  secabbs <- c("dom", "elec", "mfg", "min", "irr", "liv")
+  secabbs <- c("Domestic" = "dom", "Electricity" = "elec", "Manufacturing" = "mfg", 
+               "Mining" = "min", "Irrigation" = "irr", "Livestock" = "liv")
 
   water_pal = c("Domestic"="dodgerblue",
                 "Electricity"="darkslateblue",
@@ -27,6 +28,13 @@ generate_figures <- function(folder=NULL,
                 "Mining"="grey75",
                 "Irrigation"="forestgreen",
                 "Livestock"="goldenrod2")
+  
+  sec_pal = c("dom"="dodgerblue",
+                "elec"="darkslateblue",
+                "mfg"="#cef4d1",
+                "min"="grey75",
+                "irr"="forestgreen",
+                "liv"="goldenrod2")
 
   gcm_pal = c("gfdl" = "gold",
               "hadgem" = "darkorange",
@@ -47,6 +55,26 @@ generate_figures <- function(folder=NULL,
                "FodderHerb" = "darkseagreen4",
                "FodderGrass" = "mediumseagreen",
                "biomass" = "#00931d")
+  
+  all_pal = c("dom"="dodgerblue",
+              "elec"="darkslateblue",
+              "mfg"="#cef4d1",
+              "min"="grey75",
+              #"irr"="forestgreen",
+              "liv"="goldenrod2",
+              "Corn" = "gold3",
+              "FiberCrop" = "gold4",
+              "MiscCrop" = "darkorange4",
+              "OilCrop" = "gray20",
+              "OtherGrain" = "indianred2",
+              "PalmFruit" = "firebrick3",
+              "Rice" = "steelblue2",
+              "Root_Tuber" = "mediumpurple",
+              "SugarCrop" = "yellow2",
+              "Wheat" = "burlywood",
+              "FodderHerb" = "darkseagreen4",
+              "FodderGrass" = "mediumseagreen",
+              "biomass" = "#00931d")
 
   # Initialize
   print("Starting generate_figures ...")
@@ -398,10 +426,26 @@ generate_figures <- function(folder=NULL,
                                           select=c(2, 3, 6:17), col.names=c("lon", "lat", month.abb))
     monthly_grid_data <- data.table::melt(monthly_grid_data, measure.vars=month.abb, variable.name="scenario")
 
-    annual_map <- rmap::map(annual_grid_data, overLayer=rmap::mapCountries, background=T, save=F, show=F)
-    monthly_map <- rmap::map(monthly_grid_data, overLayer=rmap::mapCountries, background=T, save=F, show=F)
-    temporal_wf1 <- annual_map$map_param_KMEANS / monthly_map$map_param_KMEANS
-    ggplot2::ggsave(filename = "temporalworkflow1.png",
+    annual_map <- rmap::map(annual_grid_data, legendType = "continuous", overLayer=rmap::mapCountries, background=T, save=F, show=F)
+    annual_map1 <- annual_map[[1]] + ggplot2::scale_fill_gradientn(
+      colors = rev(jgcricol()$pal_spectral),
+      trans = scales::trans_new(name = '4th root',
+                                transform = function(x){x^0.25},
+                                inverse = function(x){x^4}),
+      breaks = round(seq(0,max(annual_grid_data$value*0.99, na.rm = T)^0.25,length.out=5)^4, 2))
+    
+    monthly_map <- rmap::map(monthly_grid_data, legendType = "continuous", overLayer=rmap::mapCountries, background=T, save=F, show=F)
+    monthly_map1 <- monthly_map[[1]] + ggplot2::scale_fill_gradientn(
+      colors = rev(jgcricol()$pal_spectral),
+      trans = scales::trans_new(name = '4th root',
+                                transform = function(x){x^0.25},
+                                inverse = function(x){x^4}),
+      breaks = round(seq(0,max(monthly_grid_data$value*0.99, na.rm = T)^0.25,length.out=5)^4, 2))
+    
+    temporal_wf1 <- annual_map1 / monthly_map1
+    grDevices::png(paste0(images,"temporalworkflow.png"),width=8,height=10,units="in",res=300); print(temporal_wf1); grDevices::dev.off()
+    
+    ggplot2::ggsave(filename = "temporalworkflow.png",
                     plot = temporal_wf1,
                     width = 13,
                     height = 10) # save plot
@@ -448,99 +492,78 @@ generate_figures <- function(folder=NULL,
 
   # validation plots
   if(grepl("validation|all",temporal_scale,ignore.case=T)){
-
+    
     # Validation  1: Spatial Downscaling
-    # 1 point for each ssp-rcp-gcm (75) x GCAM Year (19) x Sector (6)
+    # 1 point for each ssp-rcp-gcm (75) x GCAM Year (19) x [Sector (6) or Crop (13)]
     # x-axis: total water withdrawal for that point (sum over GCAM regions/basins)
     # y-axis: total water withdrawal for that point (sum over 67420 Tethys grids)
-
-    GCAM_data <- readRDS("../data/region_data.rds")
-    GCAM_data <- dplyr::group_by(GCAM_data, scenario, Year=year, Sector=class)
-    GCAM_data <- dplyr::summarise(GCAM_data, GCAM_Value=sum(value))
-
-    print("Loading grid data")
-    # get grid data
-    spatial_data <- readRDS("../data/annual_data.rds")
-    spatial_data <- dplyr::filter(spatial_data, Sector!="Total"&Sector!="Non-Agriculture")
-    spatial_data <- dplyr::mutate(spatial_data, .keep="unused", .before="Sector",
-                                  scenario=paste0(names(SSP), "_", names(RCP), "_", GCM))
-
-    GCAM_vs_spatial <- dplyr::full_join(GCAM_data, spatial_data)
-    GCAM_vs_spatial <- dplyr::mutate(GCAM_vs_spatial, diff=(Value-GCAM_Value), reldiff=(Value-GCAM_Value)/GCAM_Value)
-
-    v1 <- ggplot2::ggplot(GCAM_vs_spatial,
-                          ggplot2::aes(x=GCAM_Value, y=Value, color=Sector)) +
+    
+    GCAM_data <- readRDS("../data/gcam_data.rds")
+    Tethys_data <- readRDS("../data/region_sums_wd.rds")
+    Tethys_data <- dplyr::select(Tethys_data,-month)
+    Tethys_data <- dplyr::rename(Tethys_data, tethys_value = value)
+    comparison <- dplyr::full_join(GCAM_data, Tethys_data)
+    comparison <- dplyr::mutate(comparison, tethys_value=tidyr::replace_na(tethys_value, 0))
+    #comparison <- dplyr::group_by(comparison, scenario, sector, year)
+    #comparison <- dplyr::summarise(comparison, value = sum(value), tethys_value=sum(tethys_value))
+    
+    # 6 sectors
+    comparison_sectors <- dplyr::filter(comparison, sector %in% c("dom","elec","irr","liv","mfg","min"))
+    v1 <- ggplot2::ggplot(comparison_sectors,
+                          ggplot2::aes(x=value, y=tethys_value, color=sector)) +
       ggplot2::geom_point(shape=3) +
       ggplot2::coord_fixed() +
       ggplot2::theme_bw() +
-      ggplot2::scale_color_manual(values=water_pal) +
+      ggplot2::scale_color_manual(values=sec_pal) +
       ggplot2::ggtitle("GCAM vs Spatially Downscaled") +
       ggplot2::xlab(bquote("GCAM Water Withdrawal " ~ (km^3 ~ per ~ year))) +
       ggplot2::ylab(bquote("Spatially Downscaled, Reaggregated " ~ (km^3 ~ per ~ year)))
     ggplot2::ggsave(filename = paste0(images, "validation1.png"),
                     plot = v1,
                     width = 13,
-                    height = 10) # save plot
-
-    # Validation  2: Spatial Downscaling - Crops
-    # 1 point for each ssp-rcp-gcm (75) x GCAM Year (19) x Crop (13)
-    # x-axis: total water withdrawal for that point (sum over GCAM regions/basins)
-    # y-axis: total water withdrawal for that point (sum over 67420 Tethys grids)
-
-    GCAM_crops <- readRDS("../data/region_crops.rds")
-    GCAM_crops <- dplyr::rename(GCAM_crops, GCAM_Value=Value)
-    GCAM_crops <- dplyr::group_by(GCAM_crops, scenario, Crop, Year)
-    GCAM_crops <- dplyr::summarise(GCAM_crops, GCAM_Value=sum(GCAM_Value))
-
-    annual_crops <- readRDS("../data/annual_crops.rds")
-    annual_crops <- dplyr::mutate(annual_crops, .keep="unused", .before="Crop",
-                                  scenario=paste0(names(SSP), "_", names(RCP), "_", GCM))
-
-    GCAM_vs_spatial_crops <- dplyr::full_join(GCAM_crops, annual_crops)
-    GCAM_vs_spatial_crops <- dplyr::mutate(GCAM_vs_spatial_crops, difference=Value-GCAM_Value)
-    GCAM_vs_spatial_crops <- dplyr::mutate(GCAM_vs_spatial_crops, .keep="unused", .before="Crop",
-                                           SSP = substr(scenario, 1, 4),
-                                           RCP = substr(scenario, 6, 10),
-                                           GCM = substr(scenario, 12, 17))
-
-    v2 <- ggplot2::ggplot(GCAM_vs_spatial_crops, ggplot2::aes(x=GCAM_Value,
-                                                              y=Value,
-                                                              color = Crop)) +
+                    height = 10)
+    
+    # 13 crops
+    comparison_crops <- dplyr::filter(comparison, !sector %in% c("dom","elec","irr","liv","mfg","min"))
+    v2 <- ggplot2::ggplot(comparison_crops,
+                          ggplot2::aes(x=value, y=tethys_value, color=sector)) +
       ggplot2::geom_point(shape=3) +
       ggplot2::coord_fixed() +
       ggplot2::theme_bw() +
       ggplot2::scale_color_manual(values=crop_pal) +
-      ggplot2::ggtitle("GCAM vs Spatially Downscaled (Crops)") +
+      ggplot2::ggtitle("GCAM vs Spatially Downscaled") +
       ggplot2::xlab(bquote("GCAM Water Withdrawal " ~ (km^3 ~ per ~ year))) +
       ggplot2::ylab(bquote("Spatially Downscaled, Reaggregated " ~ (km^3 ~ per ~ year)))
     ggplot2::ggsave(filename = paste0(images, "validation2.png"),
                     plot = v2,
                     width = 13,
-                    height = 10) # save plot
-
-
-    # Validation  3: Temporal Downscaling
-    # 1 point for each ssp-rcp-gcm (75) x GCAM Year (19) x Sector (6)
-    # x-axis: total water withdrawal for that point (sum over 67420 Tethys grids)
-    # y-axis: total water withdrawal for that point (sum over 67420 Tethys grids, 12 months)
-    annual_data <- readRDS("../data/annual_data.rds")
-    annual_data <- dplyr::filter(annual_data, (names(Sector)!="total") &
-                              (names(Sector)!="nonag"))
-
-    monthly_data <- readRDS("../data/monthly_data.rds")
-    monthly_data <- dplyr::filter(monthly_data, Year %% 5 == 0)
-    monthly_data <- dplyr::group_by(monthly_data, SSP, RCP, GCM, Sector, Year)
-    monthly_data <- dplyr::summarise(monthly_data, monthly_Value = sum(Value))
-    annual_vs_monthly <- dplyr::full_join(annual_data, monthly_data)
-    annual_vs_monthly <- dplyr::mutate(annual_vs_monthly, diff=monthly_Value-Value, reldiff=(monthly_Value-Value)/Value)
-
-    # each point represents total withdrawal by sector (global) in a year
-    v3 <- ggplot2::ggplot(annual_vs_monthly,
-                          ggplot2::aes(x=Value, y=monthly_Value, color = Sector)) +
+                    height = 10)
+    
+    
+    ## all months
+#    files <- list.files(path = "../data", pattern = "^region_sums_twd", full.names = TRUE)
+#    monthly_data <- purrr::map_dfr(files, function(x){
+#      data <- readRDS(x)
+#      data <- dplyr::filter(data, year %% 5 == 0)
+#      data <- dplyr::group_by(data, scenario, region, basin, sector, year)
+#      data <- dplyr::summarise(data, value = sum(value))
+#      return (data)
+#    })
+#    saveRDS(monthly_data, "../data/month_sums.rds")
+    
+    Tethys_spatial <- readRDS("../data/region_sums_wd.rds")
+    Tethys_spatial <- dplyr::select(Tethys_spatial,-month)
+    Tethys_temporal <- readRDS("../data/month_sums.rds")
+    Tethys_temporal <- dplyr::rename(Tethys_temporal, temporal_value=value)
+    comparison <- dplyr::full_join(Tethys_spatial, Tethys_temporal)
+    
+    comparison_sectors <- dplyr::filter(comparison, sector %in% c("dom","elec","irr","liv","mfg","min"))
+    v3 <- ggplot2::ggplot(comparison_sectors,
+                          ggplot2::aes(x=value, y=temporal_value, color = sector)) +
       ggplot2::geom_point(shape=3) +
       ggplot2::coord_fixed() +
       ggplot2::theme_bw() +
-      ggplot2::scale_color_manual(values=water_pal) +
+      ggplot2::scale_color_manual(values=sec_pal) +
       ggplot2::ggtitle("Tethys Annual vs Tethys Monthly") +
       ggplot2::xlab(bquote("Tethys Annual Withdrawal" ~ (km^3 ~ per ~ year))) +
       ggplot2::ylab(bquote("Tethys Monthly Withdrawal, Reaggregated " ~ (km^3 ~ per ~ year)))
@@ -548,37 +571,21 @@ generate_figures <- function(folder=NULL,
                     plot = v3,
                     width = 13,
                     height = 10) # save plot
-
-
-
-    # Validation  4: Temporal Downscaling (Crops)
-    # 1 point for each ssp-rcp-gcm (75) x GCAM Year (19) x Crop (13)
-    # x-axis: total water withdrawal for that point (sum over 67420 Tethys grids)
-    # y-axis: total water withdrawal for that point (sum over 67420 Tethys grids, 12 months)
-    annual <- readRDS("../data/annual_crops.rds")
-    monthly <- readRDS("../data/monthly_crops.rds")
-    monthly <- dplyr::filter(monthly, Year %% 5 == 0)
-    monthly <- dplyr::group_by(monthly, SSP, RCP, GCM, Crop, Year)
-    monthly <- dplyr::summarise(monthly, reagg= sum(Value))
-    annual_vs_monthly <- dplyr::full_join(annual, monthly)
-    annual_vs_monthly <- dplyr::mutate(annual_vs_monthly, diff=reagg-Value, reldiff=(reagg-Value)/Value)
-
-    # each point represents total withdrawal by crop (global) in a year
-    v4 <- ggplot2::ggplot(annual_vs_monthly,
-                          ggplot2::aes(x=Value, y=reagg, color = Crop)) +
+    
+    comparison_crops <- dplyr::filter(comparison, !sector %in% c("dom","elec","irr","liv","mfg","min"))
+    v4 <- ggplot2::ggplot(comparison_crops,
+                          ggplot2::aes(x=value, y=temporal_value, color = sector)) +
       ggplot2::geom_point(shape=3) +
       ggplot2::coord_fixed() +
       ggplot2::theme_bw() +
       ggplot2::scale_color_manual(values=crop_pal) +
-      ggplot2::ggtitle("Tethys Annual vs Tethys Monthly (Crops)") +
+      ggplot2::ggtitle("Tethys Annual vs Tethys Monthly") +
       ggplot2::xlab(bquote("Tethys Annual Withdrawal" ~ (km^3 ~ per ~ year))) +
       ggplot2::ylab(bquote("Tethys Monthly Withdrawal, Reaggregated " ~ (km^3 ~ per ~ year)))
     ggplot2::ggsave(filename = paste0(images, "validation4.png"),
                     plot = v4,
                     width = 13,
                     height = 10) # save plot
-
-
     }
 
   if(grepl("animations|all",temporal_scale,ignore.case=T)) {
