@@ -143,7 +143,7 @@ knitr::include_graphics("images/workflow2.jpg")
 
 <!-------------------------->
 <!-------------------------->
-# Workflow 3 - Spatial Downscaling {.tabset}
+# Workflow 3 - Spatial Downscaling
 <!-------------------------->
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
@@ -188,13 +188,13 @@ Gridded global maps of livestock in six types (cattle, buffalo, sheep, goats, pi
 ## Workflow 3C - Irrigation
 <!-------------------------->
 
-Uses Demeter outputs.
+Spatial landcover outputs from Demeter are reaggregated to the target resolution. For each region-basin intersection, and each crop type (except for biomass), the water withdrawal from GCAM is allocated to the constituent grids in proportion to the ratio from Demeter. Biomass is distributed uniformly.
 
 <br>
 
 <!-------------------------->
 <!-------------------------->
-# Workflow 4 - Temporal Downscaling {.tabset}
+# Workflow 4 - Temporal Downscaling
 <!-------------------------->
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
@@ -216,7 +216,6 @@ For spatial downscaling, the workflow is divided into four parts:
 * C. Electricity Generation
 * D. Irrigation
 
-<br>
 
 <!-------------------------->
 ## Workflow 4A - Livestock, Manufacturing, and Mining
@@ -377,6 +376,41 @@ knitr::include_graphics("images/overview_map.png")
 ```
 
 ## Indus
+
+<!-------------------------->
+### Annuals {.tabset}
+<!-------------------------->
+
+#### Total
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
+knitr::include_graphics("images/Indus_total.png")
+```
+#### Domestic
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
+knitr::include_graphics("images/Indus_dom.png")
+```
+#### Electric
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
+knitr::include_graphics("images/Indus_elec.png")
+```
+#### Manufacturing
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
+knitr::include_graphics("images/Indus_mfg.png")
+```
+#### Mining
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
+knitr::include_graphics("images/Indus_min.png")
+```
+#### Livestock
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
+knitr::include_graphics("images/Indus_liv.png")
+```
+#### Irrigation
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
+knitr::include_graphics("images/Indus_irr.png")
+```
+
+### Heatmap
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
 knitr::include_graphics("images/heatmap.png")
 ```

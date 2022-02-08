@@ -644,6 +644,34 @@ generate_figures <- function(folder=NULL,
 
 
     # Maps for Indus basin
+    
+    # Total withdrawals (annual), selected years
+    
+    my_sectors <- c("total", "dom", "elec", "mfg", "min", "liv", "irr")
+    
+    indus_data <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
+                           sectors = my_sectors,
+                           basins = "Indus",
+                           years=c(2025,2050,2100), months=0)
+    for (my_sector in my_sectors) {
+      sector_data <- dplyr::filter(indus_data, sector == my_sector)
+      # Having a column named "year" makes rmap make a bunch of other maps
+      sector_data <- dplyr::select(sector_data, lon, lat, category=year, value) 
+      sector_map <- rmap::map(sector_data, save=F, show=F,
+                              background=T, zoom=-0.5, legendType="continuous",
+                              title = paste0(my_sector, ": Indus basin"),
+                              underLayer = rmap::mapGCAMReg32,
+                              overLayer = rmap::mapGCAMReg32,
+                              col="category")
+      if (my_sector == my_sectors[1]){
+        target_dim <- patchwork::get_dim(sector_map[[1]])
+      } else {
+        sector_map[[1]] <- patchwork::set_dim(sector_map[[1]], target_dim)
+      }
+      grDevices::png(paste0(images,"indus_", my_sector, ".png"),width=13,height=5,units="in",res=300); print(sector_map[[1]]); grDevices::dev.off()
+    }
+
+    
     indus_data2 <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
                             sectors = c("irr", "biomass"),
                             basins = "Indus",
@@ -654,12 +682,11 @@ generate_figures <- function(folder=NULL,
     indus_data2 <- dplyr::group_by(indus_data2, lon, lat, year)
     indus_data2 <- dplyr::summarise(indus_data2, value=sum(value))
 
-    indus_data3 <- dplyr::select(indus_data2, lon, lat, Year=year, Month=month, value)
-    indus_data3 <- dplyr::mutate(indus_data3, Month=factor(month.abb[Month], levels=month.abb))
-    indus_data4 <- dplyr::mutate(indus_data3, value = (value/max(indus_data3$value))^0.2)
+    indus_data2 <- dplyr::select(indus_data2, lon, lat, Year=year, Month=month, value)
+    indus_data2 <- dplyr::mutate(indus_data2, Month=factor(month.abb[Month], levels=month.abb))
+    indus_data2 <- dplyr::mutate(indus_data2, value = (value/max(indus_data2$value))^0.2)
 
-
-    rm <- rmap::map(indus_data4, save=T, show=F, background=T, zoom=-0.5, legendType="continuous",
+    rm <- rmap::map(indus_data2, save=T, show=F, background=T, zoom=-0.5, legendType="continuous",
                     underLayer = rmap::mapGCAMReg32,
                     overLayer = rmap::mapGCAMReg32,
                     col="Month", row="Year")
@@ -712,6 +739,7 @@ generate_figures <- function(folder=NULL,
       ggplot2::theme(panel.background = ggplot2::element_blank(),
                      plot.background = ggplot2::element_blank()); hm
 
+    
     ggplot2::ggsave(filename = paste0(images, "heatmap.png"),
                     plot = hm,
                     width = 13,

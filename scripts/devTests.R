@@ -33,6 +33,15 @@ rm <- rmap::map(mydata, save=F, show=F, background = T, legendType="continuous",
 
 a <- rm[[1]] + ggplot2::scale_fill_gradientn(
   colors = rev(jgcricol()$pal_spectral),
+  rescaler = ~(.x/max(.x))^0.25); a
+
+
+a <- rm[[1]] + ggplot2::scale_fill_viridis_c(
+  rescaler = ~(.x/max(.x))^0.25); a
+
+
+a <- rm[[1]] + ggplot2::scale_fill_gradientn(
+  colors = rev(jgcricol()$pal_spectral),
   trans = scales::trans_new(name = '4th root',
                             transform = function(x){x^0.25},
                             inverse = function(x){x^4}),
@@ -92,23 +101,4 @@ b <- rm[[1]] + ggplot2::scale_fill_gradientn(
   breaks = round(seq(0,max(mydata2$value*0.99, na.rm = T)^0.25,length.out=5)^4, 2))
 
 grDevices::png(paste0(images,"test.png"),width=15,height=21,units="in",res=100); print(b); grDevices::dev.off()
-
-
-
-
-# validation
-GCAM <- readRDS("region_data.rds")
-GCAM <- dplyr::rename(GCAM, basin=subRegion_GCAMBasin, region=subRegion_GCAMReg32, sector=class, GCAM_value=value)
-
-tethys <- readRDS("region_sums_wd.rds")
-tethysa <- dplyr::filter(tethys, !sector %in% names(crop_pal))
-tethysa <- dplyr::mutate(tethysa, sector = c(dom = "Domestic",
-                                             elec= "Electricity",
-                                             irr = "Irrigation",
-                                             liv = "Livestock",
-                                             mfg = "Manufacturing",
-                                             min = "Mining")[sector])
-a <- dplyr::full_join(GCAM, tethysa)
-
-
 
