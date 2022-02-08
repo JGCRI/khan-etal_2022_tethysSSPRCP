@@ -11,7 +11,7 @@
 
 
 
-<title>SEAsia</title>
+<title>khan_etal_2022_tethysSSPRCP</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -369,7 +369,7 @@ div.tocify {
 <p align="center">
 <img src="images/divider.png">
 </p>
-<p>Khan, Z., Thompson, I., Vernon, C., 2022. A global gridded monthly water withdrawal dataset for multiple sectors from 2015 to 2100 at 0.5° resolution under a range of socioeconomic and climate scenarios. (In progress) Journal_TBD, DOI: XXXX</p>
+<p>Khan, Z., Thompson, I., Vernon, C., 2022. A global gridded monthly water withdrawal dataset for multiple sectors from 2010 to 2100 at 0.5° resolution under a range of socioeconomic and climate scenarios. (In progress) Journal_TBD, DOI: XXXX</p>
 <p><br></p>
 <!-------------------------->
 <!-------------------------->
@@ -582,8 +582,8 @@ Workflow 2
 <!-------------------------->
 <!-------------------------->
 </div>
-<div id="workflow-3---spatial-downscaling" class="section level1 tabset">
-<h1 class="tabset">Workflow 3 - Spatial Downscaling</h1>
+<div id="workflow-3---spatial-downscaling" class="section level1">
+<h1>Workflow 3 - Spatial Downscaling</h1>
 <!-------------------------->
 <!-------------------------->
 <p align="center">
@@ -627,14 +627,14 @@ Spatial Workflow
 <div id="workflow-3c---irrigation" class="section level2">
 <h2>Workflow 3C - Irrigation</h2>
 <!-------------------------->
-<p>Uses Demeter outputs.</p>
+<p>Spatial landcover outputs from Demeter are reaggregated to the target resolution. For each region-basin intersection, and each crop type (except for biomass), the water withdrawal from GCAM is allocated to the constituent grids in proportion to the ratio from Demeter. Biomass is distributed uniformly.</p>
 <p><br></p>
 <!-------------------------->
 <!-------------------------->
 </div>
 </div>
-<div id="workflow-4---temporal-downscaling" class="section level1 tabset">
-<h1 class="tabset">Workflow 4 - Temporal Downscaling</h1>
+<div id="workflow-4---temporal-downscaling" class="section level1">
+<h1>Workflow 4 - Temporal Downscaling</h1>
 <!-------------------------->
 <!-------------------------->
 <p align="center">
@@ -660,7 +660,6 @@ Temporal Workflow
 <li>C. Electricity Generation</li>
 <li>D. Irrigation</li>
 </ul>
-<p><br></p>
 <!-------------------------->
 <div id="workflow-4a---livestock-manufacturing-and-mining" class="section level2">
 <h2>Workflow 4A - Livestock, Manufacturing, and Mining</h2>
@@ -716,6 +715,15 @@ Total Annual Water Withdrawal by SSP-RCP-GCM
 <h3>By Sector</h3>
 <div class="figure" style="text-align: center">
 <img src="images/figure2.png" alt="Global Annual Water Withdrawal by SSP-RCP-GCM and Sector" width="100%" />
+<p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-GCM and Sector
+</p>
+</div>
+</div>
+<div id="crops" class="section level3">
+<h3>Crops</h3>
+<div class="figure" style="text-align: center">
+<img src="images/figure6.png" alt="Global Annual Water Withdrawal by SSP-RCP-GCM and Sector" width="100%" />
 <p class="caption">
 Global Annual Water Withdrawal by SSP-RCP-GCM and Sector
 </p>
@@ -791,45 +799,177 @@ Monthly Example
 Without Irrigation
 </p>
 </div>
+</div>
+<div id="crops-1" class="section level3">
+<h3>Crops</h3>
+<div class="figure" style="text-align: center">
+<img src="images/figure5.png" alt="Without Irrigation" width="100%" />
+<p class="caption">
+Without Irrigation
+</p>
+</div>
 <!-------------------------->
 </div>
 </div>
 <div id="maps" class="section level2 tabset">
 <h2 class="tabset">Maps</h2>
 <!-------------------------->
+<p><img src="images/facetmapannual.png" width="100%" style="display: block; margin: auto;" /> <img src="images/facetmapmonthly.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <!-------------------------->
 <!-------------------------->
 </div>
 </div>
-<div id="validation" class="section level1 tabset">
-<h1 class="tabset">Validation</h1>
+<div id="validation" class="section level1">
+<h1>Validation</h1>
 <!-------------------------->
 <!-------------------------->
 <p align="center">
 <img src="images/divider.png">
 </p>
 <!-------------------------->
-<div id="spatial" class="section level2">
-<h2>Spatial</h2>
+<div id="spatial" class="section level2 tabset">
+<h2 class="tabset">Spatial</h2>
 <!-------------------------->
+<div id="sectors" class="section level3">
+<h3>Sectors</h3>
 <div class="figure" style="text-align: center">
-<img src="images/validation1.png" alt="GCAM inputs vs grids Reaggregated" width="100%" />
+<img src="images/validation1.png" alt="GCAM inputs vs grids Reaggregated" width="75%" />
+<p class="caption">
+GCAM inputs vs grids Reaggregated
+</p>
+</div>
+</div>
+<div id="crops-2" class="section level3">
+<h3>Crops</h3>
+<div class="figure" style="text-align: center">
+<img src="images/validation2.png" alt="GCAM inputs vs grids Reaggregated" width="75%" />
 <p class="caption">
 GCAM inputs vs grids Reaggregated
 </p>
 </div>
 <!-------------------------->
 </div>
-<div id="temporal" class="section level2">
-<h2>Temporal</h2>
+</div>
+<div id="temporal" class="section level2 tabset">
+<h2 class="tabset">Temporal</h2>
 <!-------------------------->
+<div id="sectors-1" class="section level3">
+<h3>Sectors</h3>
 <div class="figure" style="text-align: center">
-<img src="images/validation2.png" alt="Annual vs Reaggregated Monthly" width="100%" />
+<img src="images/validation3.png" alt="Annual vs Reaggregated Monthly" width="75%" />
 <p class="caption">
 Annual vs Reaggregated Monthly
 </p>
 </div>
+</div>
+<div id="crops-3" class="section level3">
+<h3>Crops</h3>
+<div class="figure" style="text-align: center">
+<img src="images/validation4.png" alt="Annual vs Reaggregated Monthly" width="75%" />
+<p class="caption">
+Annual vs Reaggregated Monthly
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="regional-spotlights" class="section level1">
+<h1>Regional Spotlights</h1>
+We have selected the following regions from literature to explore in more detail, as a way of showing the full resolution of this data set and the kinds of analyses it allows for.
+<div class="figure" style="text-align: center">
+<img src="images/overview_map.png" alt="Selected Regions" width="100%" />
+<p class="caption">
+Selected Regions
+</p>
+</div>
+<div id="indus" class="section level2">
+<h2>Indus</h2>
+<!-------------------------->
+<div id="annuals" class="section level3 tabset">
+<h3 class="tabset">Annuals</h3>
+<!-------------------------->
+<div id="total-1" class="section level4">
+<h4>Total</h4>
+<div class="figure" style="text-align: center">
+<img src="images/Indus_total.png" alt="Figure" width="100%" />
+<p class="caption">
+Figure
+</p>
+</div>
+</div>
+<div id="domestic" class="section level4">
+<h4>Domestic</h4>
+<div class="figure" style="text-align: center">
+<img src="images/Indus_dom.png" alt="Figure" width="100%" />
+<p class="caption">
+Figure
+</p>
+</div>
+</div>
+<div id="electric" class="section level4">
+<h4>Electric</h4>
+<div class="figure" style="text-align: center">
+<img src="images/Indus_elec.png" alt="Figure" width="100%" />
+<p class="caption">
+Figure
+</p>
+</div>
+</div>
+<div id="manufacturing" class="section level4">
+<h4>Manufacturing</h4>
+<div class="figure" style="text-align: center">
+<img src="images/Indus_mfg.png" alt="Figure" width="100%" />
+<p class="caption">
+Figure
+</p>
+</div>
+</div>
+<div id="mining" class="section level4">
+<h4>Mining</h4>
+<div class="figure" style="text-align: center">
+<img src="images/Indus_min.png" alt="Figure" width="100%" />
+<p class="caption">
+Figure
+</p>
+</div>
+</div>
+<div id="livestock" class="section level4">
+<h4>Livestock</h4>
+<div class="figure" style="text-align: center">
+<img src="images/Indus_liv.png" alt="Figure" width="100%" />
+<p class="caption">
+Figure
+</p>
+</div>
+</div>
+<div id="irrigation" class="section level4">
+<h4>Irrigation</h4>
+<div class="figure" style="text-align: center">
+<img src="images/Indus_irr.png" alt="Figure" width="100%" />
+<p class="caption">
+Figure
+</p>
+</div>
+</div>
+</div>
+<div id="heatmap" class="section level3">
+<h3>Heatmap</h3>
+<div class="figure" style="text-align: center">
+<img src="images/heatmap.png" alt="Figure" width="100%" />
+<p class="caption">
+Figure
+</p>
+</div>
+</div>
+</div>
+<div id="nile" class="section level2">
+<h2>Nile</h2>
+<p>Placeholder Text</p>
+</div>
+<div id="colorado" class="section level2">
+<h2>Colorado</h2>
+<p>Placeholder Text</p>
 </div>
 </div>
 
