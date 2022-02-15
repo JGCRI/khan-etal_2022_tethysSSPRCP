@@ -357,6 +357,12 @@ div.tocify {
 </div>
 
 
+<!-- Allow linking to tabset images -->
+<script type="text/javascript">
+window.onload = function() {
+  document.querySelector('a[href="' + window.location.href.match("#.*$") + '"]').click();
+}
+</script>
 <div class="header_logo">
 <p><img src="images/logo_pnnl_white.png" style="float:right;height:40px;"></p>
 </div>
@@ -407,7 +413,7 @@ Link
 Tethys
 </td>
 <td style="text-align:left;">
-v1.3.0?
+v1.3.0
 </td>
 <td style="text-align:left;">
 Spatiotemporal downscaling model for global water use
@@ -559,7 +565,7 @@ Workflow Summary
 Workflow 1
 </p>
 </div>
-<p>For each valid SSP-RCP combination, five General Circulation Models (GCMs). This gives a grand total of 75 SSP-RCP-GCM combinations, which are fed into the models.</p>
+<p>For each valid SSP-RCP combination, five General Circulation Models (GCMs) are used. This gives a grand total of 75 SSP-RCP-GCM combinations, which are fed into GCAM.</p>
 <p><br></p>
 <!-------------------------->
 <!-------------------------->
@@ -571,7 +577,7 @@ Workflow 1
 <p align="center">
 <img src="images/divider.png">
 </p>
-<p>(Comment on GCAM, Xanthos, Demeter) GCAM is run for each SSP-RCP-GCM combination. The GCAM outputs are at the resolution of 32 geopolitical regions, and 235 water basins, with 5-year timesteps. The sectoral water withdrawal outputs from GCAM are the primary inputs to Tethys, which will be downscaled to the target resolution. Crop outputs from GCAM are sent to Demeter for downscaling, to be used by Tethys for the irrigation sector.</p>
+<p>GCAM is run for each SSP-RCP-GCM combination. The GCAM outputs are at the resolution of 32 geopolitical regions, and 235 water basins, with 5-year timesteps. The sectoral water withdrawal outputs from GCAM are the primary inputs to Tethys, which will be downscaled to the target resolution. Crop outputs from GCAM are sent to Demeter for downscaling, to be used by Tethys for the irrigation sector.</p>
 <div class="figure" style="text-align: center">
 <img src="images/workflow2.jpg" alt="Workflow 2" width="100%" />
 <p class="caption">
@@ -640,7 +646,7 @@ Spatial Workflow
 <p align="center">
 <img src="images/divider.png">
 </p>
-<p>At this stage the data has been downscaled spatially to 0.5 degree grids, but is still in 5-year timesteps. First, linear interpolation is applied to produce annual data. Then, downscaling algorithms are applied to each sector to produce monthly data with seasonal variation.</p>
+<p>At this stage the data has been downscaled spatially to 0.5 degree grids, but is still in 5 year timesteps. First, linear interpolation is applied to produce annual data. Then, downscaling algorithms are applied to each sector to produce monthly data with seasonal variation.</p>
 <div class="figure" style="text-align: center">
 <img src="images/workflow4.jpg" alt="Workflow 4" width="100%" />
 <p class="caption">
@@ -876,7 +882,7 @@ Annual vs Reaggregated Monthly
 </div>
 <div id="regional-spotlights" class="section level1">
 <h1>Regional Spotlights</h1>
-We have selected the following regions from literature to explore in more detail, as a way of showing the full resolution of this data set and the kinds of analyses it allows for.
+We have selected the following regions from literature to explore in more detail, as a way of showing the full resolution of this data set.
 <div class="figure" style="text-align: center">
 <img src="images/overview_map.png" alt="Selected Regions" width="100%" />
 <p class="caption">
@@ -886,81 +892,136 @@ Selected Regions
 <div id="indus" class="section level2">
 <h2>Indus</h2>
 <!-------------------------->
-<div id="annuals" class="section level3 tabset">
-<h3 class="tabset">Annuals</h3>
+<div id="withdrawals-by-sector" class="section level3 tabset">
+<h3 class="tabset">Withdrawals by Sector</h3>
 <!-------------------------->
-<div id="total-1" class="section level4">
-<h4>Total</h4>
-<div class="figure" style="text-align: center">
-<img src="images/Indus_total.png" alt="Figure" width="100%" />
-<p class="caption">
-Figure
-</p>
+<div id="total-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">total</h4>
+<div id="ssp1_rcp26_gfdl" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/Indus_total.png" /> <img src="images/heatmap_Indus_total.png" /></p>
 </div>
 </div>
-<div id="domestic" class="section level4">
-<h4>Domestic</h4>
-<div class="figure" style="text-align: center">
-<img src="images/Indus_dom.png" alt="Figure" width="100%" />
-<p class="caption">
-Figure
-</p>
+<div id="dom" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">dom</h4>
+<div id="ssp1_rcp26_gfdl-1" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/Indus_dom.png" /> <img src="images/heatmap_indus_dom.png" /></p>
 </div>
 </div>
-<div id="electric" class="section level4">
-<h4>Electric</h4>
-<div class="figure" style="text-align: center">
-<img src="images/Indus_elec.png" alt="Figure" width="100%" />
-<p class="caption">
-Figure
-</p>
+<div id="elec" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">elec</h4>
+<div id="ssp1_rcp26_gfdl-2" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/Indus_elec.png" /> <img src="images/heatmap_indus_elec.png" /></p>
 </div>
 </div>
-<div id="manufacturing" class="section level4">
-<h4>Manufacturing</h4>
-<div class="figure" style="text-align: center">
-<img src="images/Indus_mfg.png" alt="Figure" width="100%" />
-<p class="caption">
-Figure
-</p>
+<div id="mfg" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">mfg</h4>
+<div id="ssp1_rcp26_gfdl-3" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/Indus_mfg.png" /> <img src="images/heatmap_indus_mfg.png" /></p>
 </div>
 </div>
-<div id="mining" class="section level4">
-<h4>Mining</h4>
-<div class="figure" style="text-align: center">
-<img src="images/Indus_min.png" alt="Figure" width="100%" />
-<p class="caption">
-Figure
-</p>
+<div id="min" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">min</h4>
+<div id="ssp1_rcp26_gfdl-4" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/Indus_min.png" /> <img src="images/heatmap_indus_min.png" /></p>
 </div>
 </div>
-<div id="livestock" class="section level4">
-<h4>Livestock</h4>
-<div class="figure" style="text-align: center">
-<img src="images/Indus_liv.png" alt="Figure" width="100%" />
-<p class="caption">
-Figure
-</p>
+<div id="liv" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">liv</h4>
+<div id="ssp1_rcp26_gfdl-5" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/Indus_liv.png" /> <img src="images/heatmap_indus_liv.png" /></p>
 </div>
 </div>
-<div id="irrigation" class="section level4">
-<h4>Irrigation</h4>
-<div class="figure" style="text-align: center">
-<img src="images/Indus_irr.png" alt="Figure" width="100%" />
-<p class="caption">
-Figure
-</p>
+<div id="irr" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">irr</h4>
+<div id="ssp1_rcp26_gfdl-6" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/Indus_irr.png" /> <img src="images/heatmap_indus_irr.png" /></p>
+<!-------------------------->
 </div>
 </div>
 </div>
-<div id="heatmap" class="section level3">
-<h3>Heatmap</h3>
-<div class="figure" style="text-align: center">
-<img src="images/heatmap.png" alt="Figure" width="100%" />
-<p class="caption">
-Figure
-</p>
+<div id="withdrawals-by-crop" class="section level3 tabset">
+<h3 class="tabset">Withdrawals by Crop</h3>
+<!-------------------------->
+<div id="corn" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Corn</h4>
+<div id="ssp1_rcp26_gfdl-7" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/indus_Corn.png" /> <img src="images/heatmap_indus_Corn.png" /></p>
 </div>
+</div>
+<div id="fibercrop" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">FiberCrop</h4>
+<div id="ssp1_rcp26_gfdl-8" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/indus_FiberCrop.png" /> <img src="images/heatmap_indus_FiberCrop.png" /></p>
+</div>
+</div>
+<div id="misccrop" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">MiscCrop</h4>
+<div id="ssp1_rcp26_gfdl-9" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/indus_MiscCrop.png" /> <img src="images/heatmap_indus_MiscCrop.png" /></p>
+</div>
+</div>
+<div id="oilcrop" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">OilCrop</h4>
+<div id="ssp1_rcp26_gfdl-10" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/indus_OilCrop.png" /> <img src="images/heatmap_indus_OilCrop.png" /></p>
+</div>
+</div>
+<div id="othergrain" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">OtherGrain</h4>
+<div id="ssp1_rcp26_gfdl-11" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/indus_OtherGrain.png" /> <img src="images/heatmap_indus_OtherGrain.png" /></p>
+</div>
+</div>
+<div id="rice" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Rice</h4>
+<div id="ssp1_rcp26_gfdl-12" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/indus_Rice.png" /> <img src="images/heatmap_indus_Rice.png" /></p>
+</div>
+</div>
+<div id="root_tuber" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Root_Tuber</h4>
+<div id="ssp1_rcp26_gfdl-13" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/indus_Root_Tuber.png" /> <img src="images/heatmap_indus_Root_Tuber.png" /></p>
+</div>
+</div>
+<div id="sugarcrop" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">SugarCrop</h4>
+<div id="ssp1_rcp26_gfdl-14" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/indus_SugarCrop.png" /> <img src="images/heatmap_indus_SugarCrop.png" /></p>
+</div>
+</div>
+<div id="wheat" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Wheat</h4>
+<div id="ssp1_rcp26_gfdl-15" class="section level5">
+<h5>ssp1_rcp26_gfdl</h5>
+<p><img src="images/indus_Wheat.png" /> <img src="images/heatmap_indus_Wheat.png" /></p>
+<!-------------------------->
+</div>
+</div>
+</div>
+<div id="consumption-by-sector" class="section level3 tabset">
+<h3 class="tabset">Consumption by Sector</h3>
+<!-------------------------->
+<!-------------------------->
+</div>
+<div id="consumption-by-crop" class="section level3 tabset">
+<h3 class="tabset">Consumption by Crop</h3>
+<!-------------------------->
 </div>
 </div>
 <div id="nile" class="section level2">
