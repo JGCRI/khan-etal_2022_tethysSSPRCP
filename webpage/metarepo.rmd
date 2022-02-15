@@ -10,6 +10,12 @@ output:
     theme: cosmo
     #inverse: true
 ---
+<!-- Allow linking to tabset images --> 
+```{js, echo=FALSE}
+window.onload = function() {
+  document.querySelector('a[href="' + window.location.href.match("#.*$") + '"]').click();
+}
+```
 
 <div class="header_logo">
 <img src="images/logo_pnnl_white.png" style="float:right;height:40px;">
@@ -38,7 +44,7 @@ Khan, Z., Thompson, I., Vernon, C., 2022. A global gridded monthly water withdra
 library(kableExtra)
 data.frame(
     Model = c("Tethys"),
-    Version = c("v1.3.0?"),
+    Version = c("v1.3.0"),
     Description = c("Spatiotemporal downscaling model for global water use"),
     Language = c("Python"),
     Link = c("https://jgcri.github.io/tethys/")
@@ -121,7 +127,7 @@ This dataset contains water withdrawal projections under a range of socioeconomi
 knitr::include_graphics("images/workflow1.jpg")
 ```
 
-For each valid SSP-RCP combination, five General Circulation Models (GCMs). This gives a grand total of 75 SSP-RCP-GCM combinations, which are fed into the models.
+For each valid SSP-RCP combination, five General Circulation Models (GCMs) are used. This gives a grand total of 75 SSP-RCP-GCM combinations, which are fed into GCAM.
 
 <br>
 
@@ -132,7 +138,6 @@ For each valid SSP-RCP combination, five General Circulation Models (GCMs). This
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
 
-(Comment on GCAM, Xanthos, Demeter)
 GCAM is run for each SSP-RCP-GCM combination. The GCAM outputs are at the resolution of 32 geopolitical regions, and 235 water basins, with 5-year timesteps. The sectoral water withdrawal outputs from GCAM are the primary inputs to Tethys, which will be downscaled to the target resolution. Crop outputs from GCAM are sent to Demeter for downscaling, to be used by Tethys for the irrigation sector.
 
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Workflow 2"}
@@ -199,7 +204,7 @@ Spatial landcover outputs from Demeter are reaggregated to the target resolution
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
 
-At this stage the data has been downscaled spatially to 0.5 degree grids, but is still in 5-year timesteps. First, linear interpolation is applied to produce annual data. Then, downscaling algorithms are applied to each sector to produce monthly data with seasonal variation.
+At this stage the data has been downscaled spatially to 0.5 degree grids, but is still in 5 year timesteps. First, linear interpolation is applied to produce annual data. Then, downscaling algorithms are applied to each sector to produce monthly data with seasonal variation.
 
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Workflow 4"}
 knitr::include_graphics("images/workflow4.jpg")
@@ -370,7 +375,7 @@ knitr::include_graphics("images/validation4.png")
 ```
 
 # Regional Spotlights
-We have selected the following regions from literature to explore in more detail, as a way of showing the full resolution of this data set and the kinds of analyses it allows for.
+We have selected the following regions from literature to explore in more detail, as a way of showing the full resolution of this data set.
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Selected Regions"}
 knitr::include_graphics("images/overview_map.png")
 ```
@@ -378,42 +383,40 @@ knitr::include_graphics("images/overview_map.png")
 ## Indus
 
 <!-------------------------->
-### Annuals {.tabset}
+### Withdrawals by Sector {.tabset}
 <!-------------------------->
 
-#### Total
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
-knitr::include_graphics("images/Indus_total.png")
-```
-#### Domestic
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
-knitr::include_graphics("images/Indus_dom.png")
-```
-#### Electric
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
-knitr::include_graphics("images/Indus_elec.png")
-```
-#### Manufacturing
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
-knitr::include_graphics("images/Indus_mfg.png")
-```
-#### Mining
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
-knitr::include_graphics("images/Indus_min.png")
-```
-#### Livestock
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
-knitr::include_graphics("images/Indus_liv.png")
-```
-#### Irrigation
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
-knitr::include_graphics("images/Indus_irr.png")
+```{r, echo=FALSE, results = 'asis'}
+for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
+  cat("\n####", sector, "{.tabset .tabset-pills}\n")
+  cat("\n#####", "ssp1_rcp26_gfdl", "\n")
+  cat("![](images/Indus_", sector, ".png)", sep="")
+  cat('\n')
+  cat("![](images/heatmap_Indus_", sector, ".png)", sep="")
+  cat('\n')
+}
 ```
 
-### Heatmap
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Figure"}
-knitr::include_graphics("images/heatmap.png")
+<!-------------------------->
+### Withdrawals by Crop {.tabset}
+<!-------------------------->
+```{r, echo=FALSE, results = 'asis'}
+for(sector in c("Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat")){
+  cat("\n####", sector, "{.tabset .tabset-pills}\n")
+  cat("\n#####", "ssp1_rcp26_gfdl", "\n")
+  cat("![](images/Indus_", sector, ".png)\n", sep="")
+  cat("![](images/heatmap_Indus_", sector, ".png)\n", sep="")
+}
 ```
+
+<!-------------------------->
+### Consumption by Sector {.tabset}
+<!-------------------------->
+
+<!-------------------------->
+### Consumption by Crop {.tabset}
+<!-------------------------->
+
 ## Nile
 Placeholder Text
 
