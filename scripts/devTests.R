@@ -102,3 +102,29 @@ b <- rm[[1]] + ggplot2::scale_fill_gradientn(
 
 grDevices::png(paste0(images,"test.png"),width=15,height=21,units="in",res=100); print(b); grDevices::dev.off()
 
+
+data1 <- data.table::fread(GCAM_withdrawals_csv)
+data2 <- dplyr::filter(data1, endsWith(scenario, "woclimate"))
+data3 <- dplyr::filter(data2, value < 0)
+data4 <- dplyr::filter(data1, value < 0)
+data5 <- dplyr::filter(data1, value < 0 & scenario == "ssp1_rcp60_woclimate")
+
+####
+indus_data1 <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
+                       sectors = "Rice", months = 0,
+                       regions = "South Africa")
+
+indus_data <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
+                       sectors = names(crop_pal),
+                       basins = c("Indus"))
+
+idp <- dplyr::filter(indus_data, value > 0)
+idp <- dplyr::group_by(idp, sector, Grid_ID, year)
+idp <- dplyr::mutate(idp, value = value/sum(value))
+p <- ggplot2::ggplot(data = idp,
+                       ggplot2::aes(x = month,
+                                    y = value,
+                                    group = interaction(year, Grid_ID))) +
+  ggplot2::geom_line(ggplot2::aes(color=sector)) +
+  ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p
+
