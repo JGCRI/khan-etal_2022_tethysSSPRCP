@@ -10,17 +10,32 @@ output:
     theme: cosmo
     #inverse: true
 ---
-<!-- Allow linking to tabset images --> 
+
+<!-- Allow href to tabsets --> 
 ```{js, echo=FALSE}
-window.onload = function() {
-  document.querySelector('a[href="' + window.location.href.match("#.*$") + '"]').click();
+function goToTab() {
+  var hash = String(window.location.href.match("#.*$"));
+  var target = document.querySelector("a[role = 'tab'][href='" + hash + "']");
+  if (target !== null) {
+    var greatgrandparent = target.parentElement.parentElement.parentElement;
+    if (greatgrandparent.getAttribute("role") == "tabpanel") {
+      document.querySelector("a[role = 'tab'][href='#" + greatgrandparent.getAttribute("id") + "']").click();
+    }
+    target.click();
+    target.scrollIntoView();
+  }
 }
+
+window.onload = function() {
+  setTimeout(goToTab, 100);
+}
+
+window.onhashchange = goToTab;
 ```
 
 <div class="header_logo">
 <img src="images/logo_pnnl_white.png" style="float:right;height:40px;">
 </div>
-
 
 <!-------------------------->
 <!-------------------------->
@@ -380,6 +395,8 @@ We have selected the following regions from literature to explore in more detail
 knitr::include_graphics("images/overview_map.png")
 ```
 
+[This](#othergrain) is an example internal link to a tab.
+
 ## Indus
 
 <!-------------------------->
@@ -404,8 +421,10 @@ for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
 for(sector in c("Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat")){
   cat("\n####", sector, "{.tabset .tabset-pills}\n")
   cat("\n#####", "ssp1_rcp26_gfdl", "\n")
-  cat("![](images/Indus_", sector, ".png)\n", sep="")
-  cat("![](images/heatmap_Indus_", sector, ".png)\n", sep="")
+  cat("![](images/Indus_", sector, ".png)", sep="")
+  cat('\n')
+  cat("![](images/heatmap_Indus_", sector, ".png)", sep="")
+  cat('\n')
 }
 ```
 
@@ -422,3 +441,4 @@ Placeholder Text
 
 ## Colorado
 Placeholder Text
+
