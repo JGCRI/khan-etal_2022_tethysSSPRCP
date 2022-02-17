@@ -10,17 +10,32 @@ output:
     theme: cosmo
     #inverse: true
 ---
-<!-- Allow linking to tabset images --> 
+
+<!-- Allow href to tabsets --> 
 ```{js, echo=FALSE}
-window.onload = function() {
-  document.querySelector('a[href="' + window.location.href.match("#.*$") + '"]').click();
+function goToTab() {
+  var hash = String(window.location.href.match("#.*$"));
+  var target = document.querySelector("a[role = 'tab'][href='" + hash + "']");
+  if (target !== null) {
+    var greatgrandparent = target.parentElement.parentElement.parentElement;
+    if (greatgrandparent.getAttribute("role") == "tabpanel") {
+      document.querySelector("a[role = 'tab'][href='#" + greatgrandparent.getAttribute("id") + "']").click();
+    }
+    target.click();
+    target.scrollIntoView();
+  }
 }
+
+window.onload = function() {
+  setTimeout(goToTab, 100);
+}
+
+window.onhashchange = goToTab;
 ```
 
 <div class="header_logo">
 <img src="images/logo_pnnl_white.png" style="float:right;height:40px;">
 </div>
-
 
 <!-------------------------->
 <!-------------------------->
@@ -374,7 +389,7 @@ knitr::include_graphics("images/validation3.png")
 knitr::include_graphics("images/validation4.png")
 ```
 
-# Regional Spotlights
+# Basin Examples
 We have selected the following regions from literature to explore in more detail, as a way of showing the full resolution of this data set.
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Selected Regions"}
 knitr::include_graphics("images/overview_map.png")
@@ -389,11 +404,12 @@ knitr::include_graphics("images/overview_map.png")
 ```{r, echo=FALSE, results = 'asis'}
 for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
   cat("\n####", sector, "{.tabset .tabset-pills}\n")
-  cat("\n#####", "ssp1_rcp26_gfdl", "\n")
-  cat("![](images/Indus_", sector, ".png)", sep="")
-  cat('\n')
-  cat("![](images/heatmap_Indus_", sector, ".png)", sep="")
-  cat('\n')
+  for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
+    cat("\n#####", scenario, "\n")
+    cat("![](images/regional/spatial_Indus_w", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/temporal_Indus_w", sector, "_", scenario, ".png)", sep="")
+    cat('\n')
+  }
 }
 ```
 
@@ -403,22 +419,78 @@ for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
 ```{r, echo=FALSE, results = 'asis'}
 for(sector in c("Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat")){
   cat("\n####", sector, "{.tabset .tabset-pills}\n")
-  cat("\n#####", "ssp1_rcp26_gfdl", "\n")
-  cat("![](images/Indus_", sector, ".png)\n", sep="")
-  cat("![](images/heatmap_Indus_", sector, ".png)\n", sep="")
+  for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
+    cat("\n#####", scenario, "\n")
+    cat("![](images/regional/spatial_Indus_w", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/temporal_Indus_w", sector, "_", scenario, ".png)", sep="")
+    cat('\n')
+  }
+}
+```
+
+## Nile
+
+<!-------------------------->
+### Withdrawals by Sector {.tabset}
+<!-------------------------->
+
+```{r, echo=FALSE, results = 'asis'}
+for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
+  cat("\n####", sector, "{.tabset .tabset-pills}\n")
+  for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
+    cat("\n#####", scenario, "\n")
+    cat("![](images/regional/spatial_Nile_w", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/temporal_Nile_w", sector, "_", scenario, ".png)", sep="")
+    cat('\n')
+  }
 }
 ```
 
 <!-------------------------->
-### Consumption by Sector {.tabset}
+### Withdrawals by Crop {.tabset}
 <!-------------------------->
-
-<!-------------------------->
-### Consumption by Crop {.tabset}
-<!-------------------------->
-
-## Nile
-Placeholder Text
+```{r, echo=FALSE, results = 'asis'}
+for(sector in c("Corn", "FiberCrop", "FodderHerb", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat")){
+  cat("\n####", sector, "{.tabset .tabset-pills}\n")
+  for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
+    cat("\n#####", scenario, "\n")
+    cat("![](images/regional/spatial_Nile_w", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/temporal_Nile_w", sector, "_", scenario, ".png)", sep="")
+    cat('\n')
+  }
+}
+```
 
 ## Colorado
-Placeholder Text
+
+<!-------------------------->
+### Withdrawals by Sector {.tabset}
+<!-------------------------->
+
+```{r, echo=FALSE, results = 'asis'}
+for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
+  cat("\n####", sector, "{.tabset .tabset-pills}\n")
+  for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
+    cat("\n#####", scenario, "\n")
+    cat("![](images/regional/spatial_Upper_Colorado_River_w", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/temporal_Upper_Colorado_River_w", sector, "_", scenario, ".png)", sep="")
+    cat('\n')
+  }
+}
+```
+
+<!-------------------------->
+### Withdrawals by Crop {.tabset}
+<!-------------------------->
+```{r, echo=FALSE, results = 'asis'}
+for(sector in c("Corn", "FodderHerb", "MiscCrop", "OilCrop", "OtherGrain", "Root_Tuber", "SugarCrop", "Wheat")){
+  cat("\n####", sector, "{.tabset .tabset-pills}\n")
+  for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
+    cat("\n#####", scenario, "\n")
+    cat("![](images/regional/spatial_Upper_Colorado_River_w", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/temporal_Upper_Colorado_River_w", sector, "_", scenario, ".png)", sep="")
+    cat('\n')
+  }
+}
+```
+
