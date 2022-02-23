@@ -128,3 +128,7 @@ p <- ggplot2::ggplot(data = idp,
   ggplot2::geom_line(ggplot2::aes(color=sector)) +
   ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p
 
+###
+a <- data.table::fread(r"{C:\Users\thom927\Documents\Data\tethysDemeterOutputs\ssp1_rcp26_gfdl\twddom_km3permonth.csv}", select=c(1, 5:29))
+
+

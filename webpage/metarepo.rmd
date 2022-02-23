@@ -398,11 +398,23 @@ knitr::include_graphics("images/overview_map.png")
 ## Indus
 
 <!-------------------------->
+### Maximum Crop by Withdrawals {.tabset}
+<!-------------------------->
+
+```{r, echo=FALSE, results = 'asis'}
+for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
+  cat("\n####", scenario, "\n")
+  cat("![](images/regional/most_crop_Indus_w_", scenario, ".png)", sep="")
+  cat('\n')
+}
+```
+
+<!-------------------------->
 ### Withdrawals by Sector {.tabset}
 <!-------------------------->
 
 ```{r, echo=FALSE, results = 'asis'}
-for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
+for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr", "Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "biomass")){
   cat("\n####", sector, "{.tabset .tabset-pills}\n")
   for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
     cat("\n#####", scenario, "\n")
@@ -413,29 +425,45 @@ for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
 }
 ```
 
+
 <!-------------------------->
-### Withdrawals by Crop {.tabset}
+### Consumption by Sector {.tabset}
 <!-------------------------->
+
 ```{r, echo=FALSE, results = 'asis'}
-for(sector in c("Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat")){
+for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr", "Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "biomass")){
   cat("\n####", sector, "{.tabset .tabset-pills}\n")
   for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
     cat("\n#####", scenario, "\n")
-    cat("![](images/regional/spatial_Indus_w", sector, "_", scenario, ".png)", sep="")
-    cat("![](images/regional/temporal_Indus_w", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/spatial_Indus_c", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/temporal_Indus_c", sector, "_", scenario, ".png)", sep="")
     cat('\n')
   }
 }
 ```
+
+
 
 ## Nile
 
 <!-------------------------->
+### Maximum Crop by Withdrawals {.tabset}
+<!-------------------------->
+
+```{r, echo=FALSE, results = 'asis'}
+for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
+  cat("\n####", scenario, "\n")
+  cat("![](images/regional/most_crop_Nile_w_", scenario, ".png)", sep="")
+  cat('\n')
+}
+```
+
+<!-------------------------->
 ### Withdrawals by Sector {.tabset}
 <!-------------------------->
 
 ```{r, echo=FALSE, results = 'asis'}
-for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
+for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr", "Corn", "FiberCrop", "FodderHerb", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "biomass")){
   cat("\n####", sector, "{.tabset .tabset-pills}\n")
   for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
     cat("\n#####", scenario, "\n")
@@ -446,29 +474,45 @@ for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
 }
 ```
 
+
+
 <!-------------------------->
-### Withdrawals by Crop {.tabset}
+### Consumption by Sector {.tabset}
 <!-------------------------->
+
 ```{r, echo=FALSE, results = 'asis'}
-for(sector in c("Corn", "FiberCrop", "FodderHerb", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat")){
+for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr", "Corn", "FiberCrop", "FodderHerb", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "biomass")){
   cat("\n####", sector, "{.tabset .tabset-pills}\n")
   for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
     cat("\n#####", scenario, "\n")
-    cat("![](images/regional/spatial_Nile_w", sector, "_", scenario, ".png)", sep="")
-    cat("![](images/regional/temporal_Nile_w", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/spatial_Nile_c", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/temporal_Nile_c", sector, "_", scenario, ".png)", sep="")
     cat('\n')
   }
 }
 ```
+
 
 ## Colorado
 
 <!-------------------------->
+### Maximum Crop by Withdrawals {.tabset}
+<!-------------------------->
+
+```{r, echo=FALSE, results = 'asis'}
+for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
+  cat("\n####", scenario, "\n")
+  cat("![](images/regional/most_crop_Upper_Colorado_River_w_", scenario, ".png)", sep="")
+  cat('\n')
+}
+```
+
+<!-------------------------->
 ### Withdrawals by Sector {.tabset}
 <!-------------------------->
 
 ```{r, echo=FALSE, results = 'asis'}
-for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
+for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr", "Corn", "FodderHerb", "MiscCrop", "OilCrop", "OtherGrain", "Root_Tuber", "SugarCrop", "Wheat", "biomass")){
   cat("\n####", sector, "{.tabset .tabset-pills}\n")
   for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
     cat("\n#####", scenario, "\n")
@@ -479,16 +523,18 @@ for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr")){
 }
 ```
 
+
 <!-------------------------->
-### Withdrawals by Crop {.tabset}
+### Consumption by Sector {.tabset}
 <!-------------------------->
+
 ```{r, echo=FALSE, results = 'asis'}
-for(sector in c("Corn", "FodderHerb", "MiscCrop", "OilCrop", "OtherGrain", "Root_Tuber", "SugarCrop", "Wheat")){
+for(sector in c("total", "dom", "elec", "mfg", "min", "liv", "irr", "Corn", "FodderHerb", "MiscCrop", "OilCrop", "OtherGrain", "Root_Tuber", "SugarCrop", "Wheat", "biomass")){
   cat("\n####", sector, "{.tabset .tabset-pills}\n")
   for(scenario in c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")){
     cat("\n#####", scenario, "\n")
-    cat("![](images/regional/spatial_Upper_Colorado_River_w", sector, "_", scenario, ".png)", sep="")
-    cat("![](images/regional/temporal_Upper_Colorado_River_w", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/spatial_Upper_Colorado_River_c", sector, "_", scenario, ".png)", sep="")
+    cat("![](images/regional/temporal_Upper_Colorado_River_c", sector, "_", scenario, ".png)", sep="")
     cat('\n')
   }
 }

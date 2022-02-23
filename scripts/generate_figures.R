@@ -652,7 +652,7 @@ generate_figures <- function(folder=NULL,
     #                      basins = "Indus",
     #                      years=c(2025,2050,2075,2100), months=0)
     # 
-    my_basins <- c("Indus", "Nile", "Upper_Colorado_River")[2:3]
+    my_basins <- c("Indus", "Nile", "Upper_Colorado_River")
     my_sectors <- c("total", "dom", "elec", "mfg", "min", "liv", "irr", "Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "PalmFruit", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "FodderHerb", "FodderGrass", "biomass")
     my_scenarios <- c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")
     
@@ -682,15 +682,39 @@ generate_figures <- function(folder=NULL,
         }
       }
     }
+    all_data <- readRDS("../data/metarepo_regional_spatial_c.rds")
+    for (my_basin in my_basins) {
+      for (my_sector in my_sectors) {
+        for (my_scenario in my_scenarios) {
+          sector_data <- dplyr::filter(all_data, basin == my_basin & sector == my_sector & scenario == my_scenario)
+          # Having a column named "year" makes rmap make a bunch of other maps
+          sector_data <- dplyr::select(sector_data, lon, lat, category=year, value) 
+          sector_map <- rmap::map(sector_data, save=F, show=F,
+                                  background=T, zoom=-0.5, legendType="continuous",
+                                  title = paste0(my_basin, " basin: ", my_sector, ", ", my_scenario),
+                                  legendTitle = "Water Consumption (km3)",
+                                  underLayer = rmap::mapGCAMReg32,
+                                  overLayer = rmap::mapGCAMReg32,
+                                  col="category", ncol=4)
+          if (is.null(target_dim)){
+            target_dim <- patchwork::get_dim(sector_map[[1]])
+          } else {
+            sector_map[[1]] <- patchwork::set_dim(sector_map[[1]], target_dim)
+          }
+          filename <- paste0(images, "regional/spatial_", my_basin, "_c", my_sector, "_", my_scenario, ".png")
+          grDevices::png(filename,width=13,height=4,units="in",res=300); print(sector_map[[1]]); grDevices::dev.off()
+        }
+      }
+    }
     
     ### heatmap by sector
     
-    indus_data <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
-                           sectors = my_sectors,
-                           basins = "Indus")
+    # indus_data <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
+    #                        sectors = my_sectors,
+    #                        basins = "Indus")
     
-    my_basins <- c("Indus", "Nile", "Upper_Colorado_River")[2:3]
-    my_sectors <- c("dom", "elec", "mfg", "min", "liv", "irr", "Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "FodderHerb", "biomass")
+    my_basins <- c("Indus", "Nile", "Upper_Colorado_River")
+    my_sectors <- c("total", "dom", "elec", "mfg", "min", "liv", "irr", "Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "FodderHerb", "biomass")
     my_scenarios <- c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")
     
     all_data2 <- readRDS("../data/metarepo_regional_temporal.rds")
@@ -700,6 +724,13 @@ generate_figures <- function(folder=NULL,
     all_data2 <- tidyr::fill(all_data2, basin)
     all_data2 <- dplyr::group_by(all_data2, basin, sector, scenario, year, month)
     all_data2 <- dplyr::summarise(all_data2, value=sum(value))
+    
+    totals <- dplyr::filter(all_data2, sector %in% c("dom", "elec", "mfg", "min", "liv", "irr"))
+    totals <- dplyr::group_by(totals, dplyr::across(c(-sector, -value)))
+    totals <- dplyr::summarise(totals, value=sum(value))
+    totals$sector <- "total"
+    
+    all_data2 <- dplyr::bind_rows(all_data2, totals)
 
     
     target_dim <- NULL
@@ -730,82 +761,126 @@ generate_figures <- function(folder=NULL,
         }
       }
     }
+    all_data3 <- readRDS("../data/metarepo_regional_temporal_c.rds")
+    all_data3 <- dplyr::ungroup(all_data3)
+    all_data3 <- tidyr::complete(all_data3, tidyr::nesting(region, basin), sector, scenario, year, month, fill=list(value=0))
+    all_data3 <- dplyr::arrange(all_data3, region, basin)
+    #all_data3 <- tidyr::fill(all_data3, basin)
+    all_data3 <- dplyr::group_by(all_data3, basin, sector, scenario, year, month)
+    all_data3 <- dplyr::summarise(all_data3, value=sum(value))
     
-
+    totals <- dplyr::filter(all_data3, sector %in% c("dom", "elec", "mfg", "min", "liv", "irr"))
+    totals <- dplyr::group_by(totals, dplyr::across(c(-sector, -value)))
+    totals <- dplyr::summarise(totals, value=sum(value))
+    totals$sector <- "total"
     
-    indus_data2 <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
-                            sectors = c("irr", "biomass"),
-                            basins = "Indus",
-                            years=c(2020,2040,2060,2080,2100), months=0)
-    indus_data2 <- dplyr::mutate(indus_data2, value=dplyr::case_when(
-      sector=="biomass"~ -value,
-      T~ value))
-    indus_data2 <- dplyr::group_by(indus_data2, lon, lat, year)
-    indus_data2 <- dplyr::summarise(indus_data2, value=sum(value))
-
-    indus_data2 <- dplyr::select(indus_data2, lon, lat, Year=year, Month=month, value)
-    indus_data2 <- dplyr::mutate(indus_data2, Month=factor(month.abb[Month], levels=month.abb))
-    indus_data2 <- dplyr::mutate(indus_data2, value = (value/max(indus_data2$value))^0.2)
-
-    rm <- rmap::map(indus_data2, save=T, show=F, background=T, zoom=-0.5, legendType="continuous",
-                    underLayer = rmap::mapGCAMReg32,
-                    overLayer = rmap::mapGCAMReg32,
-                    col="Month", row="Year")
-
+    all_data3 <- dplyr::bind_rows(all_data3, totals)
+    
+    for (my_basin in my_basins) {
+      for (my_sector in my_sectors) {
+        for (my_scenario in my_scenarios) {
+          sector_data <- dplyr::filter(all_data3, basin == my_basin & sector == my_sector & scenario == my_scenario)
+          sector_data$month <- factor(sector_data$month, labels = month.abb)
+          
+          heatmap <- ggplot2::ggplot(sector_data, ggplot2::aes(x=year,
+                                                               y=month,
+                                                               fill= value)) +
+            ggplot2::geom_tile() +
+            ggplot2::scale_x_continuous(expand=c(0,0)) +
+            ggplot2::scale_y_discrete(limits=rev(levels(sector_data$month)), expand=c(0,0)) +
+            ggplot2::scale_fill_gradientn(colors=jgcricol()$pal_hot) +
+            ggplot2::theme(panel.background = ggplot2::element_blank(),
+                           plot.background = ggplot2::element_blank())
+          if (is.null(target_dim)){
+            target_dim <- patchwork::get_dim(heatmap)
+          } else {
+            heatmap <- patchwork::set_dim(heatmap, target_dim)
+          }
+          ggplot2::ggsave(filename = paste0(images, "regional/temporal_", my_basin, "_c", my_sector, "_", my_scenario, ".png"),
+                          plot = heatmap,
+                          width = 13,
+                          height = 3)
+        }
+      }
+    }
+    
+    #####
     # crop types
-    indus_data_raw <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
-                               sectors = head(names(crop_pal), -1),
-                               basins = "Indus",
-                               years=c(2020,2040,2060,2080,2100))
-    indus_data <- dplyr::group_by(indus_data_raw, Grid_ID, lon, lat, year, month)
-    indus_data <- dplyr::summarise(indus_data, sector = sector[which.max(value)],
-                                  max_value=max(value))
-    indus_data <- dplyr::ungroup(indus_data)
-    indus_data <- dplyr::filter(indus_data, max_value > 0)
+    
+    crop_data <- readRDS("../data/metarepo_regional_spatial.rds")
+    crop_data <- dplyr::filter(crop_data, sector %in% c("Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "FodderHerb", "biomass"))
 
-    indus_data <- dplyr::mutate(indus_data, value=match(sector, names(crop_pal)),
-                                month=factor(month.abb[month], levels=month.abb),
-                                param="param")
-    indus_data <- dplyr::select(indus_data, lon, lat, Year=year, Month=month, value, param)
+    crop_data <- dplyr::group_by(crop_data, dplyr::across(c(-sector, -value)))
+    crop_data <- dplyr::summarise(crop_data, sector = sector[which.max(value)],
+                                  max_value=max(value))
+    crop_data <- dplyr::ungroup(crop_data)
+    crop_data <- dplyr::filter(crop_data, max_value > 0)
+    crop_data <- dplyr::mutate(crop_data, value=match(sector, names(crop_pal)), param="param")
+    crop_data <- dplyr::select(crop_data, lon, lat, basin, scenario, year, value, param)
 
     numeric2Cat_list <-list(numeric2Cat_param = list(c("param")),
                             numeric2Cat_breaks = list(c(-Inf,1:12+0.5,Inf)),
                             numeric2Cat_labels = list(names(crop_pal)),
                             numeric2Cat_palette = list(crop_pal),
                             numeric2Cat_legendTextSize = list(c(0.7)))
-
-    rm <- rmap::map(indus_data, background=T, save=T, show =F,
-                    numeric2Cat_list = numeric2Cat_list,
-                    underLayer= rmap::mapGCAMReg32,
-                    overLayer = rmap::mapGCAMReg32,
-                    row="Month", col="Year", zoom = -0.5)
-
-
-    # heatmap (year-month)
-    indus_data <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
-                           sectors = names(crop_pal), #c("dom", "elec", "mfg", "min", "irr", "liv"),
-                           basins = "Indus")
-    indus_data <- dplyr::group_by(indus_data, sector, year, month)
-    indus_summary <- dplyr::summarise(indus_data, value=sum(value))
-    indus_summary$month <- factor(indus_summary$month, labels = month.abb)
-
-    hm <- ggplot2::ggplot(indus_summary, ggplot2::aes(x=year,
-                                                      y=month,
-                                                      fill= value)) +
-      ggplot2::geom_tile() +
-      ggplot2::facet_wrap(ggplot2::vars(sector)) +
-      ggplot2::scale_x_continuous(expand=c(0,0)) +
-      ggplot2::scale_y_discrete(limits=rev(levels(indus_summary$month)), expand=c(0,0)) +
-      ggplot2::scale_fill_gradientn(colors=jgcricol()$pal_hot) +
-      ggplot2::theme(panel.background = ggplot2::element_blank(),
-                     plot.background = ggplot2::element_blank()); hm
-
     
-    ggplot2::ggsave(filename = paste0(images, "heatmap.png"),
-                    plot = hm,
-                    width = 13,
-                    height = 7)
+    target_dim <- NULL
+    for (my_basin in my_basins) {
+      for (my_scenario in my_scenarios) {
+        sector_data <- dplyr::filter(crop_data, basin == my_basin & scenario == my_scenario)
+        # Having a column named "year" makes rmap make a bunch of other maps
+        sector_data <- dplyr::select(sector_data, lon, lat, category=year, value, param) 
+        crop_map <- rmap::map(sector_data, background=T, zoom=-0.5, save=F, show=F,
+                              numeric2Cat_list = numeric2Cat_list,
+                              legendTitle = "Crop",
+                              title = paste0(my_basin, " basin: ", my_scenario),
+                              underLayer= rmap::mapGCAMReg32,
+                              overLayer = rmap::mapGCAMReg32,
+                              col="category", ncol=4)
+        if (is.null(target_dim)){
+          target_dim <- patchwork::get_dim(crop_map[[1]])
+        } else {
+          crop_map[[1]] <- patchwork::set_dim(crop_map[[1]], target_dim)
+        }
+        filename <- paste0(images, "regional/most_crop_", my_basin, "_w_", my_scenario, ".png")
+        grDevices::png(filename,width=13,height=4,units="in",res=300); print(crop_map[[1]]); grDevices::dev.off()
+      }
+    }
+    
+    crop_data <- readRDS("../data/metarepo_regional_spatial_c.rds")
+    crop_data <- dplyr::filter(crop_data, sector %in% c("Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "FodderHerb", "biomass"))
+    
+    crop_data <- dplyr::group_by(crop_data, dplyr::across(c(-sector, -value)))
+    crop_data <- dplyr::summarise(crop_data, sector = sector[which.max(value)],
+                                  max_value=max(value))
+    crop_data <- dplyr::ungroup(crop_data)
+    crop_data <- dplyr::filter(crop_data, max_value > 0)
+    crop_data <- dplyr::mutate(crop_data, value=match(sector, names(crop_pal)), param="param")
+    crop_data <- dplyr::select(crop_data, lon, lat, basin, scenario, year, value, param)
+    
+    for (my_basin in my_basins) {
+      for (my_scenario in my_scenarios) {
+        sector_data <- dplyr::filter(crop_data, basin == my_basin & scenario == my_scenario)
+        # Having a column named "year" makes rmap make a bunch of other maps
+        sector_data <- dplyr::select(sector_data, lon, lat, category=year, value, param) 
+        crop_map <- rmap::map(sector_data, background=T, zoom=-0.5, save=F, show=F,
+                              numeric2Cat_list = numeric2Cat_list,
+                              legendTitle = "Crop",
+                              title = paste0(my_basin, " basin: ", my_scenario),
+                              underLayer= rmap::mapGCAMReg32,
+                              overLayer = rmap::mapGCAMReg32,
+                              col="category", ncol=4)
+        if (is.null(target_dim)){
+          target_dim <- patchwork::get_dim(crop_map[[1]])
+        } else {
+          crop_map[[1]] <- patchwork::set_dim(crop_map[[1]], target_dim)
+        }
+        filename <- paste0(images, "regional/most_crop_", my_basin, "_c_", my_scenario, ".png")
+        grDevices::png(filename,width=13,height=4,units="in",res=300); print(crop_map[[1]]); grDevices::dev.off()
+      }
+    }
 
+   
   }
 
   # Initialize
@@ -1061,7 +1136,10 @@ build_gridLookup <- function() {
   return(gridLookup)
 }
 
-get_data <- function(folder=NULL, scenarios=NULL, sectors=NULL, years=NULL, months=NULL, regions=NULL, basins=NULL, countries=NULL, aggregate=F) {
+get_data <- function(folder=NULL, scenarios=NULL, sectors=NULL,
+                     years=NULL, months=NULL, consumption = F,
+                     regions=NULL, basins=NULL, countries=NULL,
+                     sum_spatial = F, sum_temporal = F, filter_zero = F) {
   lookup <- rmap::mapping_tethys_grid_basin_region_country
   crop_names = c("biomass", "Corn", "FiberCrop", "FodderGrass", "FodderHerb",
                  "MiscCrop", "OilCrop", "OtherGrain", "PalmFruit", "Rice",
@@ -1070,18 +1148,21 @@ get_data <- function(folder=NULL, scenarios=NULL, sectors=NULL, years=NULL, mont
   sector_list <- rep(sectors, length(scenarios))
   if (is.null(years)) {years = 2010:2100}
   if (is.null(months)) {months = 1:12}
-  if (months[1]==0) {
+  if (months[1] == 0) {
     years <- years[years %% 5 == 0]
     cols <- 6 + (years - 2010)/5
   } else {
     cols <- 5+(rep(years, each=length(months)) - 2010)*12 + rep(months, length(years))
   }
   filename_after = c("_km3permonth.csv", "_km3peryr.csv")[1 + (months[1] == 0)]
+  scenario_after = c("_withdrawals", "_consumption")[1+consumption]
+  scenario_after = "" # my local directories are named differently
 
   all_data <- data.table::rbindlist(lapply(1:length(scenario_list), function(i){
-    case <- 1 + (months[1] == 0)*2 + sector_list[i] %in% crop_names # abusing T=1, F=0
-    filename_before = c("/twd", "/crops_twdirr_", "/wd", "/crops_wdirr_")[case]
-    filename <- paste0(folder, "/", scenario_list[i], filename_before, sector_list[i], filename_after)
+    case <- 1 + consumption*4 + (months[1] == 0)*2 + sector_list[i] %in% crop_names # abusing T=1, F=0
+    filename_before = c("/twd", "/crops_twdirr_", "/wd", "/crops_wdirr_",
+                        "/tcd", "/crops_tcdirr_", "/cd", "/crops_cdirr_")[case]
+    filename <- paste0(folder, "/", scenario_list[i], scenario_after, filename_before, sector_list[i], filename_after)
     print(filename)
     file_data <- data.table::fread(filename, select=c(1, cols))
 
@@ -1098,31 +1179,33 @@ get_data <- function(folder=NULL, scenarios=NULL, sectors=NULL, years=NULL, mont
     file_data <- dplyr::mutate(file_data, .after="Grid_ID",
                                region = lookup$regionName[Grid_ID],
                                basin = lookup$basinName[Grid_ID])
-    if (aggregate) {
+    if (sum_temporal) {
+      
+    }
+    if (sum_spatial) {
       file_data[,Grid_ID:=NULL]
-      if (sector_list[i] %in% c("dom", "elec", "mfg", "min", "liv")) {
-        file_data$basin = NA_character_
-      }
       file_data <- file_data[, lapply(.SD, sum), by=list(region, basin)]
       file_data <- data.table::melt(file_data, id.vars=1:2)
-
-      file_data <- dplyr::filter(file_data, value != 0)
-      file_data <- dplyr::mutate(file_data, .before="value",
-                                 scenario = scenario_list[i],
-                                 sector = sector_list[i],
-                                 year  = as.integer(substr(variable, 1, 4)),
-                                 month = as.integer(substr(variable, 5, 6)))
     } else {
       file_data <- data.table::melt(file_data, id.vars=1:3)
-      file_data <- dplyr::mutate(file_data, .before="value",
+      file_data <- dplyr::mutate(file_data, .before="region",
                                  lon = lookup$lon[Grid_ID],
-                                 lat = lookup$lat[Grid_ID],
-                                 scenario = scenario_list[i],
-                                 sector = sector_list[i],
-                                 year  = as.integer(substr(variable, 1, 4)),
-                                 month = as.integer(substr(variable, 5, 6)))
+                                 lat = lookup$lat[Grid_ID])
     }
+    if (filter_zero) {
+      file_data <- dplyr::filter(file_data, value != 0)
+    }
+    file_data <- dplyr::mutate(file_data, .before="region",
+                               scenario = scenario_list[i],
+                               sector = sector_list[i],
+                               year  = as.integer(substr(variable, 1, 4)),
+                               month = as.integer(substr(variable, 5, 6)))
     file_data <- dplyr::select(file_data, -variable)
+    if (sum_temporal) {
+      file_data <- dplyr::group_by(file_data, dplyr::across(c(-month, -value)))
+      file_data <- dplyr::summarise(file_data, value = sum(value))
+      file_data <- dplyr::ungroup(file_data)
+    }
     return (file_data)}))
   return (all_data)
 }
