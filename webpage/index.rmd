@@ -13,16 +13,12 @@ pagetitle: khan_etal_2022_tethysSSPRCP
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
 
+<a href = "metarepo.html">
 ```{r, echo=FALSE, out.width="80%", fig.align='center'}
 knitr::include_graphics("images/total.png")
 ```
+</a>
 
 Future sectoral-specific water withdrawals at a temporal resolution capable of representing patterns in seasonality and a commonly used spatial resolution are an important factor to consider for energy, water, land and environmental research.  Projected water withdrawals that are harmonized with assumptions for alternate futures that capture socioeconomic and climatic variation are critical for many modeling studies on future global and regional dynamics. Here we generate a novel global gridded water withdrawals dataset by coupling Global Change Analysis Model (GCAM) with a land use spatial downscaling model (Demeter), a global hydrologic framework (Xanthos) and a water withdrawal downscaling model (Tethys) for the five Shared Socioeconomic Pathways (SSPs) and four Representative Concentration Pathways (RCPs) scenarios. The dataset provides sectoral monthly data at 0.5° resolution for years 2010 to 2100. The presented dataset will be useful for both global and regional analysis looking at the impacts of socioeconomic, climate and technological futures as well as in characterizing the uncertainties associated with these impacts.
 
 <p align="center"> <img src="images/divider.png"></p>
-
-<a href = "metarepo.html">
-```{r, echo=FALSE, out.width="60%", fig.align = 'center'}
-knitr::include_graphics('images/anim_SSP1_RCP26_gfdl_KMEANS.gif')
-```
-</a>
