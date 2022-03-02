@@ -363,17 +363,19 @@ function goToTab() {
   var hash = String(window.location.href.match("#.*$"));
   var target = document.querySelector("a[role = 'tab'][href='" + hash + "']");
   if (target !== null) {
-    var greatgrandparent = target.parentElement.parentElement.parentElement;
-    if (greatgrandparent.getAttribute("role") == "tabpanel") {
-      document.querySelector("a[role = 'tab'][href='#" + greatgrandparent.getAttribute("id") + "']").click();
+    var greatGrandParent = target.parentElement.parentElement.parentElement;
+    if (greatGrandParent.getAttribute("role") == "tabpanel") {
+      greatGrandParent.parentElement.parentElement.scrollIntoView();
+      document.querySelector("a[role = 'tab'][href='#" + greatGrandParent.getAttribute("id") + "']").click();
+    } else {
+      greatGrandParent.scrollIntoView();
     }
     target.click();
-    target.scrollIntoView();
   }
 }
 
 window.onload = function() {
-  setTimeout(goToTab, 100);
+  setTimeout(goToTab, 1000);
 }
 
 window.onhashchange = goToTab;
@@ -390,7 +392,7 @@ window.onhashchange = goToTab;
 <p align="center">
 <img src="images/divider.png">
 </p>
-<p>Khan, Z., Thompson, I., Vernon, C., Graham, N., Wild, T.B., Chen, M., 2022. A global gridded monthly water withdrawal dataset for multiple sectors from 2015 to 2100 at 0.5° resolution under a range of socioeconomic and climate scenarios. (In progress) Journal_TBD, DOI: XXXX</p>
+<p>Khan, Z., Thompson, I., Vernon, C., Graham, N., Wild, T.B., Chen, M., 2022. A global gridded monthly water withdrawal dataset for multiple sectors from 2010 to 2100 at 0.5° resolution under a range of socioeconomic and climate scenarios. (In progress) Journal_TBD, DOI: XXXX</p>
 <p><br></p>
 <!-------------------------->
 <!-------------------------->
@@ -635,6 +637,7 @@ Spatial Workflow
 <h2>Workflow 3A - Nonagricultural Sectors</h2>
 <!-------------------------->
 <p>For nonagricultural sectors (domestic, electricity, manufacturing, and mining), water withdrawal in each grid cell is assumed to be proportional to that cell’s population. (equation, supporting files, function name)</p>
+<p><span class="math display">\[W_i = W_j\times\frac{P_i}{P_j},\]</span></p>
 <p><br></p>
 <!-------------------------->
 </div>
@@ -852,8 +855,12 @@ Without Irrigation
 <div id="spatial" class="section level2 tabset">
 <h2 class="tabset">Spatial</h2>
 <!-------------------------->
-<div id="sectors" class="section level3">
-<h3>Sectors</h3>
+<!-------------------------->
+<div id="withdrawals" class="section level3 tabset tabset-pills">
+<h3 class="tabset tabset-pills">Withdrawals</h3>
+<!-------------------------->
+<div id="sectors" class="section level4">
+<h4>Sectors</h4>
 <div class="figure" style="text-align: center">
 <img src="images/validation1.png" alt="GCAM inputs vs grids Reaggregated" width="75%" />
 <p class="caption">
@@ -861,8 +868,8 @@ GCAM inputs vs grids Reaggregated
 </p>
 </div>
 </div>
-<div id="crops-2" class="section level3">
-<h3>Crops</h3>
+<div id="crops-2" class="section level4">
+<h4>Crops</h4>
 <div class="figure" style="text-align: center">
 <img src="images/validation2.png" alt="GCAM inputs vs grids Reaggregated" width="75%" />
 <p class="caption">
@@ -872,11 +879,39 @@ GCAM inputs vs grids Reaggregated
 <!-------------------------->
 </div>
 </div>
+<div id="consumption" class="section level3 tabset tabset-pills">
+<h3 class="tabset tabset-pills">Consumption</h3>
+<!-------------------------->
+<div id="sectors-1" class="section level4">
+<h4>Sectors</h4>
+<div class="figure" style="text-align: center">
+<img src="images/validation5.png" alt="GCAM inputs vs grids Reaggregated" width="75%" />
+<p class="caption">
+GCAM inputs vs grids Reaggregated
+</p>
+</div>
+</div>
+<div id="crops-3" class="section level4">
+<h4>Crops</h4>
+<div class="figure" style="text-align: center">
+<img src="images/validation6.png" alt="GCAM inputs vs grids Reaggregated" width="75%" />
+<p class="caption">
+GCAM inputs vs grids Reaggregated
+</p>
+</div>
+<!-------------------------->
+</div>
+</div>
+</div>
 <div id="temporal" class="section level2 tabset">
 <h2 class="tabset">Temporal</h2>
 <!-------------------------->
-<div id="sectors-1" class="section level3">
-<h3>Sectors</h3>
+<!-------------------------->
+<div id="withdrawals-1" class="section level3 tabset tabset-pills">
+<h3 class="tabset tabset-pills">Withdrawals</h3>
+<!-------------------------->
+<div id="sectors-2" class="section level4">
+<h4>Sectors</h4>
 <div class="figure" style="text-align: center">
 <img src="images/validation3.png" alt="Annual vs Reaggregated Monthly" width="75%" />
 <p class="caption">
@@ -884,13 +919,37 @@ Annual vs Reaggregated Monthly
 </p>
 </div>
 </div>
-<div id="crops-3" class="section level3">
-<h3>Crops</h3>
+<div id="crops-4" class="section level4">
+<h4>Crops</h4>
 <div class="figure" style="text-align: center">
 <img src="images/validation4.png" alt="Annual vs Reaggregated Monthly" width="75%" />
 <p class="caption">
 Annual vs Reaggregated Monthly
 </p>
+</div>
+<!-------------------------->
+</div>
+</div>
+<div id="consumption-1" class="section level3 tabset tabset-pills">
+<h3 class="tabset tabset-pills">Consumption</h3>
+<!-------------------------->
+<div id="sectors-3" class="section level4">
+<h4>Sectors</h4>
+<div class="figure" style="text-align: center">
+<img src="images/validation7.png" alt="Annual vs Reaggregated Monthly" width="75%" />
+<p class="caption">
+Annual vs Reaggregated Monthly
+</p>
+</div>
+</div>
+<div id="crops-5" class="section level4">
+<h4>Crops</h4>
+<div class="figure" style="text-align: center">
+<img src="images/validation8.png" alt="Annual vs Reaggregated Monthly" width="75%" />
+<p class="caption">
+Annual vs Reaggregated Monthly
+</p>
+</div>
 </div>
 </div>
 </div>
@@ -907,380 +966,819 @@ Selected Regions
 <div id="indus" class="section level2">
 <h2>Indus</h2>
 <!-------------------------->
+<div id="crop-withdrawals" class="section level3 tabset">
+<h3 class="tabset">Crop Withdrawals</h3>
+<!-------------------------->
+<div id="ssp-1-rcp-2.6-gfdl" class="section level4">
+<h4>SSP 1, RCP 2.6, gfdl</h4>
+<p><img src="images/regional/most_crop_Indus_w_ssp1_rcp26_gfdl.png" /><img src="images/regional/crops_annual_Indus_w_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem" class="section level4">
+<h4>SSP 2, RCP 4.5, hadgem</h4>
+<p><img src="images/regional/most_crop_Indus_w_ssp2_rcp45_hadgem.png" /><img src="images/regional/crops_annual_Indus_w_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl" class="section level4">
+<h4>SSP 3, RCP 6.0, ipsl</h4>
+<p><img src="images/regional/most_crop_Indus_w_ssp3_rcp60_ipsl.png" /><img src="images/regional/crops_annual_Indus_w_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc" class="section level4">
+<h4>SSP 4, RCP 4.5, miroc</h4>
+<p><img src="images/regional/most_crop_Indus_w_ssp4_rcp45_miroc.png" /><img src="images/regional/crops_annual_Indus_w_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm" class="section level4">
+<h4>SSP 5, RCP 8.5, noresm</h4>
+<p><img src="images/regional/most_crop_Indus_w_ssp5_rcp85_noresm.png" /><img src="images/regional/crops_annual_Indus_w_ssp5_rcp85_noresm.png" /></p>
+<!-------------------------->
+</div>
+</div>
 <div id="withdrawals-by-sector" class="section level3 tabset">
 <h3 class="tabset">Withdrawals by Sector</h3>
 <!-------------------------->
 <div id="total-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">total</h4>
-<div id="ssp1_rcp26_gfdl" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<h4 class="tabset tabset-pills">Total</h4>
+<div id="ssp-1-rcp-2.6-gfdl-1" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wtotal_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wtotal_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-1" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wtotal_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wtotal_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-1" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wtotal_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wtotal_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-1" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wtotal_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wtotal_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-1" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wtotal_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wtotal_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="dom" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">dom</h4>
-<div id="ssp1_rcp26_gfdl-1" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="domestic" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Domestic</h4>
+<div id="ssp-1-rcp-2.6-gfdl-2" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wdom_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wdom_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-1" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-2" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wdom_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wdom_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-1" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-2" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wdom_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wdom_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-1" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-2" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wdom_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wdom_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-1" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-2" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wdom_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wdom_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="elec" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">elec</h4>
-<div id="ssp1_rcp26_gfdl-2" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="electricity" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Electricity</h4>
+<div id="ssp-1-rcp-2.6-gfdl-3" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_welec_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_welec_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-2" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-3" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_welec_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_welec_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-2" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-3" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_welec_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_welec_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-2" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-3" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_welec_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_welec_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-2" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-3" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_welec_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_welec_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="mfg" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">mfg</h4>
-<div id="ssp1_rcp26_gfdl-3" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="manufacturing" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Manufacturing</h4>
+<div id="ssp-1-rcp-2.6-gfdl-4" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wmfg_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wmfg_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-3" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-4" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wmfg_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wmfg_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-3" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-4" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wmfg_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wmfg_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-3" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-4" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wmfg_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wmfg_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-3" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-4" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wmfg_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wmfg_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="min" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">min</h4>
-<div id="ssp1_rcp26_gfdl-4" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="mining" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Mining</h4>
+<div id="ssp-1-rcp-2.6-gfdl-5" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wmin_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wmin_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-4" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-5" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wmin_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wmin_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-4" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-5" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wmin_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wmin_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-4" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-5" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wmin_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wmin_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-4" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-5" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wmin_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wmin_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="liv" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">liv</h4>
-<div id="ssp1_rcp26_gfdl-5" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="livestock" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Livestock</h4>
+<div id="ssp-1-rcp-2.6-gfdl-6" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wliv_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wliv_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-5" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-6" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wliv_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wliv_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-5" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-6" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wliv_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wliv_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-5" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-6" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wliv_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wliv_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-5" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-6" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wliv_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wliv_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="irr" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">irr</h4>
-<div id="ssp1_rcp26_gfdl-6" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="irrigation" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Irrigation</h4>
+<div id="ssp-1-rcp-2.6-gfdl-7" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wirr_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wirr_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-6" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-7" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wirr_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wirr_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-6" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-7" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wirr_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wirr_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-6" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-7" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wirr_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wirr_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-6" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-7" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wirr_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wirr_ssp5_rcp85_noresm.png" /></p>
-<!-------------------------->
 </div>
 </div>
-</div>
-<div id="withdrawals-by-crop" class="section level3 tabset">
-<h3 class="tabset">Withdrawals by Crop</h3>
-<!-------------------------->
 <div id="corn" class="section level4 tabset tabset-pills">
 <h4 class="tabset tabset-pills">Corn</h4>
-<div id="ssp1_rcp26_gfdl-7" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="ssp-1-rcp-2.6-gfdl-8" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wCorn_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wCorn_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-7" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-8" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wCorn_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wCorn_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-7" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-8" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wCorn_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wCorn_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-7" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-8" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wCorn_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wCorn_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-7" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-8" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wCorn_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wCorn_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="fibercrop" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">FiberCrop</h4>
-<div id="ssp1_rcp26_gfdl-8" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="fiber-crop" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Fiber Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-9" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wFiberCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wFiberCrop_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-8" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-9" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wFiberCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wFiberCrop_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-8" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-9" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wFiberCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wFiberCrop_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-8" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-9" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wFiberCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wFiberCrop_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-8" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-9" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wFiberCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wFiberCrop_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="misccrop" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">MiscCrop</h4>
-<div id="ssp1_rcp26_gfdl-9" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="misc-crop" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Misc Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-10" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wMiscCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wMiscCrop_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-9" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-10" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wMiscCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wMiscCrop_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-9" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-10" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wMiscCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wMiscCrop_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-9" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-10" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wMiscCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wMiscCrop_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-9" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-10" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wMiscCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wMiscCrop_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="oilcrop" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">OilCrop</h4>
-<div id="ssp1_rcp26_gfdl-10" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="oil-crop" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Oil Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-11" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wOilCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wOilCrop_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-10" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-11" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wOilCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wOilCrop_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-10" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-11" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wOilCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wOilCrop_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-10" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-11" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wOilCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wOilCrop_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-10" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-11" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wOilCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wOilCrop_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="othergrain" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">OtherGrain</h4>
-<div id="ssp1_rcp26_gfdl-11" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="other-grain" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Other Grain</h4>
+<div id="ssp-1-rcp-2.6-gfdl-12" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wOtherGrain_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wOtherGrain_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-11" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-12" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wOtherGrain_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wOtherGrain_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-11" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-12" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wOtherGrain_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wOtherGrain_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-11" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-12" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wOtherGrain_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wOtherGrain_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-11" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-12" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wOtherGrain_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wOtherGrain_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
 <div id="rice" class="section level4 tabset tabset-pills">
 <h4 class="tabset tabset-pills">Rice</h4>
-<div id="ssp1_rcp26_gfdl-12" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="ssp-1-rcp-2.6-gfdl-13" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wRice_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wRice_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-12" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-13" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wRice_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wRice_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-12" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-13" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wRice_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wRice_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-12" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-13" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wRice_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wRice_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-12" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-13" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wRice_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wRice_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="root_tuber" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">Root_Tuber</h4>
-<div id="ssp1_rcp26_gfdl-13" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="root-tuber" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Root Tuber</h4>
+<div id="ssp-1-rcp-2.6-gfdl-14" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wRoot_Tuber_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wRoot_Tuber_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-13" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-14" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wRoot_Tuber_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wRoot_Tuber_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-13" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-14" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wRoot_Tuber_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wRoot_Tuber_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-13" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-14" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wRoot_Tuber_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wRoot_Tuber_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-13" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-14" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wRoot_Tuber_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wRoot_Tuber_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="sugarcrop" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">SugarCrop</h4>
-<div id="ssp1_rcp26_gfdl-14" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="sugar-crop" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Sugar Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-15" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wSugarCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wSugarCrop_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-14" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-15" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wSugarCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wSugarCrop_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-14" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-15" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wSugarCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wSugarCrop_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-14" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-15" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wSugarCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wSugarCrop_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-14" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-15" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wSugarCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wSugarCrop_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
 <div id="wheat" class="section level4 tabset tabset-pills">
 <h4 class="tabset tabset-pills">Wheat</h4>
-<div id="ssp1_rcp26_gfdl-15" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="ssp-1-rcp-2.6-gfdl-16" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Indus_wWheat_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wWheat_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-15" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-16" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Indus_wWheat_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wWheat_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-15" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-16" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Indus_wWheat_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wWheat_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-15" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-16" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Indus_wWheat_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wWheat_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-15" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-16" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Indus_wWheat_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wWheat_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="biomass" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Biomass</h4>
+<div id="ssp-1-rcp-2.6-gfdl-17" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_wbiomass_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_wbiomass_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-17" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_wbiomass_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_wbiomass_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-17" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_wbiomass_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_wbiomass_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-17" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_wbiomass_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_wbiomass_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-17" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_wbiomass_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_wbiomass_ssp5_rcp85_noresm.png" /></p>
+<!-------------------------->
+</div>
+</div>
+</div>
+<div id="consumption-by-sector" class="section level3 tabset">
+<h3 class="tabset">Consumption by Sector</h3>
+<!-------------------------->
+<div id="total-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Total</h4>
+<div id="ssp-1-rcp-2.6-gfdl-18" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_ctotal_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_ctotal_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-18" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_ctotal_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_ctotal_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-18" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_ctotal_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_ctotal_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-18" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_ctotal_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_ctotal_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-18" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_ctotal_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_ctotal_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="domestic-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Domestic</h4>
+<div id="ssp-1-rcp-2.6-gfdl-19" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cdom_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cdom_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-19" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cdom_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cdom_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-19" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cdom_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cdom_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-19" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cdom_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cdom_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-19" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cdom_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cdom_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="electricity-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Electricity</h4>
+<div id="ssp-1-rcp-2.6-gfdl-20" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_celec_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_celec_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-20" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_celec_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_celec_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-20" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_celec_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_celec_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-20" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_celec_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_celec_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-20" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_celec_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_celec_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="manufacturing-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Manufacturing</h4>
+<div id="ssp-1-rcp-2.6-gfdl-21" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cmfg_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cmfg_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-21" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cmfg_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cmfg_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-21" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cmfg_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cmfg_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-21" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cmfg_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cmfg_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-21" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cmfg_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cmfg_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="mining-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Mining</h4>
+<div id="ssp-1-rcp-2.6-gfdl-22" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cmin_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cmin_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-22" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cmin_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cmin_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-22" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cmin_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cmin_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-22" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cmin_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cmin_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-22" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cmin_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cmin_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="livestock-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Livestock</h4>
+<div id="ssp-1-rcp-2.6-gfdl-23" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cliv_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cliv_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-23" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cliv_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cliv_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-23" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cliv_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cliv_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-23" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cliv_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cliv_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-23" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cliv_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cliv_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="irrigation-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Irrigation</h4>
+<div id="ssp-1-rcp-2.6-gfdl-24" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cirr_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cirr_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-24" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cirr_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cirr_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-24" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cirr_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cirr_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-24" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cirr_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cirr_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-24" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cirr_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cirr_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="corn-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Corn</h4>
+<div id="ssp-1-rcp-2.6-gfdl-25" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cCorn_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cCorn_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-25" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cCorn_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cCorn_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-25" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cCorn_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cCorn_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-25" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cCorn_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cCorn_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-25" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cCorn_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cCorn_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="fiber-crop-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Fiber Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-26" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cFiberCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cFiberCrop_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-26" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cFiberCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cFiberCrop_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-26" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cFiberCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cFiberCrop_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-26" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cFiberCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cFiberCrop_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-26" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cFiberCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cFiberCrop_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="misc-crop-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Misc Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-27" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cMiscCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cMiscCrop_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-27" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cMiscCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cMiscCrop_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-27" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cMiscCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cMiscCrop_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-27" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cMiscCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cMiscCrop_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-27" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cMiscCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cMiscCrop_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="oil-crop-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Oil Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-28" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cOilCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cOilCrop_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-28" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cOilCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cOilCrop_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-28" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cOilCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cOilCrop_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-28" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cOilCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cOilCrop_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-28" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cOilCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cOilCrop_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="other-grain-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Other Grain</h4>
+<div id="ssp-1-rcp-2.6-gfdl-29" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cOtherGrain_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cOtherGrain_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-29" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cOtherGrain_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cOtherGrain_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-29" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cOtherGrain_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cOtherGrain_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-29" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cOtherGrain_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cOtherGrain_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-29" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cOtherGrain_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cOtherGrain_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="rice-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Rice</h4>
+<div id="ssp-1-rcp-2.6-gfdl-30" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cRice_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cRice_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-30" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cRice_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cRice_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-30" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cRice_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cRice_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-30" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cRice_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cRice_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-30" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cRice_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cRice_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="root-tuber-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Root Tuber</h4>
+<div id="ssp-1-rcp-2.6-gfdl-31" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cRoot_Tuber_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cRoot_Tuber_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-31" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cRoot_Tuber_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cRoot_Tuber_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-31" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cRoot_Tuber_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cRoot_Tuber_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-31" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cRoot_Tuber_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cRoot_Tuber_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-31" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cRoot_Tuber_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cRoot_Tuber_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="sugar-crop-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Sugar Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-32" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cSugarCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cSugarCrop_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-32" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cSugarCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cSugarCrop_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-32" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cSugarCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cSugarCrop_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-32" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cSugarCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cSugarCrop_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-32" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cSugarCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cSugarCrop_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="wheat-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Wheat</h4>
+<div id="ssp-1-rcp-2.6-gfdl-33" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cWheat_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cWheat_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-33" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cWheat_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cWheat_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-33" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cWheat_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cWheat_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-33" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cWheat_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cWheat_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-33" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cWheat_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cWheat_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="biomass-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Biomass</h4>
+<div id="ssp-1-rcp-2.6-gfdl-34" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Indus_cbiomass_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Indus_cbiomass_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-34" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Indus_cbiomass_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Indus_cbiomass_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-34" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Indus_cbiomass_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Indus_cbiomass_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-34" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Indus_cbiomass_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Indus_cbiomass_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-34" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Indus_cbiomass_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Indus_cbiomass_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
 </div>
@@ -1288,403 +1786,865 @@ Selected Regions
 <div id="nile" class="section level2">
 <h2>Nile</h2>
 <!-------------------------->
+<div id="crop-withdrawals-1" class="section level3 tabset">
+<h3 class="tabset">Crop Withdrawals</h3>
+<!-------------------------->
+<div id="ssp-1-rcp-2.6-gfdl-35" class="section level4">
+<h4>SSP 1, RCP 2.6, gfdl</h4>
+<p><img src="images/regional/most_crop_Nile_w_ssp1_rcp26_gfdl.png" /><img src="images/regional/crops_annual_Nile_w_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-35" class="section level4">
+<h4>SSP 2, RCP 4.5, hadgem</h4>
+<p><img src="images/regional/most_crop_Nile_w_ssp2_rcp45_hadgem.png" /><img src="images/regional/crops_annual_Nile_w_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-35" class="section level4">
+<h4>SSP 3, RCP 6.0, ipsl</h4>
+<p><img src="images/regional/most_crop_Nile_w_ssp3_rcp60_ipsl.png" /><img src="images/regional/crops_annual_Nile_w_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-35" class="section level4">
+<h4>SSP 4, RCP 4.5, miroc</h4>
+<p><img src="images/regional/most_crop_Nile_w_ssp4_rcp45_miroc.png" /><img src="images/regional/crops_annual_Nile_w_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-35" class="section level4">
+<h4>SSP 5, RCP 8.5, noresm</h4>
+<p><img src="images/regional/most_crop_Nile_w_ssp5_rcp85_noresm.png" /><img src="images/regional/crops_annual_Nile_w_ssp5_rcp85_noresm.png" /></p>
+<!-------------------------->
+</div>
+</div>
 <div id="withdrawals-by-sector-1" class="section level3 tabset">
 <h3 class="tabset">Withdrawals by Sector</h3>
 <!-------------------------->
-<div id="total-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">total</h4>
-<div id="ssp1_rcp26_gfdl-16" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="total-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Total</h4>
+<div id="ssp-1-rcp-2.6-gfdl-36" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wtotal_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wtotal_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-16" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-36" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wtotal_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wtotal_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-16" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-36" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wtotal_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wtotal_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-16" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-36" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wtotal_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wtotal_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-16" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-36" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wtotal_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wtotal_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="dom-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">dom</h4>
-<div id="ssp1_rcp26_gfdl-17" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="domestic-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Domestic</h4>
+<div id="ssp-1-rcp-2.6-gfdl-37" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wdom_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wdom_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-17" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-37" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wdom_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wdom_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-17" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-37" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wdom_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wdom_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-17" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-37" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wdom_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wdom_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-17" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-37" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wdom_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wdom_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="elec-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">elec</h4>
-<div id="ssp1_rcp26_gfdl-18" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="electricity-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Electricity</h4>
+<div id="ssp-1-rcp-2.6-gfdl-38" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_welec_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_welec_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-18" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-38" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_welec_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_welec_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-18" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-38" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_welec_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_welec_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-18" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-38" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_welec_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_welec_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-18" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-38" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_welec_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_welec_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="mfg-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">mfg</h4>
-<div id="ssp1_rcp26_gfdl-19" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="manufacturing-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Manufacturing</h4>
+<div id="ssp-1-rcp-2.6-gfdl-39" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wmfg_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wmfg_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-19" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-39" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wmfg_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wmfg_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-19" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-39" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wmfg_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wmfg_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-19" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-39" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wmfg_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wmfg_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-19" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-39" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wmfg_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wmfg_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="min-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">min</h4>
-<div id="ssp1_rcp26_gfdl-20" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="mining-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Mining</h4>
+<div id="ssp-1-rcp-2.6-gfdl-40" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wmin_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wmin_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-20" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-40" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wmin_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wmin_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-20" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-40" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wmin_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wmin_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-20" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-40" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wmin_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wmin_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-20" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-40" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wmin_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wmin_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="liv-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">liv</h4>
-<div id="ssp1_rcp26_gfdl-21" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="livestock-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Livestock</h4>
+<div id="ssp-1-rcp-2.6-gfdl-41" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wliv_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wliv_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-21" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-41" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wliv_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wliv_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-21" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-41" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wliv_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wliv_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-21" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-41" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wliv_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wliv_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-21" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-41" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wliv_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wliv_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="irr-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">irr</h4>
-<div id="ssp1_rcp26_gfdl-22" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="irrigation-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Irrigation</h4>
+<div id="ssp-1-rcp-2.6-gfdl-42" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wirr_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wirr_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-22" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-42" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wirr_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wirr_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-22" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-42" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wirr_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wirr_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-22" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-42" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wirr_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wirr_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-22" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-42" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wirr_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wirr_ssp5_rcp85_noresm.png" /></p>
-<!-------------------------->
 </div>
 </div>
-</div>
-<div id="withdrawals-by-crop-1" class="section level3 tabset">
-<h3 class="tabset">Withdrawals by Crop</h3>
-<!-------------------------->
-<div id="corn-1" class="section level4 tabset tabset-pills">
+<div id="corn-2" class="section level4 tabset tabset-pills">
 <h4 class="tabset tabset-pills">Corn</h4>
-<div id="ssp1_rcp26_gfdl-23" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="ssp-1-rcp-2.6-gfdl-43" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wCorn_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wCorn_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-23" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-43" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wCorn_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wCorn_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-23" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-43" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wCorn_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wCorn_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-23" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-43" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wCorn_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wCorn_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-23" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-43" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wCorn_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wCorn_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="fibercrop-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">FiberCrop</h4>
-<div id="ssp1_rcp26_gfdl-24" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="fiber-crop-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Fiber Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-44" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wFiberCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wFiberCrop_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-24" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-44" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wFiberCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wFiberCrop_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-24" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-44" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wFiberCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wFiberCrop_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-24" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-44" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wFiberCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wFiberCrop_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-24" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-44" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wFiberCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wFiberCrop_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="fodderherb" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">FodderHerb</h4>
-<div id="ssp1_rcp26_gfdl-25" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="fodder-herb" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Fodder Herb</h4>
+<div id="ssp-1-rcp-2.6-gfdl-45" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wFodderHerb_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wFodderHerb_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-25" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-45" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wFodderHerb_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wFodderHerb_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-25" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-45" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wFodderHerb_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wFodderHerb_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-25" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-45" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wFodderHerb_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wFodderHerb_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-25" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-45" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wFodderHerb_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wFodderHerb_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="misccrop-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">MiscCrop</h4>
-<div id="ssp1_rcp26_gfdl-26" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="misc-crop-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Misc Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-46" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wMiscCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wMiscCrop_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-26" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-46" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wMiscCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wMiscCrop_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-26" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-46" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wMiscCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wMiscCrop_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-26" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-46" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wMiscCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wMiscCrop_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-26" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-46" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wMiscCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wMiscCrop_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="oilcrop-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">OilCrop</h4>
-<div id="ssp1_rcp26_gfdl-27" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="oil-crop-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Oil Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-47" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wOilCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wOilCrop_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-27" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-47" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wOilCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wOilCrop_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-27" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-47" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wOilCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wOilCrop_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-27" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-47" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wOilCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wOilCrop_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-27" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-47" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wOilCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wOilCrop_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="othergrain-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">OtherGrain</h4>
-<div id="ssp1_rcp26_gfdl-28" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="other-grain-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Other Grain</h4>
+<div id="ssp-1-rcp-2.6-gfdl-48" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wOtherGrain_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wOtherGrain_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-28" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-48" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wOtherGrain_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wOtherGrain_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-28" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-48" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wOtherGrain_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wOtherGrain_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-28" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-48" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wOtherGrain_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wOtherGrain_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-28" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-48" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wOtherGrain_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wOtherGrain_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="rice-1" class="section level4 tabset tabset-pills">
+<div id="rice-2" class="section level4 tabset tabset-pills">
 <h4 class="tabset tabset-pills">Rice</h4>
-<div id="ssp1_rcp26_gfdl-29" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="ssp-1-rcp-2.6-gfdl-49" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wRice_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wRice_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-29" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-49" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wRice_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wRice_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-29" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-49" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wRice_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wRice_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-29" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-49" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wRice_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wRice_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-29" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-49" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wRice_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wRice_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="root_tuber-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">Root_Tuber</h4>
-<div id="ssp1_rcp26_gfdl-30" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="root-tuber-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Root Tuber</h4>
+<div id="ssp-1-rcp-2.6-gfdl-50" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wRoot_Tuber_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wRoot_Tuber_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-30" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-50" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wRoot_Tuber_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wRoot_Tuber_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-30" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-50" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wRoot_Tuber_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wRoot_Tuber_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-30" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-50" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wRoot_Tuber_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wRoot_Tuber_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-30" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-50" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wRoot_Tuber_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wRoot_Tuber_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="sugarcrop-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">SugarCrop</h4>
-<div id="ssp1_rcp26_gfdl-31" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="sugar-crop-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Sugar Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-51" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wSugarCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wSugarCrop_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-31" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-51" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wSugarCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wSugarCrop_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-31" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-51" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wSugarCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wSugarCrop_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-31" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-51" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wSugarCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wSugarCrop_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-31" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-51" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wSugarCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wSugarCrop_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="wheat-1" class="section level4 tabset tabset-pills">
+<div id="wheat-2" class="section level4 tabset tabset-pills">
 <h4 class="tabset tabset-pills">Wheat</h4>
-<div id="ssp1_rcp26_gfdl-32" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="ssp-1-rcp-2.6-gfdl-52" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Nile_wWheat_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wWheat_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-32" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-52" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Nile_wWheat_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wWheat_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-32" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-52" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Nile_wWheat_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wWheat_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-32" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-52" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Nile_wWheat_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wWheat_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-32" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-52" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Nile_wWheat_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wWheat_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="biomass-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Biomass</h4>
+<div id="ssp-1-rcp-2.6-gfdl-53" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_wbiomass_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_wbiomass_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-53" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_wbiomass_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_wbiomass_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-53" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_wbiomass_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_wbiomass_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-53" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_wbiomass_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_wbiomass_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-53" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_wbiomass_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_wbiomass_ssp5_rcp85_noresm.png" /></p>
+<!-------------------------->
+</div>
+</div>
+</div>
+<div id="consumption-by-sector-1" class="section level3 tabset">
+<h3 class="tabset">Consumption by Sector</h3>
+<!-------------------------->
+<div id="total-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Total</h4>
+<div id="ssp-1-rcp-2.6-gfdl-54" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_ctotal_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_ctotal_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-54" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_ctotal_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_ctotal_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-54" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_ctotal_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_ctotal_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-54" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_ctotal_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_ctotal_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-54" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_ctotal_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_ctotal_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="domestic-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Domestic</h4>
+<div id="ssp-1-rcp-2.6-gfdl-55" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cdom_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cdom_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-55" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cdom_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cdom_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-55" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cdom_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cdom_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-55" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cdom_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cdom_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-55" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cdom_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cdom_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="electricity-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Electricity</h4>
+<div id="ssp-1-rcp-2.6-gfdl-56" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_celec_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_celec_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-56" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_celec_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_celec_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-56" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_celec_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_celec_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-56" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_celec_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_celec_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-56" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_celec_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_celec_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="manufacturing-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Manufacturing</h4>
+<div id="ssp-1-rcp-2.6-gfdl-57" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cmfg_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cmfg_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-57" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cmfg_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cmfg_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-57" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cmfg_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cmfg_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-57" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cmfg_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cmfg_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-57" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cmfg_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cmfg_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="mining-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Mining</h4>
+<div id="ssp-1-rcp-2.6-gfdl-58" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cmin_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cmin_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-58" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cmin_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cmin_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-58" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cmin_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cmin_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-58" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cmin_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cmin_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-58" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cmin_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cmin_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="livestock-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Livestock</h4>
+<div id="ssp-1-rcp-2.6-gfdl-59" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cliv_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cliv_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-59" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cliv_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cliv_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-59" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cliv_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cliv_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-59" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cliv_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cliv_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-59" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cliv_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cliv_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="irrigation-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Irrigation</h4>
+<div id="ssp-1-rcp-2.6-gfdl-60" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cirr_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cirr_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-60" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cirr_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cirr_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-60" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cirr_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cirr_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-60" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cirr_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cirr_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-60" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cirr_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cirr_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="corn-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Corn</h4>
+<div id="ssp-1-rcp-2.6-gfdl-61" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cCorn_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cCorn_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-61" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cCorn_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cCorn_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-61" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cCorn_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cCorn_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-61" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cCorn_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cCorn_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-61" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cCorn_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cCorn_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="fiber-crop-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Fiber Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-62" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cFiberCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cFiberCrop_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-62" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cFiberCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cFiberCrop_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-62" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cFiberCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cFiberCrop_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-62" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cFiberCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cFiberCrop_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-62" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cFiberCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cFiberCrop_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="fodder-herb-1" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Fodder Herb</h4>
+<div id="ssp-1-rcp-2.6-gfdl-63" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cFodderHerb_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cFodderHerb_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-63" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cFodderHerb_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cFodderHerb_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-63" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cFodderHerb_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cFodderHerb_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-63" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cFodderHerb_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cFodderHerb_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-63" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cFodderHerb_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cFodderHerb_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="misc-crop-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Misc Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-64" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cMiscCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cMiscCrop_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-64" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cMiscCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cMiscCrop_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-64" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cMiscCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cMiscCrop_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-64" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cMiscCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cMiscCrop_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-64" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cMiscCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cMiscCrop_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="oil-crop-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Oil Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-65" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cOilCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cOilCrop_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-65" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cOilCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cOilCrop_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-65" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cOilCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cOilCrop_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-65" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cOilCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cOilCrop_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-65" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cOilCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cOilCrop_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="other-grain-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Other Grain</h4>
+<div id="ssp-1-rcp-2.6-gfdl-66" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cOtherGrain_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cOtherGrain_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-66" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cOtherGrain_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cOtherGrain_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-66" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cOtherGrain_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cOtherGrain_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-66" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cOtherGrain_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cOtherGrain_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-66" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cOtherGrain_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cOtherGrain_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="rice-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Rice</h4>
+<div id="ssp-1-rcp-2.6-gfdl-67" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cRice_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cRice_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-67" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cRice_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cRice_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-67" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cRice_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cRice_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-67" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cRice_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cRice_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-67" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cRice_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cRice_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="root-tuber-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Root Tuber</h4>
+<div id="ssp-1-rcp-2.6-gfdl-68" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cRoot_Tuber_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cRoot_Tuber_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-68" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cRoot_Tuber_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cRoot_Tuber_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-68" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cRoot_Tuber_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cRoot_Tuber_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-68" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cRoot_Tuber_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cRoot_Tuber_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-68" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cRoot_Tuber_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cRoot_Tuber_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="sugar-crop-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Sugar Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-69" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cSugarCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cSugarCrop_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-69" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cSugarCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cSugarCrop_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-69" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cSugarCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cSugarCrop_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-69" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cSugarCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cSugarCrop_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-69" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cSugarCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cSugarCrop_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="wheat-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Wheat</h4>
+<div id="ssp-1-rcp-2.6-gfdl-70" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cWheat_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cWheat_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-70" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cWheat_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cWheat_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-70" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cWheat_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cWheat_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-70" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cWheat_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cWheat_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-70" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cWheat_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cWheat_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="biomass-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Biomass</h4>
+<div id="ssp-1-rcp-2.6-gfdl-71" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Nile_cbiomass_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Nile_cbiomass_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-71" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Nile_cbiomass_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Nile_cbiomass_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-71" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Nile_cbiomass_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Nile_cbiomass_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-71" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Nile_cbiomass_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Nile_cbiomass_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-71" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Nile_cbiomass_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Nile_cbiomass_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
 </div>
@@ -1692,357 +2652,773 @@ Selected Regions
 <div id="colorado" class="section level2">
 <h2>Colorado</h2>
 <!-------------------------->
+<div id="crop-withdrawals-2" class="section level3 tabset">
+<h3 class="tabset">Crop Withdrawals</h3>
+<!-------------------------->
+<div id="ssp-1-rcp-2.6-gfdl-72" class="section level4">
+<h4>SSP 1, RCP 2.6, gfdl</h4>
+<p><img src="images/regional/most_crop_Upper_Colorado_River_w_ssp1_rcp26_gfdl.png" /><img src="images/regional/crops_annual_Upper_Colorado_River_w_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-72" class="section level4">
+<h4>SSP 2, RCP 4.5, hadgem</h4>
+<p><img src="images/regional/most_crop_Upper_Colorado_River_w_ssp2_rcp45_hadgem.png" /><img src="images/regional/crops_annual_Upper_Colorado_River_w_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-72" class="section level4">
+<h4>SSP 3, RCP 6.0, ipsl</h4>
+<p><img src="images/regional/most_crop_Upper_Colorado_River_w_ssp3_rcp60_ipsl.png" /><img src="images/regional/crops_annual_Upper_Colorado_River_w_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-72" class="section level4">
+<h4>SSP 4, RCP 4.5, miroc</h4>
+<p><img src="images/regional/most_crop_Upper_Colorado_River_w_ssp4_rcp45_miroc.png" /><img src="images/regional/crops_annual_Upper_Colorado_River_w_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-72" class="section level4">
+<h4>SSP 5, RCP 8.5, noresm</h4>
+<p><img src="images/regional/most_crop_Upper_Colorado_River_w_ssp5_rcp85_noresm.png" /><img src="images/regional/crops_annual_Upper_Colorado_River_w_ssp5_rcp85_noresm.png" /></p>
+<!-------------------------->
+</div>
+</div>
 <div id="withdrawals-by-sector-2" class="section level3 tabset">
 <h3 class="tabset">Withdrawals by Sector</h3>
 <!-------------------------->
-<div id="total-3" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">total</h4>
-<div id="ssp1_rcp26_gfdl-33" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="total-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Total</h4>
+<div id="ssp-1-rcp-2.6-gfdl-73" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wtotal_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wtotal_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-33" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-73" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wtotal_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wtotal_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-33" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-73" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wtotal_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wtotal_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-33" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-73" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wtotal_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wtotal_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-33" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-73" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wtotal_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wtotal_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="dom-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">dom</h4>
-<div id="ssp1_rcp26_gfdl-34" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="domestic-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Domestic</h4>
+<div id="ssp-1-rcp-2.6-gfdl-74" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wdom_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wdom_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-34" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-74" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wdom_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wdom_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-34" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-74" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wdom_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wdom_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-34" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-74" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wdom_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wdom_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-34" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-74" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wdom_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wdom_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="elec-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">elec</h4>
-<div id="ssp1_rcp26_gfdl-35" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="electricity-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Electricity</h4>
+<div id="ssp-1-rcp-2.6-gfdl-75" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_welec_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_welec_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-35" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-75" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_welec_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_welec_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-35" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-75" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_welec_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_welec_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-35" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-75" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_welec_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_welec_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-35" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-75" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_welec_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_welec_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="mfg-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">mfg</h4>
-<div id="ssp1_rcp26_gfdl-36" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="manufacturing-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Manufacturing</h4>
+<div id="ssp-1-rcp-2.6-gfdl-76" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wmfg_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wmfg_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-36" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-76" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wmfg_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wmfg_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-36" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-76" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wmfg_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wmfg_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-36" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-76" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wmfg_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wmfg_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-36" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-76" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wmfg_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wmfg_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="min-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">min</h4>
-<div id="ssp1_rcp26_gfdl-37" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="mining-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Mining</h4>
+<div id="ssp-1-rcp-2.6-gfdl-77" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wmin_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wmin_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-37" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-77" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wmin_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wmin_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-37" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-77" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wmin_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wmin_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-37" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-77" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wmin_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wmin_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-37" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-77" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wmin_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wmin_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="liv-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">liv</h4>
-<div id="ssp1_rcp26_gfdl-38" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="livestock-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Livestock</h4>
+<div id="ssp-1-rcp-2.6-gfdl-78" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wliv_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wliv_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-38" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-78" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wliv_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wliv_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-38" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-78" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wliv_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wliv_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-38" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-78" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wliv_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wliv_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-38" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-78" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wliv_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wliv_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="irr-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">irr</h4>
-<div id="ssp1_rcp26_gfdl-39" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="irrigation-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Irrigation</h4>
+<div id="ssp-1-rcp-2.6-gfdl-79" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wirr_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wirr_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-39" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-79" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wirr_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wirr_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-39" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-79" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wirr_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wirr_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-39" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-79" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wirr_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wirr_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-39" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-79" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wirr_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wirr_ssp5_rcp85_noresm.png" /></p>
-<!-------------------------->
 </div>
 </div>
-</div>
-<div id="withdrawals-by-crop-2" class="section level3 tabset">
-<h3 class="tabset">Withdrawals by Crop</h3>
-<!-------------------------->
-<div id="corn-2" class="section level4 tabset tabset-pills">
+<div id="corn-4" class="section level4 tabset tabset-pills">
 <h4 class="tabset tabset-pills">Corn</h4>
-<div id="ssp1_rcp26_gfdl-40" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="ssp-1-rcp-2.6-gfdl-80" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wCorn_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wCorn_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-40" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-80" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wCorn_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wCorn_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-40" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-80" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wCorn_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wCorn_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-40" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-80" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wCorn_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wCorn_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-40" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-80" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wCorn_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wCorn_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="fodderherb-1" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">FodderHerb</h4>
-<div id="ssp1_rcp26_gfdl-41" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="fodder-herb-2" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Fodder Herb</h4>
+<div id="ssp-1-rcp-2.6-gfdl-81" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wFodderHerb_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wFodderHerb_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-41" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-81" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wFodderHerb_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wFodderHerb_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-41" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-81" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wFodderHerb_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wFodderHerb_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-41" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-81" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wFodderHerb_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wFodderHerb_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-41" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-81" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wFodderHerb_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wFodderHerb_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="misccrop-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">MiscCrop</h4>
-<div id="ssp1_rcp26_gfdl-42" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="misc-crop-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Misc Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-82" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wMiscCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wMiscCrop_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-42" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-82" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wMiscCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wMiscCrop_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-42" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-82" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wMiscCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wMiscCrop_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-42" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-82" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wMiscCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wMiscCrop_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-42" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-82" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wMiscCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wMiscCrop_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="oilcrop-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">OilCrop</h4>
-<div id="ssp1_rcp26_gfdl-43" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="oil-crop-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Oil Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-83" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wOilCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wOilCrop_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-43" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-83" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wOilCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wOilCrop_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-43" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-83" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wOilCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wOilCrop_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-43" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-83" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wOilCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wOilCrop_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-43" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-83" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wOilCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wOilCrop_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="othergrain-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">OtherGrain</h4>
-<div id="ssp1_rcp26_gfdl-44" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="other-grain-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Other Grain</h4>
+<div id="ssp-1-rcp-2.6-gfdl-84" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wOtherGrain_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wOtherGrain_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-44" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-84" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wOtherGrain_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wOtherGrain_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-44" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-84" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wOtherGrain_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wOtherGrain_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-44" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-84" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wOtherGrain_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wOtherGrain_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-44" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-84" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wOtherGrain_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wOtherGrain_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="root_tuber-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">Root_Tuber</h4>
-<div id="ssp1_rcp26_gfdl-45" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="root-tuber-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Root Tuber</h4>
+<div id="ssp-1-rcp-2.6-gfdl-85" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wRoot_Tuber_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wRoot_Tuber_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-45" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-85" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wRoot_Tuber_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wRoot_Tuber_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-45" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-85" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wRoot_Tuber_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wRoot_Tuber_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-45" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-85" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wRoot_Tuber_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wRoot_Tuber_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-45" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-85" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wRoot_Tuber_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wRoot_Tuber_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="sugarcrop-2" class="section level4 tabset tabset-pills">
-<h4 class="tabset tabset-pills">SugarCrop</h4>
-<div id="ssp1_rcp26_gfdl-46" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="sugar-crop-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Sugar Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-86" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wSugarCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wSugarCrop_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-46" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-86" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wSugarCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wSugarCrop_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-46" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-86" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wSugarCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wSugarCrop_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-46" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-86" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wSugarCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wSugarCrop_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-46" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-86" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wSugarCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wSugarCrop_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
-<div id="wheat-2" class="section level4 tabset tabset-pills">
+<div id="wheat-4" class="section level4 tabset tabset-pills">
 <h4 class="tabset tabset-pills">Wheat</h4>
-<div id="ssp1_rcp26_gfdl-47" class="section level5">
-<h5>ssp1_rcp26_gfdl</h5>
+<div id="ssp-1-rcp-2.6-gfdl-87" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wWheat_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wWheat_ssp1_rcp26_gfdl.png" /></p>
 </div>
-<div id="ssp2_rcp45_hadgem-47" class="section level5">
-<h5>ssp2_rcp45_hadgem</h5>
+<div id="ssp-2-rcp-4.5-hadgem-87" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wWheat_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wWheat_ssp2_rcp45_hadgem.png" /></p>
 </div>
-<div id="ssp3_rcp60_ipsl-47" class="section level5">
-<h5>ssp3_rcp60_ipsl</h5>
+<div id="ssp-3-rcp-6.0-ipsl-87" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wWheat_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wWheat_ssp3_rcp60_ipsl.png" /></p>
 </div>
-<div id="ssp4_rcp45_miroc-47" class="section level5">
-<h5>ssp4_rcp45_miroc</h5>
+<div id="ssp-4-rcp-4.5-miroc-87" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wWheat_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wWheat_ssp4_rcp45_miroc.png" /></p>
 </div>
-<div id="ssp5_rcp85_noresm-47" class="section level5">
-<h5>ssp5_rcp85_noresm</h5>
+<div id="ssp-5-rcp-8.5-noresm-87" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
 <p><img src="images/regional/spatial_Upper_Colorado_River_wWheat_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wWheat_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="biomass-4" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Biomass</h4>
+<div id="ssp-1-rcp-2.6-gfdl-88" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_wbiomass_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wbiomass_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-88" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_wbiomass_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_wbiomass_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-88" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_wbiomass_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_wbiomass_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-88" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_wbiomass_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_wbiomass_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-88" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_wbiomass_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_wbiomass_ssp5_rcp85_noresm.png" /></p>
+<!-------------------------->
+</div>
+</div>
+</div>
+<div id="consumption-by-sector-2" class="section level3 tabset">
+<h3 class="tabset">Consumption by Sector</h3>
+<!-------------------------->
+<div id="total-6" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Total</h4>
+<div id="ssp-1-rcp-2.6-gfdl-89" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_ctotal_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_ctotal_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-89" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_ctotal_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_ctotal_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-89" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_ctotal_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_ctotal_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-89" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_ctotal_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_ctotal_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-89" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_ctotal_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_ctotal_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="domestic-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Domestic</h4>
+<div id="ssp-1-rcp-2.6-gfdl-90" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cdom_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cdom_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-90" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cdom_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cdom_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-90" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cdom_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cdom_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-90" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cdom_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cdom_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-90" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cdom_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cdom_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="electricity-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Electricity</h4>
+<div id="ssp-1-rcp-2.6-gfdl-91" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_celec_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_celec_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-91" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_celec_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_celec_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-91" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_celec_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_celec_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-91" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_celec_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_celec_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-91" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_celec_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_celec_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="manufacturing-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Manufacturing</h4>
+<div id="ssp-1-rcp-2.6-gfdl-92" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cmfg_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cmfg_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-92" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cmfg_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cmfg_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-92" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cmfg_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cmfg_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-92" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cmfg_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cmfg_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-92" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cmfg_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cmfg_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="mining-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Mining</h4>
+<div id="ssp-1-rcp-2.6-gfdl-93" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cmin_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cmin_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-93" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cmin_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cmin_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-93" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cmin_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cmin_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-93" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cmin_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cmin_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-93" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cmin_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cmin_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="livestock-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Livestock</h4>
+<div id="ssp-1-rcp-2.6-gfdl-94" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cliv_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cliv_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-94" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cliv_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cliv_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-94" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cliv_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cliv_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-94" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cliv_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cliv_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-94" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cliv_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cliv_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="irrigation-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Irrigation</h4>
+<div id="ssp-1-rcp-2.6-gfdl-95" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cirr_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cirr_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-95" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cirr_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cirr_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-95" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cirr_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cirr_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-95" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cirr_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cirr_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-95" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cirr_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cirr_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="corn-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Corn</h4>
+<div id="ssp-1-rcp-2.6-gfdl-96" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cCorn_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cCorn_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-96" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cCorn_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cCorn_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-96" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cCorn_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cCorn_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-96" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cCorn_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cCorn_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-96" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cCorn_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cCorn_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="fodder-herb-3" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Fodder Herb</h4>
+<div id="ssp-1-rcp-2.6-gfdl-97" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cFodderHerb_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cFodderHerb_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-97" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cFodderHerb_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cFodderHerb_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-97" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cFodderHerb_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cFodderHerb_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-97" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cFodderHerb_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cFodderHerb_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-97" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cFodderHerb_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cFodderHerb_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="misc-crop-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Misc Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-98" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cMiscCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cMiscCrop_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-98" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cMiscCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cMiscCrop_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-98" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cMiscCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cMiscCrop_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-98" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cMiscCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cMiscCrop_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-98" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cMiscCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cMiscCrop_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="oil-crop-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Oil Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-99" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cOilCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cOilCrop_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-99" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cOilCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cOilCrop_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-99" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cOilCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cOilCrop_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-99" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cOilCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cOilCrop_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-99" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cOilCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cOilCrop_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="other-grain-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Other Grain</h4>
+<div id="ssp-1-rcp-2.6-gfdl-100" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cOtherGrain_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cOtherGrain_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-100" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cOtherGrain_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cOtherGrain_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-100" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cOtherGrain_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cOtherGrain_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-100" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cOtherGrain_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cOtherGrain_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-100" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cOtherGrain_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cOtherGrain_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="root-tuber-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Root Tuber</h4>
+<div id="ssp-1-rcp-2.6-gfdl-101" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cRoot_Tuber_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cRoot_Tuber_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-101" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cRoot_Tuber_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cRoot_Tuber_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-101" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cRoot_Tuber_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cRoot_Tuber_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-101" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cRoot_Tuber_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cRoot_Tuber_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-101" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cRoot_Tuber_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cRoot_Tuber_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="sugar-crop-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Sugar Crop</h4>
+<div id="ssp-1-rcp-2.6-gfdl-102" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cSugarCrop_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cSugarCrop_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-102" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cSugarCrop_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cSugarCrop_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-102" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cSugarCrop_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cSugarCrop_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-102" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cSugarCrop_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cSugarCrop_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-102" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cSugarCrop_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cSugarCrop_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="wheat-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Wheat</h4>
+<div id="ssp-1-rcp-2.6-gfdl-103" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cWheat_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cWheat_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-103" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cWheat_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cWheat_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-103" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cWheat_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cWheat_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-103" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cWheat_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cWheat_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-103" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cWheat_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cWheat_ssp5_rcp85_noresm.png" /></p>
+</div>
+</div>
+<div id="biomass-5" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills">Biomass</h4>
+<div id="ssp-1-rcp-2.6-gfdl-104" class="section level5">
+<h5>SSP 1, RCP 2.6, gfdl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cbiomass_ssp1_rcp26_gfdl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cbiomass_ssp1_rcp26_gfdl.png" /></p>
+</div>
+<div id="ssp-2-rcp-4.5-hadgem-104" class="section level5">
+<h5>SSP 2, RCP 4.5, hadgem</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cbiomass_ssp2_rcp45_hadgem.png" /><img src="images/regional/temporal_Upper_Colorado_River_cbiomass_ssp2_rcp45_hadgem.png" /></p>
+</div>
+<div id="ssp-3-rcp-6.0-ipsl-104" class="section level5">
+<h5>SSP 3, RCP 6.0, ipsl</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cbiomass_ssp3_rcp60_ipsl.png" /><img src="images/regional/temporal_Upper_Colorado_River_cbiomass_ssp3_rcp60_ipsl.png" /></p>
+</div>
+<div id="ssp-4-rcp-4.5-miroc-104" class="section level5">
+<h5>SSP 4, RCP 4.5, miroc</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cbiomass_ssp4_rcp45_miroc.png" /><img src="images/regional/temporal_Upper_Colorado_River_cbiomass_ssp4_rcp45_miroc.png" /></p>
+</div>
+<div id="ssp-5-rcp-8.5-noresm-104" class="section level5">
+<h5>SSP 5, RCP 8.5, noresm</h5>
+<p><img src="images/regional/spatial_Upper_Colorado_River_cbiomass_ssp5_rcp85_noresm.png" /><img src="images/regional/temporal_Upper_Colorado_River_cbiomass_ssp5_rcp85_noresm.png" /></p>
 </div>
 </div>
 </div>

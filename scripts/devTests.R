@@ -11,6 +11,8 @@ library(jgcricolors)
 images = r"{C:\Users\thom927\Documents\metarepos\khan-etal_2022_tethysSSPRCP\webpage\images\}"
 folder = "C:/Users/thom927/Documents/Data/tethysDemeterOutputs"
 GCAM_withdrawals_csv = "C:/Users/thom927/Documents/Data/GrahamGCAM/water_withdrawals_by_mapping_source.csv"
+GCAM_consumption_csv = "C:/Users/thom927/Documents/Data/GrahamGCAM/water_consumption_by_mapping_source.csv"
+
 
 out <- generate_figures(annual_rds = "annual_data.rds",
                         monthly_rds = "monthly_data.rds",
@@ -38,39 +40,6 @@ a <- rm[[1]] + ggplot2::scale_fill_gradientn(
 
 a <- rm[[1]] + ggplot2::scale_fill_viridis_c(
   rescaler = ~(.x/max(.x))^0.25); a
-
-
-a <- rm[[1]] + ggplot2::scale_fill_gradientn(
-  colors = rev(jgcricol()$pal_spectral),
-  trans = scales::trans_new(name = '4th root',
-                            transform = function(x){x^0.25},
-                            inverse = function(x){x^4}),
-  breaks = round(seq(0,max(mydata$value*0.99, na.rm = T)^0.25,length.out=5)^4, 2))
-
-
-# make the png not bad
-grDevices::png(paste0(images,"total.png"),width=13,height=7, units="in",res=300); print(a); grDevices::dev.off()
-
-
-mydata <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
-                   sectors = names(crop_pal), #c("Rice", "Corn", "Wheat"),
-                   years = c(2010,2050,2100), months=0)
-mydata2 <- dplyr::select(mydata, lon, lat, Year=year, Sector=sector, value)
-mydata2 <- dplyr::mutate(mydata2, value=dplyr::if_else(value <= 0, NA_real_, value))
-
-rm <- rmap::map(mydata2, save=F, show=F, background=T, legendType="continuous",
-                crop_to_overLayer = T,
-                underLayer = rmap::mapGCAMReg32,
-                overLayer = rmap::mapGCAMReg32,
-                col="Year", row="Sector")
-b <- rm[[1]] + ggplot2::scale_fill_gradientn(
-  colors = rev(jgcricol()$pal_spectral),
-  trans = scales::trans_new(name = '4th root',
-                            transform = function(x){x^0.25},
-                            inverse = function(x){x^4}),
-  breaks = round(seq(0,max(mydata2$value*0.99, na.rm = T)^0.25,length.out=5)^4, 2))
-
-grDevices::png(paste0(images,"test.png"),width=13,height=21,units="in",res=300); print(b); grDevices::dev.off()
 
 
 #
@@ -127,4 +96,61 @@ p <- ggplot2::ggplot(data = idp,
                                     group = interaction(year, Grid_ID))) +
   ggplot2::geom_line(ggplot2::aes(color=sector)) +
   ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p
+
+###
+file_data <- data.table::fread(r"{C:\Users\thom927\Documents\Data\tethysDemeterOutputs\ssp1_rcp26_gfdl\twddom_km3permonth.csv}", drop=2:5)
+
+file_data <- dplyr::group_by(file_data, dplyr::across(c(-month, -value)))
+file_data <- dplyr::summarise(file_data, value = sum(value))
+
+##
+
+annual_withdrawals <- readRDS("../data/annual_data.rds")
+annual_withdrawals<- dplyr::filter(annual_withdrawals, Sector!="Total" & Sector!="Non-Agriculture")
+annual_withdrawals$type <- "withdrawals"
+
+annual_consumption <- readRDS("../data/consumption_sums.rds")
+annual_consumption <- dplyr::filter(annual_consumption, sector %in% c("dom", "elec", "mfg", "min", "liv", "irr"))
+annual_consumption <- dplyr::group_by(annual_consumption, dplyr::across(c(-region, -basin, -value)))
+annual_consumption <- dplyr::summarise(annual_consumption, value = sum(value))
+annual_consumption <- dplyr::ungroup(annual_consumption)
+annual_consumption <- dplyr::mutate(annual_consumption, SSP = paste0("SSP ", substr(scenario, 4, 4)),
+                                    RCP = paste0("RCP ", substr(scenario, 9, 9), ".", substr(scenario, 10, 10)),
+                                    GCM = substr(scenario, 12, 17))
+annual_consumption <- dplyr::mutate(annual_consumption, Sector = c("dom" = "Domestic",
+                                                                   "elec" = "Electricity",
+                                                                   "mfg" = "Manufacturing",
+                                                                   "min" = "Mining",
+                                                                   "irr" = "Irrigation",
+                                                                   "liv" = "Livestock")[sector])
+annual_consumption$type <- "consumption"
+annual_consumption <- dplyr::select(annual_consumption, SSP, RCP, GCM, Sector, type, Year=year, Value=value)
+
+annual_data <- dplyr::bind_rows(annual_consumption, annual_withdrawals)
+annual_data2 <- dplyr::filter(annual_data, Sector != "Irrigation")
+
+p2 <- ggplot2::ggplot(data = annual_data2,
+                      ggplot2::aes(x = Year,
+                                   y = Value,
+                                   group = interaction(GCM, Sector, type))) +
+  ggplot2::geom_line(ggplot2::aes(linetype=type, color=Sector)) +
+  ggplot2::scale_color_manual(values=water_pal) +
+  ggplot2::scale_linetype_manual(values=c("dashed", "solid")) +
+  ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+  ggplot2::ggtitle("Global Annual Water Withdrawal/Consumption by SSP-RCP-GCM and Sector") +
+  ggplot2::xlab("Year") +
+  ggplot2::ylab(bquote(Water ~ Withdrawal ~ (km^3 ~ per ~ year))) +
+  ggplot2::theme_bw() +
+  ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5)); p2
+
+
+scenario_names = c("ssp1_rcp26_gfdl"   = "SSP 1, RCP 2.6, gfdl",
+                   "ssp2_rcp45_hadgem" = "SSP 2, RCP 4.5, hadgem",
+                   "ssp3_rcp60_ipsl"   = "SSP 3, RCP 6.0, ipsl",
+                   "ssp4_rcp45_miroc"  = "SSP 4, RCP 4.5, miroc",
+                   "ssp5_rcp85_noresm" = "SSP 5, RCP 8.5, noresm")
+
+#####
+
+process_GCAM_csv(GCAM_csv = GCAM_consumption_csv, outfile = "../data/gcam_consumption.rds")
 
