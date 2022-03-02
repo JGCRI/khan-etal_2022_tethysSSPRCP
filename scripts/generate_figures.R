@@ -504,9 +504,7 @@ generate_figures <- function(folder=NULL,
     Tethys_data <- dplyr::rename(Tethys_data, tethys_value = value)
     comparison <- dplyr::full_join(GCAM_data, Tethys_data)
     comparison <- dplyr::mutate(comparison, tethys_value=tidyr::replace_na(tethys_value, 0))
-    #comparison <- dplyr::group_by(comparison, scenario, sector, year)
-    #comparison <- dplyr::summarise(comparison, value = sum(value), tethys_value=sum(tethys_value))
-    
+ 
     # 6 sectors
     comparison_sectors <- dplyr::filter(comparison, sector %in% c("dom","elec","irr","liv","mfg","min"))
     v1 <- ggplot2::ggplot(comparison_sectors,
@@ -539,17 +537,52 @@ generate_figures <- function(folder=NULL,
                     width = 13,
                     height = 10)
     
+    # CONSUMPTION
+    GCAM_data <- readRDS("../data/gcam_consumption.rds")
+    Tethys_data <- readRDS("../data/consumption_sums.rds")
+    Tethys_data <- dplyr::filter(Tethys_data, sector != "total")
+    Tethys_data <- dplyr::mutate(Tethys_data, basin = dplyr::case_when(
+      sector %in% c("dom", "elec","liv", "mfg", "min") ~ NA_character_,
+      TRUE ~ basin))
+    Tethys_data <- dplyr::group_by(Tethys_data, scenario, sector, year, region, basin)
+    Tethys_data <- dplyr::summarise(Tethys_data, value = sum(value))
+    Tethys_data <- dplyr::rename(Tethys_data, tethys_value = value)
+    comparison <- dplyr::full_join(GCAM_data, Tethys_data)
+    comparison <- dplyr::mutate(comparison, tethys_value=tidyr::replace_na(tethys_value, 0))
     
-    ## all months
-#    files <- list.files(path = "../data", pattern = "^region_sums_twd", full.names = TRUE)
-#    monthly_data <- purrr::map_dfr(files, function(x){
-#      data <- readRDS(x)
-#      data <- dplyr::filter(data, year %% 5 == 0)
-#      data <- dplyr::group_by(data, scenario, region, basin, sector, year)
-#      data <- dplyr::summarise(data, value = sum(value))
-#      return (data)
-#    })
-#    saveRDS(monthly_data, "../data/month_sums.rds")
+    # 6 sectors
+    comparison_sectors <- dplyr::filter(comparison, sector %in% c("dom","elec","irr","liv","mfg","min"))
+    v5 <- ggplot2::ggplot(comparison_sectors,
+                          ggplot2::aes(x=value, y=tethys_value, color=sector)) +
+      ggplot2::geom_point(shape=3) +
+      ggplot2::coord_fixed() +
+      ggplot2::theme_bw() +
+      ggplot2::scale_color_manual(values=sec_pal) +
+      ggplot2::ggtitle("GCAM vs Spatially Downscaled") +
+      ggplot2::xlab(bquote("GCAM Water Consumption " ~ (km^3 ~ per ~ year))) +
+      ggplot2::ylab(bquote("Spatially Downscaled, Reaggregated " ~ (km^3 ~ per ~ year)))
+    ggplot2::ggsave(filename = paste0(images, "validation5.png"),
+                    plot = v5,
+                    width = 13,
+                    height = 10)
+    
+    # 13 crops
+    comparison_crops <- dplyr::filter(comparison, !sector %in% c("dom","elec","irr","liv","mfg","min"))
+    v6 <- ggplot2::ggplot(comparison_crops,
+                          ggplot2::aes(x=value, y=tethys_value, color=sector)) +
+      ggplot2::geom_point(shape=3) +
+      ggplot2::coord_fixed() +
+      ggplot2::theme_bw() +
+      ggplot2::scale_color_manual(values=crop_pal) +
+      ggplot2::ggtitle("GCAM vs Spatially Downscaled") +
+      ggplot2::xlab(bquote("GCAM Water Consumption " ~ (km^3 ~ per ~ year))) +
+      ggplot2::ylab(bquote("Spatially Downscaled, Reaggregated " ~ (km^3 ~ per ~ year)))
+    ggplot2::ggsave(filename = paste0(images, "validation6.png"),
+                    plot = v6,
+                    width = 13,
+                    height = 10)
+    
+    # temporal
     
     Tethys_spatial <- readRDS("../data/region_sums_wd.rds")
     Tethys_spatial <- dplyr::select(Tethys_spatial,-month)
@@ -586,6 +619,56 @@ generate_figures <- function(folder=NULL,
                     plot = v4,
                     width = 13,
                     height = 10) # save plot
+    
+    ### CONSUMPTION
+    Tethys_spatial <- readRDS("../data/consumption_sums.rds")
+    Tethys_spatial <- dplyr::filter(Tethys_spatial, sector != "total")
+    Tethys_spatial <- dplyr::mutate(Tethys_spatial, basin = dplyr::case_when(
+      sector %in% c("dom", "elec","liv", "mfg", "min") ~ NA_character_,
+      TRUE ~ basin))
+    Tethys_spatial <- dplyr::group_by(Tethys_spatial, scenario, sector, year, region, basin)
+    Tethys_spatial <- dplyr::summarise(Tethys_spatial, value = sum(value))
+
+    Tethys_temporal <- readRDS("../data/consumption_sums_monthly.rds")
+    Tethys_temporal <- dplyr::mutate(Tethys_temporal, basin = dplyr::case_when(
+      sector %in% c("dom", "elec","liv", "mfg", "min") ~ NA_character_,
+      TRUE ~ basin))
+    Tethys_temporal <- dplyr::group_by(Tethys_temporal, scenario, sector, year, region, basin)
+    Tethys_temporal <- dplyr::summarise(Tethys_temporal, value = sum(value))
+    Tethys_temporal <- dplyr::rename(Tethys_temporal, temporal_value=value)
+    
+    comparison <- dplyr::full_join(Tethys_spatial, Tethys_temporal)
+    
+    comparison_sectors <- dplyr::filter(comparison, sector %in% c("dom","elec","irr","liv","mfg","min"))
+    v7 <- ggplot2::ggplot(comparison_sectors,
+                          ggplot2::aes(x=value, y=temporal_value, color = sector)) +
+      ggplot2::geom_point(shape=3) +
+      ggplot2::coord_fixed() +
+      ggplot2::theme_bw() +
+      ggplot2::scale_color_manual(values=sec_pal) +
+      ggplot2::ggtitle("Tethys Annual vs Tethys Monthly") +
+      ggplot2::xlab(bquote("Tethys Annual Consumption" ~ (km^3 ~ per ~ year))) +
+      ggplot2::ylab(bquote("Tethys Monthly Consumption, Reaggregated " ~ (km^3 ~ per ~ year)))
+    ggplot2::ggsave(filename = paste0(images, "validation7.png"),
+                    plot = v7,
+                    width = 13,
+                    height = 10) # save plot
+    
+    comparison_crops <- dplyr::filter(comparison, !sector %in% c("dom","elec","irr","liv","mfg","min"))
+    v8 <- ggplot2::ggplot(comparison_crops,
+                          ggplot2::aes(x=value, y=temporal_value, color = sector)) +
+      ggplot2::geom_point(shape=3) +
+      ggplot2::coord_fixed() +
+      ggplot2::theme_bw() +
+      ggplot2::scale_color_manual(values=crop_pal) +
+      ggplot2::ggtitle("Tethys Annual vs Tethys Monthly") +
+      ggplot2::xlab(bquote("Tethys Annual Consumption" ~ (km^3 ~ per ~ year))) +
+      ggplot2::ylab(bquote("Tethys Monthly Consumption, Reaggregated " ~ (km^3 ~ per ~ year)))
+    ggplot2::ggsave(filename = paste0(images, "validation8.png"),
+                    plot = v8,
+                    width = 13,
+                    height = 10) # save plot
+    
     }
 
   if(grepl("animations|all",temporal_scale,ignore.case=T)) {
@@ -653,7 +736,10 @@ generate_figures <- function(folder=NULL,
     #                      years=c(2025,2050,2075,2100), months=0)
     # 
     my_basins <- c("Indus", "Nile", "Upper_Colorado_River")
+
     my_sectors <- c("total", "dom", "elec", "mfg", "min", "liv", "irr", "Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "PalmFruit", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "FodderHerb", "FodderGrass", "biomass")
+    my_sectors <- c("total", "dom", "elec", "mfg", "min", "liv", "irr", "Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "FodderHerb", "biomass")
+    my_sectors <- c("total", "dom", "elec", "mfg", "min", "liv", "irr", "Corn", "MiscCrop", "OilCrop", "OtherGrain", "Root_Tuber", "SugarCrop", "Wheat", "FodderHerb", "biomass")
     my_scenarios <- c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")
     
     all_data <- readRDS("../data/metarepo_regional_spatial.rds")
@@ -661,6 +747,7 @@ generate_figures <- function(folder=NULL,
     target_dim <- NULL
     for (my_basin in my_basins) {
       for (my_sector in my_sectors) {
+        max_value <- max(dplyr::filter(all_data, basin == my_basin & sector == my_sector)$value)
         for (my_scenario in my_scenarios) {
           sector_data <- dplyr::filter(all_data, basin == my_basin & sector == my_sector & scenario == my_scenario)
           # Having a column named "year" makes rmap make a bunch of other maps
@@ -672,19 +759,26 @@ generate_figures <- function(folder=NULL,
                                   underLayer = rmap::mapGCAMReg32,
                                   overLayer = rmap::mapGCAMReg32,
                                   col="category", ncol=4)
+          sector_map[[1]] <- sector_map[[1]] + ggplot2::scale_fill_gradientn(
+            colors = jgcricol()$pal_hot,
+            limits = c(0, max_value*1.01),
+            name = "Water\nWithdrawals\n(km3)")
           if (is.null(target_dim)){
             target_dim <- patchwork::get_dim(sector_map[[1]])
           } else {
             sector_map[[1]] <- patchwork::set_dim(sector_map[[1]], target_dim)
           }
           filename <- paste0(images, "regional/spatial_", my_basin, "_w", my_sector, "_", my_scenario, ".png")
-          grDevices::png(filename,width=13,height=4,units="in",res=300); print(sector_map[[1]]); grDevices::dev.off()
+          grDevices::png(filename,width=13,height=4,units="in",res=144); print(sector_map[[1]]); grDevices::dev.off()
         }
       }
     }
+    
+    
     all_data <- readRDS("../data/metarepo_regional_spatial_c.rds")
     for (my_basin in my_basins) {
       for (my_sector in my_sectors) {
+        max_value <- max(dplyr::filter(all_data, basin == my_basin & sector == my_sector)$value)
         for (my_scenario in my_scenarios) {
           sector_data <- dplyr::filter(all_data, basin == my_basin & sector == my_sector & scenario == my_scenario)
           # Having a column named "year" makes rmap make a bunch of other maps
@@ -696,13 +790,17 @@ generate_figures <- function(folder=NULL,
                                   underLayer = rmap::mapGCAMReg32,
                                   overLayer = rmap::mapGCAMReg32,
                                   col="category", ncol=4)
+          sector_map[[1]] <- sector_map[[1]] + ggplot2::scale_fill_gradientn(
+            colors = jgcricol()$pal_hot,
+            limits = c(0, max_value*1.01),
+            name = "Water\nConsumption\n(km3)")
           if (is.null(target_dim)){
             target_dim <- patchwork::get_dim(sector_map[[1]])
           } else {
             sector_map[[1]] <- patchwork::set_dim(sector_map[[1]], target_dim)
           }
           filename <- paste0(images, "regional/spatial_", my_basin, "_c", my_sector, "_", my_scenario, ".png")
-          grDevices::png(filename,width=13,height=4,units="in",res=300); print(sector_map[[1]]); grDevices::dev.off()
+          grDevices::png(filename,width=13,height=4,units="in",res=144); print(sector_map[[1]]); grDevices::dev.off()
         }
       }
     }
@@ -736,6 +834,7 @@ generate_figures <- function(folder=NULL,
     target_dim <- NULL
     for (my_basin in my_basins) {
       for (my_sector in my_sectors) {
+        max_value <- max(dplyr::filter(all_data2, basin == my_basin & sector == my_sector)$value)
         for (my_scenario in my_scenarios) {
           sector_data <- dplyr::filter(all_data2, basin == my_basin & sector == my_sector & scenario == my_scenario)
           sector_data$month <- factor(sector_data$month, labels = month.abb)
@@ -746,7 +845,10 @@ generate_figures <- function(folder=NULL,
             ggplot2::geom_tile() +
             ggplot2::scale_x_continuous(expand=c(0,0)) +
             ggplot2::scale_y_discrete(limits=rev(levels(sector_data$month)), expand=c(0,0)) +
-            ggplot2::scale_fill_gradientn(colors=jgcricol()$pal_hot) +
+            ggplot2::scale_fill_gradientn(
+              colors = jgcricol()$pal_hot,
+              limits = c(0, max_value*1.01),
+              name = "Water\nWithdrawals\n(km3)") +
             ggplot2::theme(panel.background = ggplot2::element_blank(),
                            plot.background = ggplot2::element_blank())
           if (is.null(target_dim)){
@@ -778,6 +880,7 @@ generate_figures <- function(folder=NULL,
     
     for (my_basin in my_basins) {
       for (my_sector in my_sectors) {
+        max_value <- max(dplyr::filter(all_data3, basin == my_basin & sector == my_sector)$value)
         for (my_scenario in my_scenarios) {
           sector_data <- dplyr::filter(all_data3, basin == my_basin & sector == my_sector & scenario == my_scenario)
           sector_data$month <- factor(sector_data$month, labels = month.abb)
@@ -788,7 +891,10 @@ generate_figures <- function(folder=NULL,
             ggplot2::geom_tile() +
             ggplot2::scale_x_continuous(expand=c(0,0)) +
             ggplot2::scale_y_discrete(limits=rev(levels(sector_data$month)), expand=c(0,0)) +
-            ggplot2::scale_fill_gradientn(colors=jgcricol()$pal_hot) +
+            ggplot2::scale_fill_gradientn(
+              colors = jgcricol()$pal_hot,
+              limits = c(0, max_value*1.01),
+              name = "Water\nConsumption\n(km3)") +
             ggplot2::theme(panel.background = ggplot2::element_blank(),
                            plot.background = ggplot2::element_blank())
           if (is.null(target_dim)){
@@ -807,21 +913,24 @@ generate_figures <- function(folder=NULL,
     #####
     # crop types
     
+    crop_pal2 <- c(crop_pal[names(crop_pal) != "biomass"], "none" = "gray80")
+    
     crop_data <- readRDS("../data/metarepo_regional_spatial.rds")
-    crop_data <- dplyr::filter(crop_data, sector %in% c("Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "FodderHerb", "biomass"))
+    crop_data <- dplyr::filter(crop_data, sector %in% c("Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "FodderHerb")) #, "biomass"))
 
     crop_data <- dplyr::group_by(crop_data, dplyr::across(c(-sector, -value)))
     crop_data <- dplyr::summarise(crop_data, sector = sector[which.max(value)],
                                   max_value=max(value))
     crop_data <- dplyr::ungroup(crop_data)
-    crop_data <- dplyr::filter(crop_data, max_value > 0)
-    crop_data <- dplyr::mutate(crop_data, value=match(sector, names(crop_pal)), param="param")
+    crop_data <- dplyr::mutate(crop_data, sector = dplyr::case_when(max_value <= 0 ~ "none",
+                                                                    TRUE ~ sector))
+    crop_data <- dplyr::mutate(crop_data, value=match(sector, names(crop_pal2)), param="param")
     crop_data <- dplyr::select(crop_data, lon, lat, basin, scenario, year, value, param)
 
     numeric2Cat_list <-list(numeric2Cat_param = list(c("param")),
                             numeric2Cat_breaks = list(c(-Inf,1:12+0.5,Inf)),
-                            numeric2Cat_labels = list(names(crop_pal)),
-                            numeric2Cat_palette = list(crop_pal),
+                            numeric2Cat_labels = list(names(crop_pal2)),
+                            numeric2Cat_palette = list(crop_pal2),
                             numeric2Cat_legendTextSize = list(c(0.7)))
     
     target_dim <- NULL
@@ -833,7 +942,7 @@ generate_figures <- function(folder=NULL,
         crop_map <- rmap::map(sector_data, background=T, zoom=-0.5, save=F, show=F,
                               numeric2Cat_list = numeric2Cat_list,
                               legendTitle = "Crop",
-                              title = paste0(my_basin, " basin: ", my_scenario),
+                              title = paste0("Maximum Crop by Withdrawals per Grid Cell, ", my_basin, " basin: ", my_scenario),
                               underLayer= rmap::mapGCAMReg32,
                               overLayer = rmap::mapGCAMReg32,
                               col="category", ncol=4)
@@ -843,7 +952,7 @@ generate_figures <- function(folder=NULL,
           crop_map[[1]] <- patchwork::set_dim(crop_map[[1]], target_dim)
         }
         filename <- paste0(images, "regional/most_crop_", my_basin, "_w_", my_scenario, ".png")
-        grDevices::png(filename,width=13,height=4,units="in",res=300); print(crop_map[[1]]); grDevices::dev.off()
+        grDevices::png(filename,width=13,height=4,units="in",res=144); print(crop_map[[1]]); grDevices::dev.off()
       }
     }
     
@@ -879,7 +988,41 @@ generate_figures <- function(folder=NULL,
         grDevices::png(filename,width=13,height=4,units="in",res=300); print(crop_map[[1]]); grDevices::dev.off()
       }
     }
-
+    
+    # Crop line plots
+    crop_data <- readRDS("../data/metarepo_regional_temporal.rds")
+    crop_data <- dplyr::filter(crop_data, sector %in% c("Corn", "FiberCrop", "MiscCrop", "OilCrop", "OtherGrain", "Rice", "Root_Tuber", "SugarCrop", "Wheat", "FodderHerb", "biomass"))
+    crop_data <- dplyr::filter(crop_data, year %% 5 == 0)
+    crop_data <- dplyr::group_by(crop_data, basin, sector, scenario, year)
+    crop_data <- dplyr::summarise(crop_data, value = sum(value))
+    
+    my_basins <- c("Indus", "Nile", "Upper_Colorado_River")
+    my_scenarios <- c("ssp1_rcp26_gfdl", "ssp2_rcp45_hadgem", "ssp3_rcp60_ipsl", "ssp4_rcp45_miroc", "ssp5_rcp85_noresm")
+    
+    for (my_basin in my_basins) {
+      max_value <- max(dplyr::filter(crop_data, basin == my_basin)$value)
+      for (my_scenario in my_scenarios) {
+        sector_data <- dplyr::filter(crop_data, basin == my_basin & scenario == my_scenario)
+        crop_plot <- ggplot2::ggplot(data = sector_data,
+                                     ggplot2::aes(x = year,
+                                                  y = value)) +
+          #ggplot2::geom_bar(position="stack", stat="identity") +
+          #ggplot2::scale_fill_manual(values=crop_pal) +
+          ggplot2::geom_line(size = 2, ggplot2::aes(color=sector)) +
+          ggplot2::scale_color_manual(values=crop_pal) +
+          ggplot2::ylim(0, max_value) +
+          ggplot2::ggtitle(paste0("Annual Crop Water Withdrawals: ", my_basin, ", ", my_scenario)) +
+          ggplot2::xlab("Year") +
+          ggplot2::ylab(bquote(Water ~ Withdrawals ~ (km^3 ~ per ~ year))) +
+          ggplot2::theme_bw() +
+          ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5));
+        ggplot2::ggsave(filename = paste0(images, "regional/crops_annual_", my_basin, "_w_", my_scenario, ".png"),
+                        plot = crop_plot,
+                        width = 13,
+                        height = 4)
+      }
+    }
+    
    
   }
 
@@ -1094,6 +1237,52 @@ prepare_GCAM_crops <- function(GCAM_withdrawals_csv=NULL, outfile="region_crops.
   return (region_crops)
 }
 
+process_GCAM_csv <- function(GCAM_csv=NULL, outfile=NULL) {
+  subReg_to_map <- tibble::deframe(rmap::mapping_gcambasins)
+  subReg_to_map <- setNames(names(subReg_to_map), subReg_to_map)
+  
+  scenarios <- dplyr::transmute(all_combos(), paste0(
+    names(SSP), "_",names(RCP), "_", GCM))
+  scenarios <- dplyr:::distinct(scenarios)[[1]]
+  
+  print("Loading GCAM data")
+  GCAM_data <- data.table::fread(GCAM_csv, select=2:7)
+  
+  print("Filtering to dataset scenarios and years")
+  GCAM_data <- dplyr::filter(GCAM_data, 2010<=year & year<=2100 & scenario %in% scenarios)
+  
+  print("Converting sector names")
+  GCAM_data <- dplyr::mutate(GCAM_data, .keep="unused", .after="scenario",
+                             region = sub("-", "_", region), # need "EU_12", not "EU-12"
+                             basin = dplyr::case_when(
+                               grepl("water_td_irr_", input) ~ subReg_to_map[gsub("water_td_irr_|_[WC]", "", input)],
+                               TRUE ~ NA_character_),
+                             sector = dplyr::case_when(
+                               grepl("water_td_dom_", input) ~ "dom",
+                               grepl("water_td_elec_", input) ~ "elec",
+                               grepl("water_td_an_", input) ~ "liv",
+                               grepl("water_td_ind_", input) ~ "mfg",
+                               grepl("water_td_pri_", input) ~ "min",
+                               grepl("water_td_irr_", input) & grepl("^biomass", subsector) ~ "biomass",
+                               TRUE ~ sub("_[^_]+$", "", subsector))) # irr but not biomass, extract crop name
+  print("Aggregating subsectors")
+  GCAM_data <- dplyr::group_by(GCAM_data, scenario, year, region, basin, sector)
+  GCAM_data <- dplyr::summarise(GCAM_data, value=sum(value))
+  GCAM_data <- dplyr::ungroup(GCAM_data)
+  
+  print("Aggrregating irrigation")
+  irr_data <- dplyr::filter(GCAM_data, !sector %in% c("dom", "elec", "liv", "mfg", "min")) # is a crop
+  irr_data$sector <- "irr"
+  irr_data <- dplyr::group_by(irr_data, scenario, year, region, basin, sector)
+  irr_data <- dplyr::summarise(irr_data, value=sum(value))
+  irr_data <- dplyr::ungroup(irr_data)
+  GCAM_data <- dplyr::bind_rows(GCAM_data, irr_data)
+  
+  saveRDS(GCAM_data, file = outfile)
+  print(paste("GCAM data saved to", outfile))
+  #return (GCAM_data)
+}
+
 build_gridLookup <- function() {
   basinIDs <- data.table::fread("data/basin.csv", col.names="basinID")
   regionIDs <- data.table::fread("data/region32_grids.csv", col.names="regionID")
@@ -1179,9 +1368,6 @@ get_data <- function(folder=NULL, scenarios=NULL, sectors=NULL,
     file_data <- dplyr::mutate(file_data, .after="Grid_ID",
                                region = lookup$regionName[Grid_ID],
                                basin = lookup$basinName[Grid_ID])
-    if (sum_temporal) {
-      
-    }
     if (sum_spatial) {
       file_data[,Grid_ID:=NULL]
       file_data <- file_data[, lapply(.SD, sum), by=list(region, basin)]
@@ -1202,9 +1388,8 @@ get_data <- function(folder=NULL, scenarios=NULL, sectors=NULL,
                                month = as.integer(substr(variable, 5, 6)))
     file_data <- dplyr::select(file_data, -variable)
     if (sum_temporal) {
-      file_data <- dplyr::group_by(file_data, dplyr::across(c(-month, -value)))
-      file_data <- dplyr::summarise(file_data, value = sum(value))
-      file_data <- dplyr::ungroup(file_data)
+      file_data[,month:=NULL]
+      file_data <- file_data[, lapply(.SD, sum), by=setdiff(names(file_data), "value")]
     }
     return (file_data)}))
   return (all_data)
