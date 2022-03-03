@@ -3,6 +3,7 @@ pagetitle: khan_etal_2022_tethysSSPRCP
 ---
 
 <div class="header_logo">
+<img src="images/logo_gcims_white.png" style="float:right;height:30px; padding-top:10px;">
 <img src="images/logo_pnnl_white.png" style="float:right;height:40px;">
 </div>
 

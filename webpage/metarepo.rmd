@@ -65,6 +65,7 @@ scenario_names = c("ssp1_rcp26_gfdl"   = "SSP 1, RCP 2.6, gfdl",
 ```
 
 <div class="header_logo">
+<img src="images/logo_gcims_white.png" style="float:right;height:30px; padding-top:10px;">
 <img src="images/logo_pnnl_white.png" style="float:right;height:40px;">
 </div>
 
@@ -113,10 +114,8 @@ library(kableExtra)
 data.frame(
   Data = c("GCAM Outputs",
            "Demeter Outputs"),
-  Source = c("GCAM runs",
-             "Demeter runs"),
-  `Used by` = c("Tethys",
-                "Tethys"),
+  Version = c("v4.3.chen http://doi.org/10.5281/zenodo.3713432",
+              "v1.chen http://doi.org/10.5281/zenodo.3713378"),
   Location = c("https://data.pnnl.gov/dataset/13224",
                "https://data.pnnl.gov/dataset/13192")
     ) %>% 

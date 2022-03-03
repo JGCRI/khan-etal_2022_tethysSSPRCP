@@ -6,8 +6,11 @@ navbar:
     - text: "Meta Repository"
       icon: fas fa-book
       href: metarepo.html
+    - text: "Disclaimer"
+      href: disclaimer.html
     - icon: fab fa-github
       href: https://github.com/JGCRI/khan-etal_2022_tethysSSPRCP
+
 
 output:
   html_document:
