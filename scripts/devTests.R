@@ -72,12 +72,6 @@ b <- rm[[1]] + ggplot2::scale_fill_gradientn(
 grDevices::png(paste0(images,"test.png"),width=15,height=21,units="in",res=100); print(b); grDevices::dev.off()
 
 
-data1 <- data.table::fread(GCAM_withdrawals_csv)
-data2 <- dplyr::filter(data1, endsWith(scenario, "woclimate"))
-data3 <- dplyr::filter(data2, value < 0)
-data4 <- dplyr::filter(data1, value < 0)
-data5 <- dplyr::filter(data1, value < 0 & scenario == "ssp1_rcp60_woclimate")
-
 ####
 indus_data1 <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
                        sectors = "Rice", months = 0,
@@ -154,3 +148,38 @@ scenario_names = c("ssp1_rcp26_gfdl"   = "SSP 1, RCP 2.6, gfdl",
 
 process_GCAM_csv(GCAM_csv = GCAM_consumption_csv, outfile = "../data/gcam_consumption.rds")
 
+m1 = c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+m2 = c(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+
+a <- get_data(folder=folder, scenarios = "ssp1_rcp26_gfdl",
+              sectors = "min", years = 2050:2075, months = 2:4)
+
+a <- dplyr::arrange(a, scenario, sector, Grid_ID, month, year)
+a <- dplyr::mutate(a, interp_value = dplyr::case_when(year %% 400 == 0 ~ value*366/m2[month],
+                                                      year %% 100 == 0 ~ value*365/m1[month],
+                                                      year %% 20 == 0 ~ value*366/m2[month],
+                                                      year %% 5 == 0 ~ value*365/m1[month],
+                                                      TRUE ~ NA_real_))
+a <- dplyr::mutate(a, interp_value = zoo::na.approx(interp_value))
+a <- dplyr::mutate(a, interp_value = dplyr::case_when(year %% 400 == 0 ~ interp_value*m2[month]/366,
+                                                      year %% 100 == 0 ~ interp_value*m1[month]/365,
+                                                      year %% 4 == 0 ~ interp_value*m2[month]/366,
+                                                      TRUE ~ interp_value*m1[month]/365))
+a <- dplyr::mutate(a, diff = interp_value - value)
+a <- dplyr::mutate(a, pctdiff = (interp_value - value)/value)
+
+##
+b <- get_data(folder=folder, scenarios = "ssp1_rcp26_gfdl",
+              sectors = "dom", years = 2055:2060, months = 2:4)
+
+b <- dplyr::arrange(b, scenario, sector, Grid_ID, month, year)
+b <- dplyr::mutate(b, interp_value = dplyr::case_when(year %% 5 == 0 ~ value,
+                                                      TRUE ~ NA_real_))
+b <- dplyr::mutate(b, interp_value = zoo::na.approx(interp_value))
+
+b <- dplyr::mutate(b, diff = interp_value - value)
+b <- dplyr::mutate(b, pctdiff = (interp_value - value)/value)
+
+print(range(b$diff))
+
+b2 <- dplyr::filter(b, diff != 0)
