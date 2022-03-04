@@ -19,12 +19,10 @@ function goToTab() {
   if (target !== null) {
     var greatGrandParent = target.parentElement.parentElement.parentElement;
     if (greatGrandParent.getAttribute("role") == "tabpanel") {
-      greatGrandParent.parentElement.parentElement.scrollIntoView();
       document.querySelector("a[role = 'tab'][href='#" + greatGrandParent.getAttribute("id") + "']").click();
-    } else {
-      greatGrandParent.scrollIntoView();
     }
     target.click();
+    target.scrollIntoView();
   }
 }
 
@@ -198,7 +196,8 @@ knitr::include_graphics("images/workflow2.jpg")
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
 
-Withdrawal data for each sector is downscaled spatially first, from 32 regions or 235 basins to 0.5 degree grids. Of the 259,200 possible grid cells at this resolution (360 x 720), only the 67,420 cells categorized as land are considered (since nobody is withdrawing water from the bottom of the ocean).
+Water withdrawal and consumption data for each sector are downscaled spatially first, from GCAM's 32 regions (or in the case of irrigation, 434 region-basin intersections) to a 0.5 degree gridded format. Of the 259,200 possible grid cells at this resolution (360 x 720), only the 67,420 cells categorized as land are considered.
+Different sectors use different algorithms to allocate a region's water withdrawals and consumption among its constituent grid cells, but in principle they are very similar: use gridded values of some proxy quantity to approximate the spatial distribution (i.e., divide each cell's value by the total of all cells belonging to that region), then apply that distribution to GCAM's value.
 
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Workflow 3"}
 knitr::include_graphics("images/workflow3.jpg")
@@ -221,7 +220,7 @@ Different downscaling methods are used for different sectors. For spatial downsc
 ## Workflow 3A - Nonagricultural Sectors
 <!-------------------------->
 
-For nonagricultural sectors (domestic, electricity, manufacturing, and mining), water withdrawal in each grid cell is assumed to be proportional to that cell’s population.
+For nonagricultural sectors (domestic, electricity, manufacturing, and mining), water withdrawals and consumption in each grid cell are assumed to be proportional to that cell’s population.
 (equation, supporting files, function name)
 
 $$W_i = W_j\times\frac{P_i}{P_j},$$
@@ -395,6 +394,8 @@ knitr::include_graphics("images/facetmapmonthly.png")
 <!-------------------------->
 ## Spatial {.tabset}
 <!-------------------------->
+
+6 of the 434 region-basin intersections are smaller than the output resolution, and are dropped, causing a small loss of water.
 
 <!-------------------------->
 ### Withdrawals {.tabset .tabset-pills}

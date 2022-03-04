@@ -7,6 +7,7 @@
 library(rmap)
 library(magrittr)
 library(jgcricolors)
+library(dplyr)
 
 images = r"{C:\Users\thom927\Documents\metarepos\khan-etal_2022_tethysSSPRCP\webpage\images\}"
 folder = "C:/Users/thom927/Documents/Data/tethysDemeterOutputs"
@@ -146,7 +147,6 @@ scenario_names = c("ssp1_rcp26_gfdl"   = "SSP 1, RCP 2.6, gfdl",
 
 #####
 
-process_GCAM_csv(GCAM_csv = GCAM_consumption_csv, outfile = "../data/gcam_consumption.rds")
 
 m1 = c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 m2 = c(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
