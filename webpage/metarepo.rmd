@@ -135,10 +135,9 @@ data.frame(
 ```{r, results = 'show', eval=TRUE, echo=FALSE, warning=FALSE, error = FALSE, message = FALSE}
 library(kableExtra)
 data.frame(
-  Data = c("Tethys Outputs"),
-  Source = c("Tethys runs"),
-  `Used by` = c(""),
-  Location = c("zenodo link")
+  Dataset = c("Tethys Outputs"),
+  Version = c("v1.3.0 ADD_DOI_HERE"),
+  Location = c("https://doi.org/10.7910/DVN/VIQEAB")
     ) %>% 
   kbl() %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
