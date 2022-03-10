@@ -604,7 +604,7 @@ Workflow 2
 <p align="center">
 <img src="images/divider.png">
 </p>
-<p>Water withdrawal and consumption data for each sector are downscaled spatially first, from GCAM’s 32 regions (or in the case of irrigation, 434 region-basin intersections) to a 0.5 degree gridded format. Of the 259,200 possible grid cells at this resolution (360 x 720), only the 67,420 cells categorized as land are considered. Different sectors use different algorithms to allocate a region’s water withdrawals and consumption among its constituent grid cells, but in principle they are very similar: use gridded values of some proxy quantity to approximate the spatial distribution (i.e., divide each cell’s value by the total of all cells belonging to that region), then apply that distribution to GCAM’s value.</p>
+<p>Water withdrawals and consumption data for each sector are downscaled spatially first, from GCAM’s 32 regions (or in the case of irrigation, 434 region-basin intersections) to a 0.5 degree gridded format. Of the 259,200 possible grid cells at this resolution (360 x 720), only the 67,420 cells categorized as land are considered. Different sectors use different algorithms to allocate a region’s water withdrawals and consumption among its constituent grid cells, but in principle they are very similar: use gridded values of some proxy quantity to approximate the spatial distribution (i.e., divide each cell’s value by the total of all cells belonging to that region), then apply that distribution to GCAM’s value. These algorithms were derived from research by Edmonds and Reilly, 1985.</p>
 <div class="figure" style="text-align: center">
 <img src="images/workflow3.jpg" alt="Workflow 3" width="100%" />
 <p class="caption">
@@ -623,27 +623,141 @@ Spatial Workflow
 <li>B. Livestock</li>
 <li>C. Irrigation</li>
 </ul>
+<p>These are explained in detail in their respective subsections. Keep in mind that downscaling occurs not just for all regions in a single slice of time, but for every 5 years from 2010 to 2100, across 75 alternative futures (SSP-RCP-GCM combinations).</p>
 <p><br></p>
 <!-------------------------->
 <div id="workflow-3a---nonagricultural-sectors" class="section level2">
 <h2>Workflow 3A - Nonagricultural Sectors</h2>
 <!-------------------------->
-<p>For nonagricultural sectors (domestic, electricity, manufacturing, and mining), water withdrawals and consumption in each grid cell are assumed to be proportional to that cell’s population. (equation, supporting files, function name)</p>
-<p><span class="math display">\[W_i = W_j\times\frac{P_i}{P_j},\]</span></p>
+<p>For nonagricultural sectors (domestic, electricity, manufacturing, and mining), water withdrawals and consumption in each grid cell are assumed to be proportional to that cell’s population. The population data set used for this paper is from Gridded Population of the World (CIESIN, 2016). Tethys uses the nearest available year, which for this paper was 2010 in 2010, and 2015 in all other years. Each region’s population is determined by taking the sum of population over all cells belonging to that region. For each of these sectors, Tethys calculates the withdrawal for a given cell by</p>
+<span class="math display">\[\text{withdrawal}_\text{[sector], cell} = \text{withdrawal}_\text{[sector], region} \times \frac{\text{population}_\text{cell}}{\text{population}_\text{region}}.\]</span> An analogous formula is used for consumption: <span class="math display">\[\text{consumption}_\text{[sector], cell} = \text{consumption}_\text{[sector], region} \times \frac{\text{population}_\text{cell}}{\text{population}_\text{region}}.\]</span>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:left;">
+Source
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Gridded Population of the World, Version 4
+</td>
+<td style="text-align:left;">
+GPW_population.csv
+</td>
+<td style="text-align:left;">
+CIESIN, 2016
+</td>
+<td style="text-align:left;">
+<a href="http://dx.doi.org/10.7927/H4X63JVC" class="uri">http://dx.doi.org/10.7927/H4X63JVC</a>
+</td>
+</tr>
+</tbody>
+</table>
 <p><br></p>
 <!-------------------------->
 </div>
 <div id="workflow-3b---livestock" class="section level2">
 <h2>Workflow 3B - Livestock</h2>
 <!-------------------------->
-<p>Gridded global maps of livestock in six types (cattle, buffalo, sheep, goats, pigs and poultry) are used as a proxy to downscale livestock water withdrawal.</p>
+<p>Gridded global maps (Wint and Robinson, 2007) for six types of livestock (cattle, buffalo, sheep, goats, pigs, and poultry) are used as a proxy to downscale livestock water withdrawal and consumption. GCAM outputs are organized into five types (beef, dairy, pork, poultry, and “sheepgoat”), so these are first reorganized to match the six maps using ratios for each region, estimated from FAO gridded livestock of the world. These are stored in the files bfracFAO2005.csv (“buffalo fraction”) and gfracFAO2005.csv (“goat fraction”). The following formulas are used for each region:</p>
+<p><span class="math display">\[\begin{align}
+\text{buffalo} &amp;= (\text{beef} + \text{dairy}) \times \text{bfrac}\\
+\text{cattle} &amp;= (\text{beef} + \text{dairy}) \times (1-\text{bfrac})\\
+\text{goat} &amp;= \text{sheepgoat} \times \text{gfrac}\\
+\text{sheep} &amp;= \text{sheepgoat} \times (1-\text{gfrac})
+\end{align}\]</span></p>
+<p>No adjustment is required for pork (pigs) or poultry. After this, downscaling for each livestock type is very similar to downscaling the nonagricultural sectors, except the respective livestock population (heads) is used as the proxy instead of human population.</p>
+<p><span class="math display">\[\text{withdrawal}_\text{[animal], cell} = \text{withdrawal}_\text{[animal], region} \times \frac{\text{heads}_\text{[animal], cell}}{\text{heads}_\text{[animal], region}}.\]</span></p>
+<p>The results for each of the six types are then added together to get the total livestock withdrawal for each cell:</p>
+<p><span class="math display">\[\begin{align}
+\text{withdrawal}_\text{livestock, cell} =
+&amp;\phantom{{}+{}}\text{withdrawal}_\text{cattle, cell}\\
+&amp;+ \text{withdrawal}_\text{buffalo, cell}\\
+&amp;+ \text{withdrawal}_\text{sheep, cell}\\
+&amp;+ \text{withdrawal}_\text{goat, cell}\\
+&amp;+ \text{withdrawal}_\text{pig, cell}\\
+&amp;+ \text{withdrawal}_\text{poultry, cell}
+\end{align}\]</span></p>
+<p>Again, analogous formulas follow for consumption.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:left;">
+Source
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Gridded Livestock of the World
+</td>
+<td style="text-align:left;">
+livestock_&lt;animal&gt;.csv
+</td>
+<td style="text-align:left;">
+Wint and Robinson, 2007
+</td>
+<td style="text-align:left;">
+<a href="http://www.fao.org/docrep/010/a1259e/a1259e00.htm" class="uri">http://www.fao.org/docrep/010/a1259e/a1259e00.htm</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Buffalo Fraction
+</td>
+<td style="text-align:left;">
+bfracFAO2005.csv
+</td>
+<td style="text-align:left;">
+“estimated from FAO gridded livestock of the world”
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Goat Fraction
+</td>
+<td style="text-align:left;">
+gfracFAO2005.csv
+</td>
+<td style="text-align:left;">
+“estimated from FAO gridded livestock of the world”
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
 <p><br></p>
 <!-------------------------->
 </div>
 <div id="workflow-3c---irrigation" class="section level2">
 <h2>Workflow 3C - Irrigation</h2>
 <!-------------------------->
-<p>Spatial landcover outputs from Demeter are reaggregated to the target resolution. For each region-basin intersection, and each crop type (except for biomass), the water withdrawal from GCAM is allocated to the constituent grids in proportion to the ratio from Demeter. Biomass is distributed uniformly.</p>
+<p>Spatial landcover outputs from Demeter are reaggregated to the target resolution of 0.5 degrees. These cover 12 of the crop types. For each region-basin intersection, and each crop type (except for biomass), the water withdrawal from GCAM is allocated to the constituent grids in proportion to the ratio from Demeter. Biomass is distributed uniformly.</p>
 <p><br></p>
 <!-------------------------->
 <!-------------------------->

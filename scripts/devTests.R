@@ -183,3 +183,17 @@ b <- dplyr::mutate(b, pctdiff = (interp_value - value)/value)
 print(range(b$diff))
 
 b2 <- dplyr::filter(b, diff != 0)
+
+
+###
+
+sheep1 <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\harmonized_inputs\livestock_sheep.csv}")
+goat1 <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\harmonized_inputs\livestock_goat.csv}")
+
+baa <- dplyr::bind_cols(rmap::mapping_tethys_grid_basin_region_country, sheep1, goat1)
+baa <- dplyr::group_by(baa, regionName)
+baa <- dplyr::summarise(baa, sheep=sum(sheep), goat=sum(goat))
+bias = 1
+baa <- dplyr::mutate(baa, gfrac = goat/(bias*sheep+goat))
+
+
