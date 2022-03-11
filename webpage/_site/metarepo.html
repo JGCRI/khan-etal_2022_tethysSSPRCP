@@ -757,7 +757,14 @@ gfracFAO2005.csv
 <div id="workflow-3c---irrigation" class="section level2">
 <h2>Workflow 3C - Irrigation</h2>
 <!-------------------------->
-<p>Spatial landcover outputs from Demeter are reaggregated to the target resolution of 0.5 degrees. These cover 12 of the crop types. For each region-basin intersection, and each crop type (except for biomass), the water withdrawal from GCAM is allocated to the constituent grids in proportion to the ratio from Demeter. Biomass is distributed uniformly.</p>
+<p>GCAM irrigation withdrawal and consumption outputs are organized by 13 crop types: Biomass, Corn, Fiber Crop, Misc Crop, Oil Crop, Other Grain, Palm Fruit, Rice, Root Tuber, Sugar Crop, Wheat, Fodder Herb, and Fodder Grass. Demeter provides a spatial landcover breakdown by all crop types except biomass, which is downscaled uniformly within a region-basin intersection (with respect to land area).</p>
+<p><span class="math display">\[\text{withdrawal}_\text{biomass, cell} = \text{withdrawal}_\text{biomass, region} \times \frac{\text{area}_\text{cell}}{\text{area}_\text{region}},\]</span></p>
+<p>When possible, the other 12 crops are downscaled in proportion to the crop land area maps from Demeter, which have been reaggregated to the target resolution of 0.5 degrees. There are certain exceptions. If the GCAM withdrawal or consumption value for a crop in some region-basin is nonzero, but Demeter does not show any cells with that crop type in that region-basin, it will be downscaled uniformly, the same as biomass.</p>
+<p>Additionally, it is possible for GCAM and Demeter have different total crop irrigation areas for a region-basin, so applying the raw Demeter ratios to irrigation withdrawals or consumption (which are directly related to irrigation areas) could result in cell withdrawal values that imply larger irrigation area than total cell area. In order to avoid this non-physical situation, excess irrigation area in cells that are above capacity is assigned evenly among irrigated cells with capacity remaining if there are any, otherwise it is assigned evenly among the remaining cells in the region-basin. Should there still be excess after those cells have been filled, it would be dropped.</p>
+<p>Using these adjusted irrigation area values for each crop, cell withdrawal values are given by</p>
+<p><span class="math display">\[\text{withdrawal}_\text{[crop], cell} = \text{withdrawal}_\text{[crop], region} \times \frac{\text{area}_\text{[crop], cell}}{\text{area}_\text{[crop], region}},\]</span></p>
+<p>and the analogous formula is used for consumption. The total irrigation sector value for a cell is the sum of that cell’s values for all 13 crops.</p>
+<p>Note that 6 of the 434 region-basin intersections are so small that they are not represented in the 0.5 degree mapping, causing any of their irrigation withdrawals or consumption to be dropped, though these values are correspondingly small.</p>
 <p><br></p>
 <!-------------------------->
 <!-------------------------->
