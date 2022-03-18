@@ -25,9 +25,8 @@ out <- generate_figures(annual_rds = "annual_data.rds",
 
 
 mydata <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
-                   sectors = c("total"), #regions=c("USA"),
-                   years=2020, months=0)
-
+                   sectors = c("total"),
+                   years=2010, months=0)
 
 rm <- rmap::map(mydata, save=F, show=F, background = T, legendType="continuous",
                 crop_to_underLayer = T,
@@ -36,11 +35,10 @@ rm <- rmap::map(mydata, save=F, show=F, background = T, legendType="continuous",
 
 a <- rm[[1]] + ggplot2::scale_fill_gradientn(
   colors = rev(jgcricol()$pal_spectral),
-  rescaler = ~(.x/max(.x))^0.25); a
+  rescaler = ~(.x/max(.x))^0.25,
+  guide="none")
 
-
-a <- rm[[1]] + ggplot2::scale_fill_viridis_c(
-  rescaler = ~(.x/max(.x))^0.25); a
+grDevices::png(paste0(images,"total.png"),width=13,height=7,units="in",res=288); print(a); grDevices::dev.off()
 
 
 #

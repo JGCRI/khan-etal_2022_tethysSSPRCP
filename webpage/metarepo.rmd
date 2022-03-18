@@ -341,22 +341,9 @@ knitr::include_graphics("images/workflow4.jpg")
 knitr::include_graphics("images/temporalworkflow.png")
 ```
 
-<!-------------------------->
-## Workflow 4A - Livestock, Manufacturing, and Mining
-<!-------------------------->
-
-For livestock, manufacturing, and mining, a uniform distribution is applied. The withdrawal or consumption for the year is divided between months according to the number of days.
-
-$$\text{withdrawal}_\text{month} = \text{withdrawal}_\text{year} \times \frac{\text{days}_\text{month}}{\text{days}_\text{year}}.$$
-
-For consumption we have
-
-$$\text{consumption}_\text{month} = \text{consumption}_\text{year} \times \frac{\text{days}_\text{month}}{\text{days}_\text{year}}.$$
-
-<br>
 
 <!-------------------------->
-## Workflow 4B - Domestic
+## Workflow 4a - Domestic
 <!-------------------------->
 
 Temporally downscaling domestic withdrawal uses a formula from Wada et al., 2011 (http://dx.doi.org/10.1029/2010WR009792), with data from Huang et al. 2017 (https://doi.org/10.5194/hess-2017-551). Withdrawals for each month of a year for some cell are given by the formula
@@ -384,7 +371,7 @@ data.frame(
 <br>
 
 <!-------------------------->
-## Workflow 4C - Electricity Generation
+## Workflow 4B - Electricity Generation
 <!-------------------------->
 
 Water withdrawal and consumption for electricity generation each month are assumed to be proportional to the amount of electricity generated, using the formula developed in Voisin et al., 2013 (https://doi.org/10.5194/hess-17-4555-2013).
@@ -442,6 +429,17 @@ data.frame(
   kbl() %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
+
+<br>
+
+<!-------------------------->
+## Workflow 4C - Livestock, Manufacturing, and Mining
+<!-------------------------->
+
+For livestock, manufacturing, and mining, a uniform distribution is applied. The withdrawal or consumption for the year is divided between months according to the number of days.
+
+$$\text{withdrawal}_\text{month} = \text{withdrawal}_\text{year} \times \frac{\text{days}_\text{month}}{\text{days}_\text{year}}.$$
+$$\text{consumption}_\text{month} = \text{consumption}_\text{year} \times \frac{\text{days}_\text{month}}{\text{days}_\text{year}}.$$
 
 <br>
 
