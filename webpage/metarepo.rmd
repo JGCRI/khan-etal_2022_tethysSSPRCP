@@ -145,7 +145,7 @@ data.frame(
 
 <!-------------------------->
 <!-------------------------->
-# Workflows
+# Workflow Overview
 <!-------------------------->
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
@@ -163,7 +163,7 @@ knitr::include_graphics("images/workflow_summary.jpg")
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
 
-This dataset contains water withdrawal projections under a range of socioeconomic and climate scenarios. Combinations of five Shared Socioeconomic Pathways (SSPs 1-5) and four Representative Concentration Pathways (RCPs 2.6, 4.5, 6, and 8.5) are used. However, RCP 2.6 is not considered possible under SSP 3, and RCP 8.5 is only considered possible for SSP 5. This leaves 15 valid SSP-RCP combinations, shown in the diagram below.
+This data set contains water withdrawal projections under a range of socioeconomic and climate scenarios. Combinations of five Shared Socioeconomic Pathways (SSPs 1-5) and four Representative Concentration Pathways (RCPs 2.6, 4.5, 6, and 8.5) are used. However, RCP 2.6 is not considered possible for SSP 3, and RCP 8.5 is only considered possible for SSP 5. This leaves 15 valid SSP-RCP combinations, shown in the diagram below.
 
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Workflow 1"}
 knitr::include_graphics("images/workflow1.jpg")
@@ -278,7 +278,7 @@ data.frame(
   Name = c("Gridded Livestock of the World",
            "Buffalo Fraction",
            "Goat Fraction"),
-  File = c("livestock_[animal].csv",
+  File = c("livestock_<animal>.csv",
            "bfracFAO2005.csv",
            "gfracFAO2005.csv"),
   Reference = c("Wint and Robinson, 2007",
@@ -464,7 +464,7 @@ data.frame(
   Reference = c("Van Beek et al., 2011; Wada et al., 2011",
                 ""),
   Source = c("original data files were obtained from ISI‐MIP (Warszawski et al., 2014), then processed into gridded monthly percentage values",
-             "Package data")
+             "calculated from basin locations")
     ) %>% 
   kbl() %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))

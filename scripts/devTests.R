@@ -191,7 +191,6 @@ goat1 <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Inp
 baa <- dplyr::bind_cols(rmap::mapping_tethys_grid_basin_region_country, sheep1, goat1)
 baa <- dplyr::group_by(baa, regionName)
 baa <- dplyr::summarise(baa, sheep=sum(sheep), goat=sum(goat))
-bias = 1
-baa <- dplyr::mutate(baa, gfrac = goat/(bias*sheep+goat))
+baa <- dplyr::mutate(baa, gfrac = goat/(sheep+goat))
 
 
