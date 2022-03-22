@@ -551,10 +551,15 @@ generate_figures <- function(folder=NULL,
     comparison <- dplyr::mutate(comparison, tethys_value=tidyr::replace_na(tethys_value, 0))
     
     # 6 sectors
-    comparison_sectors <- dplyr::filter(comparison, sector %in% c("dom","elec","irr","liv","mfg","min"))
+    
+    comparison_sectors <- dplyr::filter(comparison, sector %in% c("dom","elec", "irr", "liv", "mfg","min"))
+    # irrigation dominates, reorders so all sectors are shown
+    comparison_sectors$sector <- factor(comparison_sectors$sector, levels=c("irr", "liv", "elec", "mfg", "dom", "min"))
+    comparison_sectors <- dplyr::arrange(comparison_sectors, sector)
+
     v5 <- ggplot2::ggplot(comparison_sectors,
                           ggplot2::aes(x=value, y=tethys_value, color=sector)) +
-      ggplot2::geom_point(shape=3) +
+      ggplot2::geom_point(shape=3, alpha=1) +
       ggplot2::coord_fixed() +
       ggplot2::theme_bw() +
       ggplot2::scale_color_manual(values=sec_pal) +
@@ -1015,7 +1020,7 @@ generate_figures <- function(folder=NULL,
           ggplot2::xlab("Year") +
           ggplot2::ylab(bquote(Water ~ Withdrawals ~ (km^3 ~ per ~ year))) +
           ggplot2::theme_bw() +
-          ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5));
+          ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5))
         ggplot2::ggsave(filename = paste0(images, "regional/crops_annual_", my_basin, "_w_", my_scenario, ".png"),
                         plot = crop_plot,
                         width = 13,

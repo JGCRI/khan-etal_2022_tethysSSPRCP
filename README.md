@@ -7,5 +7,5 @@ Meta-repository for: *Khan, Z., Thompson, I., Vernon, C., Graham, N., Wild, T.B.
 
 <br>
 <p align="center">
-<a href="https://jgcri.github.io/khan-etal_2022_tethysSSPRCP/articles/vignette_metarepo.html" target="_blank"><img src="https://github.com/JGCRI/jgcricolors/blob/main/vignettes/button_metarepo.PNG?raw=true" height="60"/></a>
+<a href="https://jgcri.github.io/khan-etal_2022_tethysSSPRCP/" target="_blank"><img src="https://github.com/JGCRI/jgcricolors/blob/main/vignettes/button_metarepo.PNG?raw=true" height="60"/></a>
 </p>
