@@ -37,7 +37,7 @@ window.onhashchange = goToTab;
 sector_names = c("total"       = "Total",
                  "dom"         = "Domestic",
                  "elec"        = "Electricity",
-                 "mfg"         =" Manufacturing",
+                 "mfg"         = "Manufacturing",
                  "min"         = "Mining",
                  "liv"         = "Livestock",
                  "irr"         = "Irrigation",
@@ -89,10 +89,10 @@ Khan, Z., Thompson, I., Vernon, C., Graham, N., Wild, T.B., Chen, M., 2022. A gl
 library(kableExtra)
 data.frame(
     Model = c("Tethys"),
-    Version = c("v1.3.0"),
+    Version = c("v1.3.1"),
     Description = c("Spatiotemporal downscaling model for global water use"),
     Language = c("Python"),
-    Link = c("https://jgcri.github.io/tethys/")
+    DOI = c("https://doi.org/10.5281/zenodo.6399488")
     ) %>% 
   kbl() %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
@@ -134,7 +134,7 @@ data.frame(
 library(kableExtra)
 data.frame(
   Dataset = c("Tethys Outputs"),
-  Version = c("v1.3.0 ADD_DOI_HERE"),
+  Version = c("v1.3.0"),
   Location = c("https://doi.org/10.7910/DVN/VIQEAB")
     ) %>% 
   kbl() %>%

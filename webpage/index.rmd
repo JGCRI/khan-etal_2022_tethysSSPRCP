@@ -16,7 +16,7 @@ pagetitle: khan_etal_2022_tethysSSPRCP
 
 <a href = "metarepo.html">
 ```{r, echo=FALSE, out.width="80%", fig.align='center'}
-knitr::include_graphics("images/total.png")
+knitr::include_graphics("images/cover.png")
 ```
 </a>
 

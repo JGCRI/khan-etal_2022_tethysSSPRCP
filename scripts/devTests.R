@@ -4,16 +4,22 @@
 # Go to more>document
 # Install and Restart
 
-library(rmap)
 library(magrittr)
 library(jgcricolors)
 library(dplyr)
+library(rmap)
 
 images = r"{C:\Users\thom927\Documents\metarepos\khan-etal_2022_tethysSSPRCP\webpage\images\}"
 folder = "C:/Users/thom927/Documents/Data/tethysDemeterOutputs"
 GCAM_withdrawals_csv = "C:/Users/thom927/Documents/Data/GrahamGCAM/water_withdrawals_by_mapping_source.csv"
 GCAM_consumption_csv = "C:/Users/thom927/Documents/Data/GrahamGCAM/water_consumption_by_mapping_source.csv"
 
+sector_names = c("dom"         = "Domestic",
+                 "elec"        = "Electricity",
+                 "liv"         = "Livestock",
+                 "irr"         = "Irrigation",
+                 "mfg"         = "Manufacturing",
+                 "min"         = "Mining")
 
 out <- generate_figures(annual_rds = "annual_data.rds",
                         monthly_rds = "monthly_data.rds",
@@ -22,6 +28,59 @@ out <- generate_figures(annual_rds = "annual_data.rds",
 
 
 # map testing
+#####
+
+region_data <- readRDS("../data/region_data.rds")
+region_data <- dplyr::ungroup(region_data)
+region_data <- dplyr::filter(region_data, year==2010, scenario=="ssp1_rcp26_gfdl")
+region_data <- dplyr::select(region_data, region=subRegion_GCAMReg32, basin=subRegion_GCAMBasin, sector=class, value)
+region_data_irr <- dplyr::filter(region_data, sector=="Irrigation")
+region_data_nonirr <- dplyr::filter(region_data, sector!="Irrigation")
+
+converter_irr <- dplyr::select(rmap::mapping_tethys_grid_basin_region_country, lon, lat, region=regionName, basin=basinName)
+converter_nonirr <- dplyr::select(rmap::mapping_tethys_grid_basin_region_country, lon, lat, region=regionName)
+
+region_data_irr <- dplyr::full_join(region_data_irr, converter_irr)
+region_data_nonirr <- dplyr::full_join(region_data_nonirr, converter_nonirr)
+
+region_data <- dplyr::bind_rows(region_data_irr, region_data_nonirr)
+region_data$sector <- factor(region_data$sector, levels=sector_names)
+region_data$name <- "Region/Basin Scale"
+region_data <- dplyr::select(region_data, lon, lat, sector, name, value)
+region_data <- tidyr::drop_na(region_data)
+
+region_map <- rmap::map(region_data, save=F, show=F, background=T,
+                        row="sector", col="name",
+                        legendType = "continuous")
+region_map <- region_map[[1]] + ggplot2::scale_fill_gradientn(
+  colors = rev(jgcricol()$pal_spectral),
+  trans = scales::trans_new(name = '4th root',
+                            transform = function(x){x^0.25},
+                            inverse = function(x){x^4}),
+  guide="none",
+  name = "Water\nWithdrawals\n(km3)")
+
+grid_data <- get_data(folder=folder, scenarios="ssp1_rcp26_gfdl", sectors=c("dom", "elec", "irr", "liv", "mfg", "min"),
+                      years=2010, months=0)
+grid_data$sector <- factor(sector_names[grid_data$sector], levels=sector_names)
+grid_data$name <- "Gridded Scale"
+grid_data <- dplyr::select(grid_data, lon, lat, sector, name, value)
+
+grid_map <- rmap::map(grid_data, save=F, show=F, background=T,
+                      row="sector", col="name",
+                      legendType = "continuous")
+grid_map <- grid_map[[1]] + ggplot2::scale_fill_gradientn(
+  colors = rev(jgcricol()$pal_spectral),
+  trans = scales::trans_new(name = '4th root',
+                            transform = function(x){x^0.25},
+                            inverse = function(x){x^4}),
+  guide="none",
+  name = "Water\nWithdrawals\n(km3)")
+
+
+together <- region_map + grid_map
+grDevices::jpeg(paste0(images,"ModelImage.jpeg"),width=8,height=11,units="in",res=300); print(together); grDevices::dev.off()
+#######################
 
 
 mydata <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
@@ -187,10 +246,91 @@ b2 <- dplyr::filter(b, diff != 0)
 
 sheep1 <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\harmonized_inputs\livestock_sheep.csv}")
 goat1 <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\harmonized_inputs\livestock_goat.csv}")
+gfrac1 <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\rgn32\gfracFAO2005.csv}")
 
 baa <- dplyr::bind_cols(rmap::mapping_tethys_grid_basin_region_country, sheep1, goat1)
 baa <- dplyr::group_by(baa, regionName)
 baa <- dplyr::summarise(baa, sheep=sum(sheep), goat=sum(goat))
+baa <- tidyr::drop_na(baa)
 baa <- dplyr::mutate(baa, gfrac = goat/(sheep+goat))
+
+####
+
+areas <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\Grid_Areas_ID.csv}")
+a = ncdf4::nc_open(r"{C:\Users\thom927\Documents\Data\Huangetal\domestic water use v2\withd_dom.nc}")
+b = ncdf4::ncvar_get(a, "withd_dom", start=c(1, 469))
+
+mydata <- get_data(folder=folder, scenarios="ssp1_rcp26_gfdl", sectors="liv",
+                   consumption=F,
+                   years=2010, months=0)
+mydata$huang_value <- rowSums(b) * areas$V1 * 0.01 * 0.000001
+mydata <- dplyr::mutate(mydata, country=rmap::mapping_tethys_grid_basin_region_country$countryName, .before="region")
+mydata <- dplyr::mutate(mydata, aez=data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\harmonized_inputs\AEZ.csv}")$aez)
+mydata <- dplyr::select(mydata, -Grid_ID, -scenario, -sector, -year, -month)
+{
+#mydata <- dplyr::group_by(mydata, aez)
+mydata <- dplyr::mutate(mydata, value_norm = value/sum(value), huang_value_norm = huang_value/sum(huang_value))
+mydata <- dplyr::ungroup(mydata)
+mydata$diff <- (mydata$value_norm - mydata$huang_value_norm)/mydata$huang_value_norm
+mydata$diff <- (mydata$value)/mydata$huang_value #mydata$value - mydata$huang_value
+}
+debugmap <- rmap::map(dplyr::select(mydata, lon, lat, value=diff),
+                      save=F, show=T, background=T,
+                      legendType="kmeans",
+                      legendSingleValue=T,
+                      palette = "pal_div_GnBr")
+
+debugplot <- ggplot2::ggplot(mydata, ggplot2::aes(x=value, y=huang_value, color=region)) +
+  ggplot2::geom_point() +
+  ggplot2::coord_fixed()
+
+ggplot2::ggsave(filename = "debugplot.png",
+                plot = debugplot,
+                width = 13,
+                height = 10)
+
+# irrigation looks a bit different
+areas <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\Grid_Areas_ID.csv}")
+nc = ncdf4::nc_open(r"{C:\Users\thom927\Documents\Data\Huangetal\irrigation water use v2\withd_irr_pcrglobwb.nc}")
+withd_irr = tibble::tibble(raw = rowSums(ncdf4::ncvar_get(nc, "withd_irr", start=c(1, 469))))
+withd_irr$lat = ncdf4::ncvar_get(nc, "lat")
+withd_irr$lon = ncdf4::ncvar_get(nc, "lon")
+
+mydata <- get_data(folder=folder, scenarios="ssp1_rcp26_gfdl", sectors="irr",
+                   consumption=F,
+                   years=2010, months=0)
+mydata$area <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\Grid_Areas_ID.csv}")
+
+mydata <- dplyr::full_join(mydata, withd_irr)
+mydata <- dplyr::mutate(mydata, huang_value = raw * area * 10^-8)
+mydata <- dplyr::mutate(mydata, huang_value = dplyr::case_when(is.nan(huang_value) ~ 0,
+                                                               is.na(huang_value) ~ 0,
+                                                               TRUE ~ huang_value))
+mydata <- dplyr::select(mydata, -Grid_ID, -scenario, -sector, -year, -month, -area, -raw)
+mydata <- dplyr::mutate(mydata, diff = value - huang_value)
+debugmap <- rmap::map(dplyr::select(mydata, lon, lat, value=diff),
+                      save=F, show=T, background=T,
+                      legendType="kmeans",
+                      legendSingleValue=T,
+                      palette = "pal_div_GnBr")
+
+## waterfootprint
+filename <- r"{C:\Users\thom927\Documents\Data\WFbl_m3mo_30m\wfbl_yr_30m\w001001.adf}"
+r <- raster::raster(filename)
+vals <- raster::values(r) * 10^-9
+coords <- round(raster::coordinates(r), 2)
+
+toplot <- tibble::tibble(lon=coords[,"x"], lat=coords[,"y"], wf_value=vals)
+
+mydata <- get_data(folder=folder, scenarios="ssp1_rcp26_gfdl", sectors="total",
+                   consumption=F,
+                   years=2010, months=0)
+mydata <- dplyr::select(mydata, lon, lat, region, basin, value)
+
+mydata <- dplyr::full_join(mydata, toplot)
+mydata <- dplyr::filter(mydata, !is.na(value))
+mydata$wf_value <- tidyr::replace_na(mydata$wf_value, 0)
+
+
 
 

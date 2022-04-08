@@ -380,20 +380,23 @@ generate_figures <- function(folder=NULL,
 
     # make the figures
     print("Building spatial workflow figure")
-    region_map <- rmap::map(data=region_data, title="Before Spatial Downscaling",
+    region_map <- rmap::map(data=region_data, title="Region/Basin Scale Values",
                             ncol=3, legendType = "continuous",
                             underLayer = rmap::mapIntersectGCAMBasin32Reg,
                             overLayer = rmap::mapIntersectGCAMBasin32Reg,
                             crop_to_underLayer = T,
-                            background = T, save=F, show=T)
+                            background = T, save=F, show=F)
     region_map2 <- region_map[[1]] + ggplot2::scale_fill_gradientn(
       colors = rev(jgcricol()$pal_spectral),
       trans = scales::trans_new(name = '4th root',
                                 transform = function(x){x^0.25},
                                 inverse = function(x){x^4}),
-      breaks = round(seq(0,max(region_data$value*0.99, na.rm = T)^0.25,length.out=5)^4, 2))
+      limits=c(0, max(region_data$value)),
+      breaks=c(0, 1, 10, 100),
+      name = "Water\nWithdrawals\n(km3)"
+      )
     
-    grid_map <- rmap::map(data=grid_data, title="After Spatial Downscaling",
+    grid_map <- rmap::map(data=grid_data, title="Spatially Downscaled Gridded Values",
                           ncol=3, legendType = "continuous",
                           underLayer = rmap::mapIntersectGCAMBasin32Reg,
                           overLayer = rmap::mapIntersectGCAMBasin32Reg,
@@ -404,16 +407,14 @@ generate_figures <- function(folder=NULL,
       trans = scales::trans_new(name = '4th root',
                                 transform = function(x){x^0.25},
                                 inverse = function(x){x^4}),
-      breaks = round(seq(0,max(grid_data$value*0.99, na.rm = T)^0.25,length.out=5)^4, 2))
+      limits=c(0, max(grid_data$value)),
+      breaks=c(0, 0.1, 1, 5),
+      name = "Water\nWithdrawals\n(km3)"
+    )
     
     spatial_wf <- region_map2/ grid_map2 # library(patchwork)
     grDevices::png(paste0(images,"spatialworkflow.png"),width=13,height=10,units="in",res=300); print(spatial_wf); grDevices::dev.off()
     
-
-    ggplot2::ggsave(filename = "spatialworkflow.png",
-                    plot = spatial_wf,
-                    width = 13,
-                    height = 10) # save plot
     print("Spatial workflow figure complete")
 
 
@@ -426,31 +427,36 @@ generate_figures <- function(folder=NULL,
                                           select=c(2, 3, 6:17), col.names=c("lon", "lat", month.abb))
     monthly_grid_data <- data.table::melt(monthly_grid_data, measure.vars=month.abb, variable.name="scenario")
 
-    annual_map <- rmap::map(annual_grid_data, legendType = "continuous", overLayer=rmap::mapCountries, background=T, save=F, show=F)
+    annual_map <- rmap::map(annual_grid_data, legendType = "continuous",
+                            title = "Annual Gridded Values",
+                            overLayer=rmap::mapCountries,
+                            background=T, save=F, show=F)
     annual_map1 <- annual_map[[1]] + ggplot2::scale_fill_gradientn(
       colors = rev(jgcricol()$pal_spectral),
       trans = scales::trans_new(name = '4th root',
                                 transform = function(x){x^0.25},
                                 inverse = function(x){x^4}),
-      breaks = round(seq(0,max(annual_grid_data$value*0.99, na.rm = T)^0.25,length.out=5)^4, 2))
+      limits=c(0, max(annual_grid_data$value)),
+      breaks=c(0, 0.1, 1, 5),
+      name = "Water\nWithdrawals\n(km3)")
     
-    monthly_map <- rmap::map(monthly_grid_data, legendType = "continuous", overLayer=rmap::mapCountries, background=T, save=F, show=F)
+    monthly_map <- rmap::map(monthly_grid_data, legendType = "continuous",
+                             title = "Temporally Downscaled Monthly Gridded Values",
+                             overLayer=rmap::mapCountries,
+                             background=T, save=F, show=F)
     monthly_map1 <- monthly_map[[1]] + ggplot2::scale_fill_gradientn(
       colors = rev(jgcricol()$pal_spectral),
       trans = scales::trans_new(name = '4th root',
                                 transform = function(x){x^0.25},
                                 inverse = function(x){x^4}),
-      breaks = round(seq(0,max(monthly_grid_data$value*0.99, na.rm = T)^0.25,length.out=5)^4, 2))
+      limits=c(0, max(monthly_grid_data$value)),
+      breaks=c(0, 0.01, 0.1, 0.5),
+      name = "Water\nWithdrawals\n(km3)")
     
-    temporal_wf1 <- annual_map1 / monthly_map1
+    temporal_wf1 <- annual_map1 / monthly_map1 + 
+      patchwork::plot_layout(nrow=2, heights=c(1,1), guides="collect")
     grDevices::png(paste0(images,"temporalworkflow.png"),width=8,height=10,units="in",res=300); print(temporal_wf1); grDevices::dev.off()
     
-    ggplot2::ggsave(filename = "temporalworkflow.png",
-                    plot = temporal_wf1,
-                    width = 13,
-                    height = 10) # save plot
-
-
     # annual graph, monthly graph
     annual_data <- readRDS("annual_data.rds")
     dataA <- dplyr::filter(annual_data, (SSP=="SSP 1") & (RCP=="RCP 2.6") &
@@ -675,7 +681,272 @@ generate_figures <- function(folder=NULL,
                     height = 10) # save plot
     
     }
-
+  
+  if(grepl("comparisons|all",temporal_scale,ignore.case=T)) {
+    
+    #monthly plots
+    wf_data <- tibble::tibble()
+    for (i in 1:12){
+      filename <- paste0(r"{C:\Users\thom927\Documents\Data\WFbl_m3mo_30m\wfbl_m}",
+                         gsub(" ", "0", format(i, width=2)), r"{_30m\w001001.adf}")
+      r <- raster::raster(filename)
+      vals <- raster::values(r) * 10^-9
+      coords <- round(raster::coordinates(r), 2)
+      wf_data <- dplyr::bind_rows(wf_data, tibble::tibble(lon=coords[,"x"],
+                                                          lat=coords[,"y"],
+                                                          month=i,
+                                                          wf_value=vals))
+    }
+    
+    
+    all_data <- get_data(folder=folder, scenarios="ssp1_rcp26_gfdl", sectors=c("dom", "elec", "irr", "liv", "mfg", "min"),
+                         consumption=T,
+                         years=2010, months=1:12)
+    all_data <- dplyr::group_by(all_data, lon, lat, region, basin, month)
+    all_data <- dplyr::summarise(all_data, value=sum(value))
+    all_data <- dplyr::ungroup(all_data)
+    all_data <- dplyr::full_join(all_data, wf_data)
+    all_data <- dplyr::filter(all_data, !is.na(value))
+    all_data <- dplyr::filter(all_data, !is.na(region))
+    all_data$wf_value <- tidyr::replace_na(all_data$wf_value, 0)
+    all_data$month <- month.name[all_data$month]
+    all_data$month <- factor(all_data$month, levels=month.name)
+    
+    comaprison_plot2 = ggplot2::ggplot(all_data, ggplot2::aes(x=value, y=wf_value, color=region)) +
+      ggplot2::geom_point() +
+      ggplot2::geom_blank(ggplot2::aes(y=value, x=wf_value)) +
+      ggplot2::theme(aspect.ratio = 1, legend.position = "bottom") +
+      ggplot2::facet_wrap(vars(month), scales="free") + 
+      #ggplot2::ggtitle("Comparing Total Gridded Water Demands by Month") +
+      ggplot2::xlab("Khan et al. (2022) value for 2010 (km3)") +
+      ggplot2::ylab("Mekonnen and Hoekstra (2011) value for 1996-2005 (km3)")
+    ggplot2::ggsave(filename = paste0(images, "comparison2.png"),
+                    plot = comaprison_plot2, width = 13, height = 10)
+    
+    
+    ### sectoral plots
+    huangetal2018 = r"{C:\Users\thom927\Documents\Data\Huangetal\}"
+    nonag = c("domestic", "electricity", "manufacturing", "mining", "livestock")
+    nonag_abb = c("dom", "elec", "mfg", "min", "liv")
+    
+    sector_names = c("dom" = "Domestic",
+                     "elec" = "Electricity",
+                     "liv" = "Livestock",
+                     "irr" = "Irrigation",
+                     "mfg" = "Manufacturing",
+                     "min" = "Mining")
+    
+    areas <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\Grid_Areas_ID.csv}")
+    
+    all_data <- tibble::tibble()
+    for (i in seq(1,5)) {
+      # Withdrawal
+      nc = ncdf4::nc_open(paste0(huangetal2018, nonag[i], r"{ water use v2\withd_}", nonag_abb[i], ".nc"))
+      withd = ncdf4::ncvar_get(nc, paste0("withd_", nonag_abb[i]), start=c(1, 469))
+      sector_data <- get_data(folder=folder, consumption=F, scenarios="ssp1_rcp26_gfdl", sectors=nonag_abb[i], years=2010, months=0)
+      sector_data$demand <- "Withdrawal"
+      sector_data <- dplyr::mutate(sector_data, huang_value=rowSums(withd) * areas$V1 * 10^-8)
+      sector_data <- dplyr::select(sector_data, lon, lat, region, basin, sector, demand, value, huang_value)
+      all_data <- dplyr::bind_rows(all_data, sector_data)
+      
+      # Consumption
+      nc = ncdf4::nc_open(paste0(huangetal2018, nonag[i], r"{ water use v2\cons_}", nonag_abb[i], ".nc"))
+      withd = ncdf4::ncvar_get(nc, paste0("cons_", nonag_abb[i]), start=c(1, 469))
+      sector_data <- get_data(folder=folder, consumption=T, scenarios="ssp1_rcp26_gfdl", sectors=nonag_abb[i], years=2010, months=0)
+      sector_data$demand <- "Consumption"
+      sector_data <- dplyr::mutate(sector_data, huang_value=rowSums(withd) * areas$V1 * 10^-8)
+      sector_data <- dplyr::select(sector_data, lon, lat, region, basin, sector, demand, value, huang_value)
+      all_data <- dplyr::bind_rows(all_data, sector_data)
+    }
+    # irrigation different
+    {
+      nc = ncdf4::nc_open(r"{C:\Users\thom927\Documents\Data\Huangetal\irrigation water use v2\withd_irr_pcrglobwb.nc}")
+      withd = tibble::tibble(raw = rowSums(ncdf4::ncvar_get(nc, "withd_irr", start=c(1, 469))))
+      withd$lat = ncdf4::ncvar_get(nc, "lat")
+      withd$lon = ncdf4::ncvar_get(nc, "lon")
+      sector_data <- get_data(folder=folder, scenarios="ssp1_rcp26_gfdl", sectors="irr", consumption=F, years=2010, months=0)
+      sector_data$demand <- "Withdrawal"
+      sector_data$area <- areas
+      sector_data <- dplyr::full_join(sector_data, withd)
+      sector_data <- dplyr::mutate(sector_data, huang_value = raw * area * 10^-8)
+      sector_data <- dplyr::mutate(sector_data, huang_value = dplyr::case_when(is.nan(huang_value) ~ 0,
+                                                                               is.na(huang_value) ~ 0,
+                                                                               TRUE ~ huang_value))
+      sector_data <- dplyr::select(sector_data, lon, lat, region, basin, sector, demand, value, huang_value)
+      all_data <- dplyr::bind_rows(all_data, sector_data)
+      
+      nc = ncdf4::nc_open(r"{C:\Users\thom927\Documents\Data\Huangetal\irrigation water use v2\cons_irr_pcr.nc}")
+      withd = tibble::tibble(raw = rowSums(ncdf4::ncvar_get(nc, "cons_irr", start=c(1, 469))))
+      withd$lat = ncdf4::ncvar_get(nc, "lat")
+      withd$lon = ncdf4::ncvar_get(nc, "lon")
+      sector_data <- get_data(folder=folder, scenarios="ssp1_rcp26_gfdl", sectors="irr", consumption=T, years=2010, months=0)
+      sector_data$demand <- "Consumption"
+      sector_data$area <- areas
+      sector_data <- dplyr::full_join(sector_data, withd)
+      sector_data <- dplyr::mutate(sector_data, huang_value = raw * area * 10^-8)
+      sector_data <- dplyr::mutate(sector_data, huang_value = dplyr::case_when(is.nan(huang_value) ~ 0,
+                                                                               is.na(huang_value) ~ 0,
+                                                                               TRUE ~ huang_value))
+      sector_data <- dplyr::select(sector_data, lon, lat, region, basin, sector, demand, value, huang_value)
+      all_data <- dplyr::bind_rows(all_data, sector_data)
+    }
+    
+    all_data <- dplyr::filter(all_data, !is.na(region))
+    #all_data <- dplyr::group_by(all_data, sector, demand, region)
+    #all_data <- dplyr::mutate(all_data, value=value/sum(value), huang_value=huang_value/sum(huang_value))
+    #all_data <- dplyr::ungroup(all_data)
+    all_data$value[is.nan(all_data$value)] <- 0
+    all_data$huang_value[is.nan(all_data$huang_value)] <- 0
+    
+    all_data$sector <- sector_names[all_data$sector]
+    
+    sector_plot = ggplot2::ggplot(all_data, ggplot2::aes(x=value, y=huang_value, color=region)) +
+      ggplot2::geom_point() +
+      ggplot2::geom_blank(ggplot2::aes(y=value, x=huang_value)) +
+      ggplot2::theme(aspect.ratio = 1, legend.position = "bottom") +
+      ggplot2::facet_wrap(demand~sector,scales="free", ncol=6) + 
+      #ggplot2::ggtitle("Comparing 2010 Gridded Water Demands by Sector") +
+      ggplot2::xlab("Khan et al. (2022) value for 2010 (km3)") +
+      ggplot2::ylab("Huang et al. (2018) value for 2010 (km3)")
+    ggplot2::ggsave(filename = paste0(images, "comparison.png"),
+                    plot = sector_plot, width = 15, height = 10)
+    
+    
+    
+    ### comparing all 3
+    huangetal2018 = r"{C:\Users\thom927\Documents\Data\Huangetal\}"
+    files_w = c(r"{domestic water use v2\withd_dom.nc}",
+                r"{electricity water use v2\withd_elec.nc}",
+                r"{irrigation water use v2\withd_irr_pcrglobwb.nc}",
+                r"{livestock water use v2\withd_liv.nc}",
+                r"{manufacturing water use v2\withd_mfg.nc}",
+                r"{mining water use v2\withd_min.nc}")
+    files_c = c(r"{domestic water use v2\cons_dom.nc}",
+                r"{electricity water use v2\cons_elec.nc}",
+                r"{irrigation water use v2\cons_irr_pcr.nc}",
+                r"{livestock water use v2\cons_liv.nc}",
+                r"{manufacturing water use v2\cons_mfg.nc}",
+                r"{mining water use v2\cons_min.nc}")
+    vars_w = paste0("withd_", c("dom", "elec", "irr", "liv", "mfg", "min"))
+    vars_c = paste0("cons_",  c("dom", "elec", "irr", "liv", "mfg", "min"))
+    
+    areas <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\Grid_Areas_ID.csv}")
+    areas$lon <- rmap::mapping_tethys_grid_basin_region_country$lon
+    areas$lat <- rmap::mapping_tethys_grid_basin_region_country$lat
+    
+    huang_data <- tibble::tibble()
+    for (i in seq(1,6)) {
+      # Withdrawal
+      nc <- ncdf4::nc_open(paste0(huangetal2018, files_w[i]))
+      for (m in 1:12) { # could probably do all at once then melt, oh well
+        partial <- tibble::tibble(raw = ncdf4::ncvar_get(nc, vars_w[i], start=c(1, 468+m), count=c(-1,1)))
+        partial$lon <- ncdf4::ncvar_get(nc, "lon")
+        partial$lat <- ncdf4::ncvar_get(nc, "lat")
+        partial <- dplyr::left_join(partial, areas)
+        partial <- dplyr::mutate(partial, value = raw * V1 * 10^-8)
+        partial$month <- m
+        partial$demand <- "Withdrawal"
+        huang_data <- dplyr::bind_rows(huang_data, partial)
+      }
+      # Consumption
+      nc <- ncdf4::nc_open(paste0(huangetal2018, files_c[i]))
+      for (m in 1:12) {
+        partial <- tibble::tibble(raw = ncdf4::ncvar_get(nc, vars_c[i], start=c(1, 468+m), count=c(-1,1)))
+        partial$lon <- ncdf4::ncvar_get(nc, "lon")
+        partial$lat <- ncdf4::ncvar_get(nc, "lat")
+        partial <- dplyr::left_join(partial, areas)
+        partial <- dplyr::mutate(partial, value = raw * V1 * 10^-8)
+        partial$month <- m
+        partial$demand <- "Consumption"
+        huang_data <- dplyr::bind_rows(huang_data, partial)
+      }
+    }
+    huang_data$value[is.nan(huang_data$value)] <- 0
+    huang_data <- dplyr::group_by(huang_data, demand, lon, lat, month)
+    huang_data <- dplyr::summarise(huang_data, value=sum(value))
+    huang_data <- dplyr::ungroup(huang_data)
+    huang_data$set <- "Huang et al. (2018)"
+    
+    
+    wf_data <- tibble::tibble()
+    for (m in 1:12){
+      filename <- paste0(r"{C:\Users\thom927\Documents\Data\WFbl_m3mo_30m\wfbl_m}",
+                         gsub(" ", "0", format(m, width=2)), r"{_30m\w001001.adf}")
+      r <- raster::raster(filename)
+      coords <- round(raster::coordinates(r), 2)
+      wf_data <- dplyr::bind_rows(wf_data, tibble::tibble(lon=coords[,"x"],
+                                                          lat=coords[,"y"],
+                                                          month=m,
+                                                          value=raster::values(r) *10^-9))
+    }
+    wf_data$set <- "Mekonnen and Hoekstra (2011)"
+    wf_data$demand <- "Consumption"
+    
+    
+    tethys_data_w <- get_data(folder=folder, scenarios="ssp1_rcp26_gfdl", sectors=c("dom", "elec", "irr", "liv", "mfg", "min"),
+                              consumption=F,
+                              years=2010, months=1:12)
+    tethys_data_w <- dplyr::group_by(tethys_data_w, lon, lat, month)
+    tethys_data_w <- dplyr::summarise(tethys_data_w, value=sum(value))
+    tethys_data_w <- dplyr::ungroup(tethys_data_w)
+    tethys_data_w$set <- "Khan et al. (2022)"
+    tethys_data_w$demand <- "Withdrawal"
+    
+    tethys_data_c <- get_data(folder=folder, scenarios="ssp1_rcp26_gfdl", sectors=c("dom", "elec", "irr", "liv", "mfg", "min"),
+                              consumption=T,
+                              years=2010, months=1:12)
+    tethys_data_c <- dplyr::group_by(tethys_data_c, lon, lat, month)
+    tethys_data_c <- dplyr::summarise(tethys_data_c, value=sum(value))
+    tethys_data_c <- dplyr::ungroup(tethys_data_c)
+    tethys_data_c$set <- "Khan et al. (2022)"
+    tethys_data_c$demand <- "Consumption"
+    
+    all_data <- dplyr::bind_rows(tethys_data_w, tethys_data_c, huang_data, wf_data)
+    
+    all_data_spatial <- dplyr::group_by(all_data, set, demand, lon, lat)
+    all_data_spatial <- dplyr::summarise(all_data_spatial, value=sum(value))
+    all_data_spatial <- dplyr::ungroup(all_data_spatial)
+    all_data_spatial <- dplyr::filter(all_data_spatial, paste0(lon, ",", lat) %in% paste0(
+      rmap::mapping_tethys_grid_basin_region_country$lon, ",",
+      rmap::mapping_tethys_grid_basin_region_country$lat)
+    )
+    
+    all_data_temporal <- dplyr::group_by(all_data, set, demand, month)
+    all_data_temporal <- dplyr::summarise(all_data_temporal, value=sum(value))
+    all_data_temporal <- dplyr::ungroup(all_data_temporal)
+    all_data_temporal$month <- month.abb[all_data_temporal$month]
+    all_data_temporal$month <- factor(all_data_temporal$month, levels = month.abb)
+    
+    myplot <- ggplot2::ggplot(all_data_temporal, ggplot2::aes(x=month, y=value,
+                                                              color=set, linetype = demand,
+                                                              group=interaction(set, demand))) +
+      ggplot2::geom_line() +
+      ggplot2::labs(color="Data Set", linetype="Demand Type") +
+      ggplot2::xlab("Month") +
+      ggplot2::ylab("Water Demand (km3/month)")
+    ggplot2::ggsave(filename = paste0(images, "comparison_temporal.png"),
+                    plot = myplot, width = 13, height = 6)
+    
+    mymap <- rmap::map(all_data_spatial, save=F, show=F, background=T,
+                       legendType = "continuous",
+                       overLayer = rmap::mapCountries,
+                       row="set", col="demand")
+    
+    mymap2 <- mymap[[1]] + 
+      ggplot2::scale_fill_gradientn(
+        colors = jgcricol()$pal_hot,
+        trans = scales::trans_new(name = '4th root',
+                                  transform = function(x){x^0.25},
+                                  inverse = function(x){x^4}),
+        name = "Water\nDemand\n(km3)")
+    
+    grDevices::png(paste0(images,"comparison_spatial.png"),width=13,height=10,units="in",res=300); print(mymap2); grDevices::dev.off()
+    
+      
+    
+  }
+  
+  
   if(grepl("animations|all",temporal_scale,ignore.case=T)) {
     gridLookup <- readRDS("rmap_tethys_grid_basin_region_country.rds")
     files <- paste0(folder, "/", "ssp5_rcp85_gfdl", "/crops_wdirr_",
@@ -1350,7 +1621,7 @@ get_data <- function(folder=NULL, scenarios=NULL, sectors=NULL,
   }
   filename_after = c("_km3permonth.csv", "_km3peryr.csv")[1 + (months[1] == 0)]
   scenario_after = c("_withdrawals", "_consumption")[1+consumption]
-  scenario_after = "" # my local directories are named differently
+  #scenario_after = "" # my local directories are named differently
 
   all_data <- data.table::rbindlist(lapply(1:length(scenario_list), function(i){
     case <- 1 + consumption*4 + (months[1] == 0)*2 + sector_list[i] %in% crop_names # abusing T=1, F=0
