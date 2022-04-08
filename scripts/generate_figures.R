@@ -344,7 +344,7 @@ generate_figures <- function(folder=NULL,
     library(rmap)
 
     ssp_rcp_gcm <- "ssp1_rcp26_gfdl"
-    data_year <- 2020
+    data_year <- 2010
     secNames <- c("Domestic", "Electricity", "Irrigation", "Livestock", "Manufacturing", "Mining")
 
     print("Starting spatial downscaling example map ...")

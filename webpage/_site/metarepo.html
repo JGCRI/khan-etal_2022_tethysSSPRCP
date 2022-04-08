@@ -421,7 +421,7 @@ Description
 Language
 </th>
 <th style="text-align:left;">
-Link
+DOI
 </th>
 </tr>
 </thead>
@@ -431,7 +431,7 @@ Link
 Tethys
 </td>
 <td style="text-align:left;">
-v1.3.0
+v1.3.1
 </td>
 <td style="text-align:left;">
 Spatiotemporal downscaling model for global water use
@@ -440,7 +440,7 @@ Spatiotemporal downscaling model for global water use
 Python
 </td>
 <td style="text-align:left;">
-<a href="https://jgcri.github.io/tethys/" class="uri">https://jgcri.github.io/tethys/</a>
+<a href="https://doi.org/10.5281/zenodo.6399488" class="uri">https://doi.org/10.5281/zenodo.6399488</a>
 </td>
 </tr>
 </tbody>
@@ -526,7 +526,7 @@ Location
 Tethys Outputs
 </td>
 <td style="text-align:left;">
-v1.3.0 ADD_DOI_HERE
+v1.3.0
 </td>
 <td style="text-align:left;">
 <a href="https://doi.org/10.7910/DVN/VIQEAB" class="uri">https://doi.org/10.7910/DVN/VIQEAB</a>
@@ -1049,8 +1049,10 @@ calculated from basin locations
 <div id="annual" class="section level2 tabset">
 <h2 class="tabset">Annual</h2>
 <!-------------------------->
-<div id="total" class="section level3">
-<h3>Total</h3>
+<div id="total" class="section level3 tabset tabset-pills">
+<h3 class="tabset tabset-pills">Total</h3>
+<div id="withdrawal" class="section level4">
+<h4>Withdrawal</h4>
 <div class="figure" style="text-align: center">
 <img src="images/figure1.png" alt="Total Annual Water Withdrawal by SSP-RCP-GCM" width="100%" />
 <p class="caption">
@@ -1058,8 +1060,20 @@ Total Annual Water Withdrawal by SSP-RCP-GCM
 </p>
 </div>
 </div>
-<div id="by-sector" class="section level3">
-<h3>By Sector</h3>
+<div id="consumption" class="section level4">
+<h4>Consumption</h4>
+<div class="figure" style="text-align: center">
+<img src="images/figure1_c.png" alt="Total Annual Water Consumption by SSP-RCP-GCM" width="100%" />
+<p class="caption">
+Total Annual Water Consumption by SSP-RCP-GCM
+</p>
+</div>
+</div>
+</div>
+<div id="by-sector" class="section level3 tabset tabset-pills">
+<h3 class="tabset tabset-pills">By Sector</h3>
+<div id="withdrawal-1" class="section level4">
+<h4>Withdrawal</h4>
 <div class="figure" style="text-align: center">
 <img src="images/figure2.png" alt="Global Annual Water Withdrawal by SSP-RCP-GCM and Sector" width="100%" />
 <p class="caption">
@@ -1067,13 +1081,35 @@ Global Annual Water Withdrawal by SSP-RCP-GCM and Sector
 </p>
 </div>
 </div>
-<div id="crops" class="section level3">
-<h3>Crops</h3>
+<div id="consumption-1" class="section level4">
+<h4>Consumption</h4>
 <div class="figure" style="text-align: center">
-<img src="images/figure6.png" alt="Global Annual Water Withdrawal by SSP-RCP-GCM and Sector" width="100%" />
+<img src="images/figure2_c.png" alt="Global Annual Water Consumption by SSP-RCP-GCM and Sector" width="100%" />
 <p class="caption">
-Global Annual Water Withdrawal by SSP-RCP-GCM and Sector
+Global Annual Water Consumption by SSP-RCP-GCM and Sector
 </p>
+</div>
+</div>
+</div>
+<div id="crops" class="section level3 tabset tabset-pills">
+<h3 class="tabset tabset-pills">Crops</h3>
+<div id="withdrawal-2" class="section level4">
+<h4>Withdrawal</h4>
+<div class="figure" style="text-align: center">
+<img src="images/figure6.png" alt="Global Annual Water Withdrawal by SSP-RCP-GCM and Crop" width="100%" />
+<p class="caption">
+Global Annual Water Withdrawal by SSP-RCP-GCM and Crop
+</p>
+</div>
+</div>
+<div id="consumption-2" class="section level4">
+<h4>Consumption</h4>
+<div class="figure" style="text-align: center">
+<img src="images/figure6_c.png" alt="Global Annual Water Consumption by SSP-RCP-GCM and Crop" width="100%" />
+<p class="caption">
+Global Annual Water Consumption by SSP-RCP-GCM and Crop
+</p>
+</div>
 </div>
 </div>
 <div id="gcms" class="section level3 tabset tabset-pills">
@@ -1203,7 +1239,7 @@ GCAM inputs vs grids Reaggregated
 <!-------------------------->
 </div>
 </div>
-<div id="consumption" class="section level3 tabset tabset-pills">
+<div id="consumption-3" class="section level3 tabset tabset-pills">
 <h3 class="tabset tabset-pills">Consumption</h3>
 <!-------------------------->
 <div id="sectors-1" class="section level4">
@@ -1254,7 +1290,7 @@ Annual vs Reaggregated Monthly
 <!-------------------------->
 </div>
 </div>
-<div id="consumption-1" class="section level3 tabset tabset-pills">
+<div id="consumption-4" class="section level3 tabset tabset-pills">
 <h3 class="tabset tabset-pills">Consumption</h3>
 <!-------------------------->
 <div id="sectors-3" class="section level4">

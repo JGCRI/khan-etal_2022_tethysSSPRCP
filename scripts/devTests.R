@@ -57,8 +57,11 @@ region_map <- region_map[[1]] + ggplot2::scale_fill_gradientn(
   trans = scales::trans_new(name = '4th root',
                             transform = function(x){x^0.25},
                             inverse = function(x){x^4}),
-  guide="none",
-  name = "Water\nWithdrawals\n(km3)")
+  limits = c(0, max(region_data$value)),
+  #guide="none",
+  name = "Water\nWithdrawals\n(km3)") + 
+  ggplot2::theme(legend.position = "bottom",
+                 legend.text = ggplot2::element_text(angle=90))
 
 grid_data <- get_data(folder=folder, scenarios="ssp1_rcp26_gfdl", sectors=c("dom", "elec", "irr", "liv", "mfg", "min"),
                       years=2010, months=0)
@@ -74,12 +77,16 @@ grid_map <- grid_map[[1]] + ggplot2::scale_fill_gradientn(
   trans = scales::trans_new(name = '4th root',
                             transform = function(x){x^0.25},
                             inverse = function(x){x^4}),
-  guide="none",
-  name = "Water\nWithdrawals\n(km3)")
+  #guide="none",
+  name = "Water\nWithdrawals\n(km3)") + 
+  ggplot2::theme(legend.position = "bottom",
+                 legend.text = ggplot2::element_text(angle=90))
 
 
 together <- region_map + grid_map
-grDevices::jpeg(paste0(images,"ModelImage.jpeg"),width=8,height=11,units="in",res=300); print(together); grDevices::dev.off()
+#grDevices::jpeg(paste0(images,"ModelImage.jpeg"),width=8,height=11,units="in",res=300); print(together); grDevices::dev.off()
+grDevices::png(paste0(images,"ModelImage.png"),width=9,height=11,units="in",res=300); print(together); grDevices::dev.off()
+
 #######################
 
 
@@ -202,58 +209,6 @@ scenario_names = c("ssp1_rcp26_gfdl"   = "SSP 1, RCP 2.6, gfdl",
                    "ssp4_rcp45_miroc"  = "SSP 4, RCP 4.5, miroc",
                    "ssp5_rcp85_noresm" = "SSP 5, RCP 8.5, noresm")
 
-#####
-
-
-m1 = c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-m2 = c(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-
-a <- get_data(folder=folder, scenarios = "ssp1_rcp26_gfdl",
-              sectors = "min", years = 2050:2075, months = 2:4)
-
-a <- dplyr::arrange(a, scenario, sector, Grid_ID, month, year)
-a <- dplyr::mutate(a, interp_value = dplyr::case_when(year %% 400 == 0 ~ value*366/m2[month],
-                                                      year %% 100 == 0 ~ value*365/m1[month],
-                                                      year %% 20 == 0 ~ value*366/m2[month],
-                                                      year %% 5 == 0 ~ value*365/m1[month],
-                                                      TRUE ~ NA_real_))
-a <- dplyr::mutate(a, interp_value = zoo::na.approx(interp_value))
-a <- dplyr::mutate(a, interp_value = dplyr::case_when(year %% 400 == 0 ~ interp_value*m2[month]/366,
-                                                      year %% 100 == 0 ~ interp_value*m1[month]/365,
-                                                      year %% 4 == 0 ~ interp_value*m2[month]/366,
-                                                      TRUE ~ interp_value*m1[month]/365))
-a <- dplyr::mutate(a, diff = interp_value - value)
-a <- dplyr::mutate(a, pctdiff = (interp_value - value)/value)
-
-##
-b <- get_data(folder=folder, scenarios = "ssp1_rcp26_gfdl",
-              sectors = "dom", years = 2055:2060, months = 2:4)
-
-b <- dplyr::arrange(b, scenario, sector, Grid_ID, month, year)
-b <- dplyr::mutate(b, interp_value = dplyr::case_when(year %% 5 == 0 ~ value,
-                                                      TRUE ~ NA_real_))
-b <- dplyr::mutate(b, interp_value = zoo::na.approx(interp_value))
-
-b <- dplyr::mutate(b, diff = interp_value - value)
-b <- dplyr::mutate(b, pctdiff = (interp_value - value)/value)
-
-print(range(b$diff))
-
-b2 <- dplyr::filter(b, diff != 0)
-
-
-###
-
-sheep1 <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\harmonized_inputs\livestock_sheep.csv}")
-goat1 <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\harmonized_inputs\livestock_goat.csv}")
-gfrac1 <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\rgn32\gfracFAO2005.csv}")
-
-baa <- dplyr::bind_cols(rmap::mapping_tethys_grid_basin_region_country, sheep1, goat1)
-baa <- dplyr::group_by(baa, regionName)
-baa <- dplyr::summarise(baa, sheep=sum(sheep), goat=sum(goat))
-baa <- tidyr::drop_na(baa)
-baa <- dplyr::mutate(baa, gfrac = goat/(sheep+goat))
-
 ####
 
 areas <- data.table::fread(r"{C:\Users\thom927\Documents\Data\example_v1_3_0\Input\Grid_Areas_ID.csv}")
@@ -332,5 +287,73 @@ mydata <- dplyr::filter(mydata, !is.na(value))
 mydata$wf_value <- tidyr::replace_na(mydata$wf_value, 0)
 
 
+### consumption figures
+annual_consumption <- readRDS("../data/consumption_sums.rds")
+annual_consumption <- dplyr::group_by(annual_consumption, scenario, sector, year)
+annual_consumption <- dplyr::summarise(annual_consumption, value = sum(value))
+annual_consumption <- dplyr::ungroup(annual_consumption)
+annual_consumption <- dplyr::mutate(annual_consumption, SSP = paste0("SSP ", substr(scenario, 4, 4)),
+                                    RCP = paste0("RCP ", substr(scenario, 9, 9), ".", substr(scenario, 10, 10)),
+                                    GCM = substr(scenario, 12, 17))
 
+total_consumption <- dplyr::filter(annual_consumption, sector=="total")
+total_plot <- ggplot2::ggplot(data = total_consumption,
+                              ggplot2::aes(x = year,
+                                           y = value,
+                                           group = GCM)) +
+  ggplot2::geom_line(ggplot2::aes(color=GCM)) +
+  ggplot2::scale_color_manual(values=gcm_pal) +
+  ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+  ggplot2::ggtitle("Total Global Annual Water Consumption by SSP-RCP-GCM") +
+  ggplot2::xlab("Year") +
+  ggplot2::ylab("Water Consumption (km3/year)") +
+  ggplot2::theme_bw() +
+  ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5))
+ggplot2::ggsave(filename = paste0(images, "figure1_c.png"),
+                plot = total_plot,
+                width = 13,
+                height = 10)
 
+sectoral_consumption <- dplyr::filter(annual_consumption, sector %in% c("dom", "elec", "irr", "liv", "mfg", "min"))
+sectoral_consumption$sector <- c("dom" = "Domestic",
+                                 "elec" = "Electricity",
+                                 "mfg" = "Manufacturing",
+                                 "min" = "Mining",
+                                 "irr" = "Irrigation",
+                                 "liv" = "Livestock")[sectoral_consumption$sector]
+
+sectoral_plot <- ggplot2::ggplot(data = sectoral_consumption,
+                      ggplot2::aes(x = year,
+                                   y = value,
+                                   group = interaction(GCM, sector))) +
+  ggplot2::geom_line(ggplot2::aes(color=sector)) +
+  ggplot2::scale_color_manual(values=water_pal) +
+  ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+  ggplot2::ggtitle("Global Annual Water Consumption by SSP-RCP-GCM and Sector") +
+  ggplot2::xlab("Year") +
+  ggplot2::ylab("Water Consumption (km3/year)") + 
+  ggplot2::theme_bw() +
+  ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5))
+ggplot2::ggsave(filename = paste0(images, "figure2_c.png"),
+                plot = sectoral_plot,
+                width = 13,
+                height = 10)
+
+crop_consumption <- dplyr::filter(annual_consumption, !sector %in% c("dom", "elec", "irr", "liv", "mfg", "min", "nonag", "total"))
+
+crop_plot <- ggplot2::ggplot(data = crop_consumption,
+                                 ggplot2::aes(x = year,
+                                              y = value,
+                                              group = interaction(GCM, sector))) +
+  ggplot2::geom_line(ggplot2::aes(color=sector)) +
+  ggplot2::scale_color_manual(values=crop_pal) +
+  ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+  ggplot2::ggtitle("Annual Crop Water Consumption by SSP-RCP-GCM and Sector") +
+  ggplot2::xlab("Year") +
+  ggplot2::ylab("Water Consumption (km3/year)") + 
+  ggplot2::theme_bw() +
+  ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5))
+ggplot2::ggsave(filename = paste0(images, "figure6_c.png"),
+                plot = crop_plot,
+                width = 13,
+                height = 10)

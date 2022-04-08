@@ -483,19 +483,37 @@ data.frame(
 ## Annual {.tabset}
 <!-------------------------->
 
-### Total
+### Total {.tabset .tabset-pills}
+#### Withdrawal
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Total Annual Water Withdrawal by SSP-RCP-GCM"}
 knitr::include_graphics("images/figure1.png")
 ```
+#### Consumption
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Total Annual Water Consumption by SSP-RCP-GCM"}
+knitr::include_graphics("images/figure1_c.png")
+```
 
-### By Sector
+### By Sector {.tabset .tabset-pills}
+
+#### Withdrawal
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-GCM and Sector"}
 knitr::include_graphics("images/figure2.png")
 ```
+#### Consumption
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Consumption by SSP-RCP-GCM and Sector"}
+knitr::include_graphics("images/figure2_c.png")
+```
 
-### Crops
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-GCM and Sector"}
+### Crops {.tabset .tabset-pills}
+
+#### Withdrawal
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Withdrawal by SSP-RCP-GCM and Crop"}
 knitr::include_graphics("images/figure6.png")
+```
+
+#### Consumption
+```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Global Annual Water Consumption by SSP-RCP-GCM and Crop"}
+knitr::include_graphics("images/figure6_c.png")
 ```
 
 ### GCMs {.tabset .tabset-pills}
