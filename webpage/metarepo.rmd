@@ -195,6 +195,10 @@ knitr::include_graphics("images/workflow2.jpg")
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
 
+```{r, echo=FALSE, out.width="75%", fig.align='center', fig.cap="Spatial Workflow"}
+knitr::include_graphics("images/spatialworkflow.png")
+```
+
 Water withdrawals and consumption data for each sector are downscaled spatially first, from GCAM's 32 regions (or in the case of irrigation, 434 region-basin intersections) to a 0.5 degree gridded format. Of the 259,200 possible grid cells at this resolution (360 x 720), only the 67,420 cells categorized as land are considered.
 Different sectors use different algorithms to allocate a region's water withdrawals and consumption among its constituent grid cells, but in principle they are very similar: use gridded values of some proxy quantity to approximate the spatial distribution (i.e., divide each cell's value by the total of all cells belonging to that region), then apply that distribution to GCAM's value. These algorithms were derived from research by Edmonds and Reilly, 1985.
 
@@ -206,13 +210,8 @@ For spatial downscaling, the workflow is divided into three parts:
 
 These are explained in detail in their respective subsections. Keep in mind that downscaling occurs not just for all regions in a single slice of time, but for every 5 years from 2010 to 2100, across 75 alternative futures (SSP-RCP-GCM combinations).
 
-
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Workflow 3"}
 knitr::include_graphics("images/workflow3.jpg")
-```
-
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Spatial Workflow"}
-knitr::include_graphics("images/spatialworkflow.png")
 ```
 
 <br>
@@ -483,7 +482,7 @@ data.frame(
 ## Annual {.tabset}
 <!-------------------------->
 
-### Total {.tabset .tabset-pills}
+### Total {.tabset .tabset-pills}           
 #### Withdrawal
 ```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap="Total Annual Water Withdrawal by SSP-RCP-GCM"}
 knitr::include_graphics("images/figure1.png")
@@ -562,15 +561,15 @@ knitr::include_graphics("images/figure4b.png")
 knitr::include_graphics("images/figure5.png")
 ```
 
-<!-------------------------->
-## Maps {.tabset}
-<!-------------------------->
-```{r, echo=FALSE, out.width="100%", fig.align='center'}
-knitr::include_graphics("images/facetmapannual.png")
-```
-```{r, echo=FALSE, out.width="100%", fig.align='center'}
-knitr::include_graphics("images/facetmapmonthly.png")
-```
+<!-- <!--------------------------> -->
+<!-- ## Maps {.tabset} -->
+<!-- <!--------------------------> -->
+<!-- ```{r, echo=FALSE, out.width="100%", fig.align='center'} -->
+<!-- knitr::include_graphics("images/facetmapannual.png") -->
+<!-- ``` -->
+<!-- ```{r, echo=FALSE, out.width="100%", fig.align='center'} -->
+<!-- knitr::include_graphics("images/facetmapmonthly.png") -->
+<!-- ``` -->
 
 <br>
 
@@ -581,11 +580,17 @@ knitr::include_graphics("images/facetmapmonthly.png")
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
 
+It is important to confirm that the water withdrawal and consumption totals are preserved at all stages of the downscaling process. Floating point calculations lead to some loss of precision, but the downscaling algorithms themselves should not meaningfully change the totals.
+
+While this is a necessary check, it does not necessarily say anything about the "correctness" of our downscaled results. Validation for the downscaling algorithms used by Tethys can be found in their respective sources. Additionally, we compare the spatial and temporal distributions of our results with those of similar data sets.
+
 <!-------------------------->
 ## Spatial {.tabset}
 <!-------------------------->
 
-6 of the 434 region-basin intersections are smaller than the output resolution, and are dropped, causing a small loss of water.
+For each region (or region-basin intersection), year, sector (or crop), and scenario, we plot the withdrawal and consumption value from GCAM compared to the value reaggregated from Tethys annual outputs.
+
+6 of the 434 region-basin intersections are smaller than the output resolution, and are dropped, causing a correspondingly small loss of water in the irrigation sector.
 
 <!-------------------------->
 ### Withdrawals {.tabset .tabset-pills}
@@ -619,6 +624,8 @@ knitr::include_graphics("images/validation6.png")
 ## Temporal {.tabset}
 <!-------------------------->
 
+For each of the same categories as above, we compare the GCAM value with the value reaggregated from Tethys monthly outputs.
+
 <!-------------------------->
 ### Withdrawals {.tabset .tabset-pills}
 <!-------------------------->
@@ -646,6 +653,37 @@ knitr::include_graphics("images/validation7.png")
 ```{r, echo=FALSE, out.width="75%", fig.align='center', fig.cap="Annual vs Reaggregated Monthly"}
 knitr::include_graphics("images/validation8.png")
 ```
+
+## Similar Data Sets
+
+There are inherent challenges with validating water demand projections across alternative futures. Since this work is primarily concerned with the downscaling of existing projections to a gridded monthly scale, we look at how spatial and temporal patterns in our year 2010 outputs (for which all scenarios are identical) compare to those of similar data sets.
+
+The first data set we look at is from Huang et al. (2018), which used an earlier version of Tethys on historical data from 1971-2010. The underlying data have more regions and different totals, but many of the downscaling methods are identical, leading to similar results.
+
+```{r, echo=FALSE, out.width="75%", fig.align='center'}
+knitr::include_graphics("images/comparisonHuang.png")
+```
+
+The second data set we compared is from Mekonnen, M.M. and Hoekstra, A.Y. (2011). It contains monthly total blue water consumption values representing an average of years 1996-2005, which is close enough to 2010 to compare with our data set, though this probably accounts for some of the differences. The sectoral breakdown is also different, but the data are at the same spatial resolution, so we can compare monthly totals for each grid cell.
+
+```{r, echo=FALSE, out.width="75%", fig.align='center'}
+knitr::include_graphics("images/comparisonWaterfootprint.png")
+```
+
+Directly comparing cell values between data sets shows the differences, but gives a somewhat limited picture of the overall distributions. To get a sense for the spatial patterns we map the 2010 (or 1996-2005) withdrawal and consumption totals from each set.
+
+```{r, echo=FALSE, out.width="75%", fig.align='center'}
+knitr::include_graphics("images/comparison_spatial.png")
+```
+
+To compare seasonal water demand changes, we plot the monthly global totals for each data set.
+
+```{r, echo=FALSE, out.width="75%", fig.align='center'}
+knitr::include_graphics("images/comparison_temporal_alt.png")
+```
+
+
+
 
 # Basin Examples
 We have selected the following regions from literature to explore in more detail, as a way of showing the full resolution of this data set.

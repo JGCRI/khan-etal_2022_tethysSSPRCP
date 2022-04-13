@@ -599,6 +599,12 @@ Workflow 2
 <p align="center">
 <img src="images/divider.png">
 </p>
+<div class="figure" style="text-align: center">
+<img src="images/spatialworkflow.png" alt="Spatial Workflow" width="75%" />
+<p class="caption">
+Spatial Workflow
+</p>
+</div>
 <p>Water withdrawals and consumption data for each sector are downscaled spatially first, from GCAM’s 32 regions (or in the case of irrigation, 434 region-basin intersections) to a 0.5 degree gridded format. Of the 259,200 possible grid cells at this resolution (360 x 720), only the 67,420 cells categorized as land are considered. Different sectors use different algorithms to allocate a region’s water withdrawals and consumption among its constituent grid cells, but in principle they are very similar: use gridded values of some proxy quantity to approximate the spatial distribution (i.e., divide each cell’s value by the total of all cells belonging to that region), then apply that distribution to GCAM’s value. These algorithms were derived from research by Edmonds and Reilly, 1985.</p>
 <p>For spatial downscaling, the workflow is divided into three parts:</p>
 <ul>
@@ -611,12 +617,6 @@ Workflow 2
 <img src="images/workflow3.jpg" alt="Workflow 3" width="100%" />
 <p class="caption">
 Workflow 3
-</p>
-</div>
-<div class="figure" style="text-align: center">
-<img src="images/spatialworkflow.png" alt="Spatial Workflow" width="100%" />
-<p class="caption">
-Spatial Workflow
 </p>
 </div>
 <p><br></p>
@@ -1191,16 +1191,12 @@ Without Irrigation
 Without Irrigation
 </p>
 </div>
-<!-------------------------->
-</div>
-</div>
-<div id="maps" class="section level2 tabset">
-<h2 class="tabset">Maps</h2>
-<!-------------------------->
-<p><img src="images/facetmapannual.png" width="100%" style="display: block; margin: auto;" /> <img src="images/facetmapmonthly.png" width="100%" style="display: block; margin: auto;" /></p>
+<!-- <!-------------------------->
+<p>–&gt; <!-- ## Maps {.tabset} --> <!-- <!--------------------------> –&gt; <!-- ```{r, echo=FALSE, out.width="100%", fig.align='center'} --> <!-- knitr::include_graphics("images/facetmapannual.png") --> <!-- ``` --> <!-- ```{r, echo=FALSE, out.width="100%", fig.align='center'} --> <!-- knitr::include_graphics("images/facetmapmonthly.png") --> <!-- ``` --></p>
 <p><br></p>
 <!-------------------------->
 <!-------------------------->
+</div>
 </div>
 </div>
 <div id="validation" class="section level1">
@@ -1210,11 +1206,14 @@ Without Irrigation
 <p align="center">
 <img src="images/divider.png">
 </p>
+<p>It is important to confirm that the water withdrawal and consumption totals are preserved at all stages of the downscaling process. Floating point calculations lead to some loss of precision, but the downscaling algorithms themselves should not meaningfully change the totals.</p>
+<p>While this is a necessary check, it does not necessarily say anything about the “correctness” of our downscaled results. Validation for the downscaling algorithms used by Tethys can be found in their respective sources. Additionally, we compare the spatial and temporal distributions of our results with those of similar data sets.</p>
 <!-------------------------->
 <div id="spatial" class="section level2 tabset">
 <h2 class="tabset">Spatial</h2>
 <!-------------------------->
-<p>6 of the 434 region-basin intersections are smaller than the output resolution, and are dropped, causing a small loss of water.</p>
+<p>For each region (or region-basin intersection), year, sector (or crop), and scenario, we plot the withdrawal and consumption value from GCAM compared to the value reaggregated from Tethys annual outputs.</p>
+<p>6 of the 434 region-basin intersections are smaller than the output resolution, and are dropped, causing a correspondingly small loss of water in the irrigation sector.</p>
 <!-------------------------->
 <div id="withdrawals" class="section level3 tabset tabset-pills">
 <h3 class="tabset tabset-pills">Withdrawals</h3>
@@ -1266,6 +1265,7 @@ GCAM inputs vs grids Reaggregated
 <div id="temporal" class="section level2 tabset">
 <h2 class="tabset">Temporal</h2>
 <!-------------------------->
+<p>For each of the same categories as above, we compare the GCAM value with the value reaggregated from Tethys monthly outputs.</p>
 <!-------------------------->
 <div id="withdrawals-1" class="section level3 tabset tabset-pills">
 <h3 class="tabset tabset-pills">Withdrawals</h3>
@@ -1312,6 +1312,18 @@ Annual vs Reaggregated Monthly
 </div>
 </div>
 </div>
+</div>
+<div id="similar-data-sets" class="section level2">
+<h2>Similar Data Sets</h2>
+<p>There are inherent challenges with validating water demand projections across alternative futures. Since this work is primarily concerned with the downscaling of existing projections to a gridded monthly scale, we look at how spatial and temporal patterns in our year 2010 outputs (for which all scenarios are identical) compare to those of similar data sets.</p>
+<p>The first data set we look at is from Huang et al. (2018), which used an earlier version of Tethys on historical data from 1971-2010. The underlying data have more regions and different totals, but many of the downscaling methods are identical, leading to similar results.</p>
+<p><img src="images/comparisonHuang.png" width="75%" style="display: block; margin: auto;" /></p>
+<p>The second data set we compared is from Mekonnen, M.M. and Hoekstra, A.Y. (2011). It contains monthly total blue water consumption values representing an average of years 1996-2005, which is close enough to 2010 to compare with our data set, though this probably accounts for some of the differences. The sectoral breakdown is also different, but the data are at the same spatial resolution, so we can compare monthly totals for each grid cell.</p>
+<p><img src="images/comparisonWaterfootprint.png" width="75%" style="display: block; margin: auto;" /></p>
+<p>Directly comparing cell values between data sets shows the differences, but gives a somewhat limited picture of the overall distributions. To get a sense for the spatial patterns we map the 2010 (or 1996-2005) withdrawal and consumption totals from each set.</p>
+<p><img src="images/comparison_spatial.png" width="75%" style="display: block; margin: auto;" /></p>
+<p>To compare seasonal water demand changes, we plot the monthly global totals for each data set.</p>
+<p><img src="images/comparison_temporal_alt.png" width="75%" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="basin-examples" class="section level1">
