@@ -248,6 +248,80 @@ generate_figures <- function(folder=NULL,
                     plot = p6,
                     width = 13,
                     height = 10) # save plot
+    
+    
+    ### consumption figures
+    annual_consumption <- readRDS("../data/consumption_sums.rds")
+    annual_consumption <- dplyr::group_by(annual_consumption, scenario, sector, year)
+    annual_consumption <- dplyr::summarise(annual_consumption, value = sum(value))
+    annual_consumption <- dplyr::ungroup(annual_consumption)
+    annual_consumption <- dplyr::mutate(annual_consumption, SSP = paste0("SSP ", substr(scenario, 4, 4)),
+                                        RCP = paste0("RCP ", substr(scenario, 9, 9), ".", substr(scenario, 10, 10)),
+                                        GCM = substr(scenario, 12, 17))
+    
+    total_consumption <- dplyr::filter(annual_consumption, sector=="total")
+    total_plot <- ggplot2::ggplot(data = total_consumption,
+                                  ggplot2::aes(x = year,
+                                               y = value,
+                                               group = GCM)) +
+      ggplot2::geom_line(ggplot2::aes(color=GCM)) +
+      ggplot2::scale_color_manual(values=gcm_pal) +
+      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+      ggplot2::ggtitle("Total Global Annual Water Consumption by SSP-RCP-GCM") +
+      ggplot2::xlab("Year") +
+      ggplot2::ylab("Water Consumption (km3/year)") +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5))
+    ggplot2::ggsave(filename = paste0(images, "figure1_c.png"),
+                    plot = total_plot,
+                    width = 13,
+                    height = 10)
+    
+    sectoral_consumption <- dplyr::filter(annual_consumption, sector %in% c("dom", "elec", "irr", "liv", "mfg", "min"))
+    sectoral_consumption$sector <- c("dom" = "Domestic",
+                                     "elec" = "Electricity",
+                                     "mfg" = "Manufacturing",
+                                     "min" = "Mining",
+                                     "irr" = "Irrigation",
+                                     "liv" = "Livestock")[sectoral_consumption$sector]
+    
+    sectoral_plot <- ggplot2::ggplot(data = sectoral_consumption,
+                                     ggplot2::aes(x = year,
+                                                  y = value,
+                                                  group = interaction(GCM, sector))) +
+      ggplot2::geom_line(ggplot2::aes(color=sector)) +
+      ggplot2::scale_color_manual(values=water_pal) +
+      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+      ggplot2::ggtitle("Global Annual Water Consumption by SSP-RCP-GCM and Sector") +
+      ggplot2::xlab("Year") +
+      ggplot2::ylab("Water Consumption (km3/year)") + 
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5))
+    ggplot2::ggsave(filename = paste0(images, "figure2_c.png"),
+                    plot = sectoral_plot,
+                    width = 13,
+                    height = 10)
+    
+    crop_consumption <- dplyr::filter(annual_consumption, !sector %in% c("dom", "elec", "irr", "liv", "mfg", "min", "nonag", "total"))
+    
+    crop_plot <- ggplot2::ggplot(data = crop_consumption,
+                                 ggplot2::aes(x = year,
+                                              y = value,
+                                              group = interaction(GCM, sector))) +
+      ggplot2::geom_line(ggplot2::aes(color=sector)) +
+      ggplot2::scale_color_manual(values=crop_pal) +
+      ggplot2::facet_grid(RCP~SSP,scales="fixed") +
+      ggplot2::ggtitle("Annual Crop Water Consumption by SSP-RCP-GCM and Sector") +
+      ggplot2::xlab("Year") +
+      ggplot2::ylab("Water Consumption (km3/year)") + 
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x=ggplot2::element_text(angle=90,vjust=0.5))
+    ggplot2::ggsave(filename = paste0(images, "figure6_c.png"),
+                    plot = crop_plot,
+                    width = 13,
+                    height = 10)
+    
+    
   }
 
   # Monthly plots
@@ -340,6 +414,86 @@ generate_figures <- function(folder=NULL,
 
   # Workflow illustrations
   if(grepl("workflow|all",temporal_scale,ignore.case=T)){
+    
+    # pretty overview total picture
+    mydata <- get_data(folder = folder, scenarios = "ssp1_rcp26_gfdl",
+                       sectors = c("total"),
+                       years=2010, months=0)
+    
+    rm <- rmap::map(mydata, save=F, show=F, background = T, legendType="continuous",
+                    crop_to_underLayer = T,
+                    underLayer = rmap::mapCountries,
+                    overLayer =  rmap::mapCountries)
+    
+    a <- rm[[1]] + ggplot2::scale_fill_gradientn(
+      colors = rev(jgcricol()$pal_spectral),
+      rescaler = ~(.x/max(.x))^0.25,
+      guide="none")
+    
+    grDevices::png(paste0(images,"total.png"),width=13,height=7,units="in",res=288); print(a); grDevices::dev.off()
+    
+    
+    ### Alternate spatial downscaling fig
+    
+    region_data <- readRDS("../data/region_data.rds")
+    region_data <- dplyr::ungroup(region_data)
+    region_data <- dplyr::filter(region_data, year==2010, scenario=="ssp1_rcp26_gfdl")
+    region_data <- dplyr::select(region_data, region=subRegion_GCAMReg32, basin=subRegion_GCAMBasin, sector=class, value)
+    region_data_irr <- dplyr::filter(region_data, sector=="Irrigation")
+    region_data_nonirr <- dplyr::filter(region_data, sector!="Irrigation")
+    
+    converter_irr <- dplyr::select(rmap::mapping_tethys_grid_basin_region_country, lon, lat, region=regionName, basin=basinName)
+    converter_nonirr <- dplyr::select(rmap::mapping_tethys_grid_basin_region_country, lon, lat, region=regionName)
+    
+    region_data_irr <- dplyr::full_join(region_data_irr, converter_irr)
+    region_data_nonirr <- dplyr::full_join(region_data_nonirr, converter_nonirr)
+    
+    region_data <- dplyr::bind_rows(region_data_irr, region_data_nonirr)
+    region_data$sector <- factor(region_data$sector, levels=sector_names)
+    region_data$name <- "Region/Basin Scale"
+    region_data <- dplyr::select(region_data, lon, lat, sector, name, value)
+    region_data <- tidyr::drop_na(region_data)
+    
+    region_map <- rmap::map(region_data, save=F, show=F, background=T,
+                            row="sector", col="name",
+                            legendType = "continuous")
+    region_map <- region_map[[1]] + ggplot2::scale_fill_gradientn(
+      colors = rev(jgcricol()$pal_spectral),
+      trans = scales::trans_new(name = '4th root',
+                                transform = function(x){x^0.25},
+                                inverse = function(x){x^4}),
+      limits = c(0, max(region_data$value)),
+      #guide="none",
+      name = "Water\nWithdrawals\n(km3)") + 
+      ggplot2::theme(legend.position = "bottom",
+                     legend.text = ggplot2::element_text(angle=90))
+    
+    grid_data <- get_data(folder=folder, scenarios="ssp1_rcp26_gfdl", sectors=c("dom", "elec", "irr", "liv", "mfg", "min"),
+                          years=2010, months=0)
+    grid_data$sector <- factor(sector_names[grid_data$sector], levels=sector_names)
+    grid_data$name <- "Gridded Scale"
+    grid_data <- dplyr::select(grid_data, lon, lat, sector, name, value)
+    
+    grid_map <- rmap::map(grid_data, save=F, show=F, background=T,
+                          row="sector", col="name",
+                          legendType = "continuous")
+    grid_map <- grid_map[[1]] + ggplot2::scale_fill_gradientn(
+      colors = rev(jgcricol()$pal_spectral),
+      trans = scales::trans_new(name = '4th root',
+                                transform = function(x){x^0.25},
+                                inverse = function(x){x^4}),
+      #guide="none",
+      name = "Water\nWithdrawals\n(km3)") + 
+      ggplot2::theme(legend.position = "bottom",
+                     legend.text = ggplot2::element_text(angle=90))
+    
+    
+    together <- region_map + grid_map
+    grDevices::png(paste0(images,"spatialworkflow.png"),width=9,height=11,units="in",res=300); print(together); grDevices::dev.off()
+    
+    #######################
+    
+    
     # using ssp1_rcp26_gfdl, 2010 to show spatial downscaling
     library(rmap)
 
