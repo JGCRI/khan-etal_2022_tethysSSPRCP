@@ -435,6 +435,13 @@ generate_figures <- function(folder=NULL,
     
     ### Alternate spatial downscaling fig
     
+    sector_names = c("dom"         = "Domestic",
+                     "elec"        = "Electricity",
+                     "liv"         = "Livestock",
+                     "irr"         = "Irrigation",
+                     "mfg"         = "Manufacturing",
+                     "min"         = "Mining")
+    
     region_data <- readRDS("../data/region_data.rds")
     region_data <- dplyr::ungroup(region_data)
     region_data <- dplyr::filter(region_data, year==2010, scenario=="ssp1_rcp26_gfdl")
@@ -442,11 +449,13 @@ generate_figures <- function(folder=NULL,
     region_data_irr <- dplyr::filter(region_data, sector=="Irrigation")
     region_data_nonirr <- dplyr::filter(region_data, sector!="Irrigation")
     
-    converter_irr <- dplyr::select(rmap::mapping_tethys_grid_basin_region_country, lon, lat, region=regionName, basin=basinName)
     converter_nonirr <- dplyr::select(rmap::mapping_tethys_grid_basin_region_country, lon, lat, region=regionName)
+    converter_irr <- dplyr::select(rmap::mapping_tethys_grid_basin_region_country, lon, lat, region=regionName, basin=basinName)
     
-    region_data_irr <- dplyr::full_join(region_data_irr, converter_irr)
     region_data_nonirr <- dplyr::full_join(region_data_nonirr, converter_nonirr)
+    region_data_irr <- dplyr::full_join(region_data_irr, converter_irr)
+    region_data_irr$sector <- "Irrigation"
+    region_data_irr$value <- tidyr::replace_na(region_data_irr$value, 0)
     
     region_data <- dplyr::bind_rows(region_data_irr, region_data_nonirr)
     region_data$sector <- factor(region_data$sector, levels=sector_names)

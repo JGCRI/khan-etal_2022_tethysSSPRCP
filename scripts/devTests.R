@@ -14,12 +14,6 @@ folder = "C:/Users/thom927/Documents/Data/tethysDemeterOutputs"
 GCAM_withdrawals_csv = "C:/Users/thom927/Documents/Data/GrahamGCAM/water_withdrawals_by_mapping_source.csv"
 GCAM_consumption_csv = "C:/Users/thom927/Documents/Data/GrahamGCAM/water_consumption_by_mapping_source.csv"
 
-sector_names = c("dom"         = "Domestic",
-                 "elec"        = "Electricity",
-                 "liv"         = "Livestock",
-                 "irr"         = "Irrigation",
-                 "mfg"         = "Manufacturing",
-                 "min"         = "Mining")
 
 out <- generate_figures(annual_rds = "annual_data.rds",
                         monthly_rds = "monthly_data.rds",
