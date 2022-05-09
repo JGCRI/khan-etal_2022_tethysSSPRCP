@@ -796,7 +796,7 @@ Temporal Workflow
 <div id="workflow-4a---domestic" class="section level2">
 <h2>Workflow 4a - Domestic</h2>
 <!-------------------------->
-<p>Temporally downscaling domestic withdrawal uses a formula from Wada et al., 2011 (<a href="http://dx.doi.org/10.1029/2010WR009792" class="uri">http://dx.doi.org/10.1029/2010WR009792</a>), with data from Huang et al. 2017 (<a href="https://doi.org/10.5194/hess-2017-551" class="uri">https://doi.org/10.5194/hess-2017-551</a>). Withdrawals for each month of a year for some cell are given by the formula</p>
+<p>Temporally downscaling domestic withdrawal uses a formula from Wada et al., 2011 (<a href="http://dx.doi.org/10.1029/2010WR009792" class="uri">http://dx.doi.org/10.1029/2010WR009792</a>), with data from Huang et al., 2018 (<a href="https://doi.org/10.5194/hess-22-2117-2018" class="uri">https://doi.org/10.5194/hess-22-2117-2018</a>). Withdrawals for each month of a year for some cell are given by the formula</p>
 <p><span class="math display">\[\text{withdrawal}_\text{month} = \frac{\text{withdrawal}_\text{year}}{12} \times \left(\frac{\text{temperature}_\text{month} - \text{temperature}_\text{mean}}{\text{temperature}_\text{max} - \text{temperature}_\text{min}}R + 1\right).\]</span></p>
 <p>Here <span class="math inline">\(\text{temperature}_\text{month}\)</span> is the average temperature that month, <span class="math inline">\(\text{temperature}_\text{mean}\)</span>, <span class="math inline">\(\text{temperature}_\text{max}\)</span>, and <span class="math inline">\(\text{temperature}_\text{min}\)</span> are the mean, maximum, and minimum among monthly average temperatures for that year. <span class="math inline">\(R\)</span> is a parameter representing the relative difference of water withdrawals between the warmest and coolest months of the year. Note that the monthly values given by this formula add back up to the total for the year (at least conceptually, since floating point arithmetic doesn’t work out perfectly).</p>
 <table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
@@ -825,10 +825,10 @@ Domestic R
 DomesticR.csv
 </td>
 <td style="text-align:left;">
-Huang et al., 2017
+Huang et al., 2018
 </td>
 <td style="text-align:left;">
-<a href="https://doi.org/10.5194/hess-2017-551" class="uri">https://doi.org/10.5194/hess-2017-551</a>
+<a href="https://doi.org/10.5194/hess-22-2117-2018" class="uri">https://doi.org/10.5194/hess-22-2117-2018</a>
 </td>
 </tr>
 <tr>
@@ -858,7 +858,7 @@ Weedon et al., 2014
 <p>Here <span class="math inline">\(p_\text{b}\)</span> and <span class="math inline">\(p_\text{it}\)</span> are the proportions of electricity used for buildings and industry/transportation respectively, with <span class="math inline">\(p_\text{b} + p_\text{it} = 1\)</span>. The electricity use for industry and transportation is assumed to be uniform throughout the year, while building electricity is further broken down by heating (<span class="math inline">\(p_\text{h}\)</span>), cooling (<span class="math inline">\(p_\text{c}\)</span>), and other (<span class="math inline">\(p_\text{u}\)</span>), with <span class="math inline">\(p_\text{h} + p_\text{c} + p_\text{u} = 1\)</span>.</p>
 <p>Heating degree days (HDD) and cooling degree days (CDD) are indicators for the amount of electricity used to heat and cool buildings, and are calculated from mean daily outdoor air temperature. HDD for a month is the sum of <span class="math inline">\((18-\text{temperature}_\text{day})\)</span> across all days where temperature is less than 18 degrees Celsius. CDD is the sum of <span class="math inline">\((\text{temperature}_\text{day} - 18)\)</span> across all days where temperature is greater than 18. Annual HDD and CDD are the sum of their respective monthly values.</p>
 <p>Tethys uses HDD, CDD, and <span class="math inline">\(p\)</span> values for each cell from the nearest available year in the input files listed at the end of this subsection, which is 2010 for this data set.</p>
-<p>The formula is modified for cells with low annual HDD or CDD as described in Huang et al., 2017, since these may not have heating or cooling services despite nonzero values of <span class="math inline">\(p_\text{h}\)</span> or <span class="math inline">\(p_\text{c}\)</span>. When <span class="math inline">\(\text{HDD}_\text{year} &lt; 650\)</span>, The HDD term is removed and <span class="math inline">\(p_\text{h}\)</span> is reallocated to the cooling proportion, giving</p>
+<p>The formula is modified for cells with low annual HDD or CDD as described in Huang et al., 2018, since these may not have heating or cooling services despite nonzero values of <span class="math inline">\(p_\text{h}\)</span> or <span class="math inline">\(p_\text{c}\)</span>. When <span class="math inline">\(\text{HDD}_\text{year} &lt; 650\)</span>, The HDD term is removed and <span class="math inline">\(p_\text{h}\)</span> is reallocated to the cooling proportion, giving</p>
 <p><span class="math display">\[\text{withdrawal}_\text{month} = \text{withdrawal}_\text{year} \times \left[p_\text{b}\times\left((p_\text{h} + p_\text{c})\frac{\text{CDD}_\text{month}}{\text{CDD}_\text{year}}+p_\text{u}\frac{1}{12}\right) + p_\text{it}\frac{1}{12}\right].\]</span></p>
 <p>Likewise, when <span class="math inline">\(\text{CDD}_\text{year} &lt; 450\)</span>, the formula becomes</p>
 <p><span class="math display">\[\text{withdrawal}_\text{month} = \text{withdrawal}_\text{year} \times \left[p_\text{b}\times\left((p_\text{h} + p_\text{c})\frac{\text{HDD}_\text{month}}{\text{HDD}_\text{year}}+p_\text{u}\frac{1}{12}\right) + p_\text{it}\frac{1}{12}\right].\]</span></p>
@@ -891,10 +891,10 @@ Building Proportion
 ElecBuilding_1971_2010.csv
 </td>
 <td style="text-align:left;">
-IEA historical data, Huang et al., 2017
+IEA historical data, Huang et al., 2018
 </td>
 <td style="text-align:left;">
-<a href="https://doi.org/10.5194/hess-2017-551" class="uri">https://doi.org/10.5194/hess-2017-551</a>
+<a href="https://doi.org/10.5194/hess-22-2117-2018" class="uri">https://doi.org/10.5194/hess-22-2117-2018</a>
 </td>
 </tr>
 <tr>
@@ -905,10 +905,10 @@ Industry/Technology Proportion
 ElecIndustry_1971_2010.csv
 </td>
 <td style="text-align:left;">
-IEA historical data, Huang et al., 2017
+IEA historical data, Huang et al., 2018
 </td>
 <td style="text-align:left;">
-<a href="https://doi.org/10.5194/hess-2017-551" class="uri">https://doi.org/10.5194/hess-2017-551</a>
+<a href="https://doi.org/10.5194/hess-22-2117-2018" class="uri">https://doi.org/10.5194/hess-22-2117-2018</a>
 </td>
 </tr>
 <tr>
@@ -919,10 +919,10 @@ Heating Proportion
 ElecBuildingHeat_1971_2010.csv
 </td>
 <td style="text-align:left;">
-IEA historical data, Huang et al., 2017
+IEA historical data, Huang et al., 2018
 </td>
 <td style="text-align:left;">
-<a href="https://doi.org/10.5194/hess-2017-551" class="uri">https://doi.org/10.5194/hess-2017-551</a>
+<a href="https://doi.org/10.5194/hess-22-2117-2018" class="uri">https://doi.org/10.5194/hess-22-2117-2018</a>
 </td>
 </tr>
 <tr>
@@ -933,10 +933,10 @@ Cooling Proportion
 ElecBuildingCool_1971_2010.csv
 </td>
 <td style="text-align:left;">
-IEA historical data, Huang et al., 2017
+IEA historical data, Huang et al., 2018
 </td>
 <td style="text-align:left;">
-<a href="https://doi.org/10.5194/hess-2017-551" class="uri">https://doi.org/10.5194/hess-2017-551</a>
+<a href="https://doi.org/10.5194/hess-22-2117-2018" class="uri">https://doi.org/10.5194/hess-22-2117-2018</a>
 </td>
 </tr>
 <tr>
@@ -947,10 +947,10 @@ Other Proportion
 ElecBuildingOthers_1971_2010.csv
 </td>
 <td style="text-align:left;">
-IEA historical data, Huang et al., 2017
+IEA historical data, Huang et al., 2018
 </td>
 <td style="text-align:left;">
-<a href="https://doi.org/10.5194/hess-2017-551" class="uri">https://doi.org/10.5194/hess-2017-551</a>
+<a href="https://doi.org/10.5194/hess-22-2117-2018" class="uri">https://doi.org/10.5194/hess-22-2117-2018</a>
 </td>
 </tr>
 <tr>

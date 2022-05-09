@@ -345,7 +345,7 @@ knitr::include_graphics("images/temporalworkflow.png")
 ## Workflow 4a - Domestic
 <!-------------------------->
 
-Temporally downscaling domestic withdrawal uses a formula from Wada et al., 2011 (http://dx.doi.org/10.1029/2010WR009792), with data from Huang et al. 2017 (https://doi.org/10.5194/hess-2017-551). Withdrawals for each month of a year for some cell are given by the formula
+Temporally downscaling domestic withdrawal uses a formula from Wada et al., 2011 (http://dx.doi.org/10.1029/2010WR009792), with data from Huang et al., 2018 (https://doi.org/10.5194/hess-22-2117-2018). Withdrawals for each month of a year for some cell are given by the formula
 
 $$\text{withdrawal}_\text{month} = \frac{\text{withdrawal}_\text{year}}{12} \times \left(\frac{\text{temperature}_\text{month} - \text{temperature}_\text{mean}}{\text{temperature}_\text{max} - \text{temperature}_\text{min}}R + 1\right).$$
 
@@ -358,9 +358,9 @@ data.frame(
            "WFDEI"),
   File = c("DomesticR.csv",
            "watch_wfdei_monthly_1971_2010.npz"),
-  Reference = c("Huang et al., 2017",
+  Reference = c("Huang et al., 2018",
                 "Weedon et al., 2014"),
-  Source = c("https://doi.org/10.5194/hess-2017-551",
+  Source = c("https://doi.org/10.5194/hess-22-2117-2018",
              "https://doi.org/10.1002/2014WR015638")
     ) %>% 
   kbl() %>%
@@ -383,7 +383,7 @@ Heating degree days (HDD) and cooling degree days (CDD) are indicators for the a
 
 Tethys uses HDD, CDD, and $p$ values for each cell from the nearest available year in the input files listed at the end of this subsection, which is 2010 for this data set.
 
-The formula is modified for cells with low annual HDD or CDD as described in Huang et al., 2017, since these may not have heating or cooling services despite nonzero values of $p_\text{h}$ or $p_\text{c}$. When $\text{HDD}_\text{year} < 650$, The HDD term is removed and $p_\text{h}$ is reallocated to the cooling proportion, giving
+The formula is modified for cells with low annual HDD or CDD as described in Huang et al., 2018, since these may not have heating or cooling services despite nonzero values of $p_\text{h}$ or $p_\text{c}$. When $\text{HDD}_\text{year} < 650$, The HDD term is removed and $p_\text{h}$ is reallocated to the cooling proportion, giving
 
 $$\text{withdrawal}_\text{month} = \text{withdrawal}_\text{year} \times \left[p_\text{b}\times\left((p_\text{h} + p_\text{c})\frac{\text{CDD}_\text{month}}{\text{CDD}_\text{year}}+p_\text{u}\frac{1}{12}\right) + p_\text{it}\frac{1}{12}\right].$$
 
@@ -412,17 +412,17 @@ data.frame(
            "ElecBuildingCool_1971_2010.csv",
            "ElecBuildingOthers_1971_2010.csv",
            "watch_wfdei_monthly_1971_2010.npz"),
-  Reference = c("IEA historical data, Huang et al., 2017",
-                "IEA historical data, Huang et al., 2017",
-                "IEA historical data, Huang et al., 2017",
-                "IEA historical data, Huang et al., 2017",
-                "IEA historical data, Huang et al., 2017",
+  Reference = c("IEA historical data, Huang et al., 2018",
+                "IEA historical data, Huang et al., 2018",
+                "IEA historical data, Huang et al., 2018",
+                "IEA historical data, Huang et al., 2018",
+                "IEA historical data, Huang et al., 2018",
                 "Weedon et al., 2014"),
-  Source = c("https://doi.org/10.5194/hess-2017-551",
-             "https://doi.org/10.5194/hess-2017-551",
-             "https://doi.org/10.5194/hess-2017-551",
-             "https://doi.org/10.5194/hess-2017-551",
-             "https://doi.org/10.5194/hess-2017-551",
+  Source = c("https://doi.org/10.5194/hess-22-2117-2018",
+             "https://doi.org/10.5194/hess-22-2117-2018",
+             "https://doi.org/10.5194/hess-22-2117-2018",
+             "https://doi.org/10.5194/hess-22-2117-2018",
+             "https://doi.org/10.5194/hess-22-2117-2018",
              "https://doi.org/10.1002/2014WR015638")
     ) %>% 
   kbl() %>%
