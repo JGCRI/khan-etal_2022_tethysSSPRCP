@@ -9,7 +9,7 @@ pagetitle: khan_etal_2022_tethysSSPRCP
 
 <!-------------------------->
 <!-------------------------->
-### **A global gridded monthly water withdrawal dataset for multiple sectors from 2010 to 2100 at 0.5° resolution under a range of socioeconomic and climate scenarios**
+### **Global monthly sectoral water use for 2010-2100 at 0.5° resolution across alternative futures**
 <!-------------------------->
 <!-------------------------->
 <p align="center"> <img src="images/divider.png"></p>
