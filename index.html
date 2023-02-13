@@ -13,7 +13,7 @@
 
 <title>khan_etal_2022_tethysSSPRCP</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -59,6 +59,7 @@ if (window.hljs) {
 
 
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 
 
@@ -83,6 +84,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -235,7 +239,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -283,19 +287,41 @@ $(document).ready(function () {
 
 
 <div class="header_logo">
-<p><img src="images/logo_gcims_white.png" style="float:right;height:30px; padding-top:10px;"> <img src="images/logo_pnnl_white.png" style="float:right;height:40px;"></p>
+<p><img src="images/logo_gcims_white.png" style="float:right;height:30px; padding-top:10px;">
+<img src="images/logo_pnnl_white.png" style="float:right;height:40px;"></p>
 </div>
 <!-------------------------->
 <!-------------------------->
-<div id="a-global-gridded-monthly-water-withdrawal-dataset-for-multiple-sectors-from-2010-to-2100-at-0.5-resolution-under-a-range-of-socioeconomic-and-climate-scenarios" class="section level3">
-<h3><strong>A global gridded monthly water withdrawal dataset for multiple sectors from 2010 to 2100 at 0.5° resolution under a range of socioeconomic and climate scenarios</strong></h3>
+<div
+id="global-monthly-sectoral-water-use-for-2010-2100-at-0.5-resolution-across-alternative-futures"
+class="section level3">
+<h3><strong>Global monthly sectoral water use for 2010-2100 at 0.5°
+resolution across alternative futures</strong></h3>
 <!-------------------------->
 <!-------------------------->
 <p align="center">
 <img src="images/divider.png">
 </p>
-<p><a href = "metarepo.html"> <img src="images/cover.png" width="80%" style="display: block; margin: auto;" /> </a></p>
-<p>Future sectoral-specific water withdrawals at a temporal resolution capable of representing patterns in seasonality and a commonly used spatial resolution are an important factor to consider for energy, water, land and environmental research. Projected water withdrawals that are harmonized with assumptions for alternate futures that capture socioeconomic and climatic variation are critical for many modeling studies on future global and regional dynamics. Here we generate a novel global gridded water withdrawals dataset by coupling Global Change Analysis Model (GCAM) with a land use spatial downscaling model (Demeter), a global hydrologic framework (Xanthos) and a water withdrawal downscaling model (Tethys) for the five Shared Socioeconomic Pathways (SSPs) and four Representative Concentration Pathways (RCPs) scenarios. The dataset provides sectoral monthly data at 0.5° resolution for years 2010 to 2100. The presented dataset will be useful for both global and regional analysis looking at the impacts of socioeconomic, climate and technological futures as well as in characterizing the uncertainties associated with these impacts.</p>
+<p><a href = "metarepo.html">
+<img src="images/cover.png" width="80%" style="display: block; margin: auto;" />
+</a></p>
+<p>Future sectoral-specific water withdrawals at a temporal resolution
+capable of representing patterns in seasonality and a commonly used
+spatial resolution are an important factor to consider for energy,
+water, land and environmental research. Projected water withdrawals that
+are harmonized with assumptions for alternate futures that capture
+socioeconomic and climatic variation are critical for many modeling
+studies on future global and regional dynamics. Here we generate a novel
+global gridded water withdrawals dataset by coupling Global Change
+Analysis Model (GCAM) with a land use spatial downscaling model
+(Demeter), a global hydrologic framework (Xanthos) and a water
+withdrawal downscaling model (Tethys) for the five Shared Socioeconomic
+Pathways (SSPs) and four Representative Concentration Pathways (RCPs)
+scenarios. The dataset provides sectoral monthly data at 0.5° resolution
+for years 2010 to 2100. The presented dataset will be useful for both
+global and regional analysis looking at the impacts of socioeconomic,
+climate and technological futures as well as in characterizing the
+uncertainties associated with these impacts.</p>
 <p align="center">
 <img src="images/divider.png">
 </p>
