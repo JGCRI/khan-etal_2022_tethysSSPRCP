@@ -114,7 +114,7 @@ data.frame(
            "Demeter Outputs"),
   Version = c("v4.3.chen http://doi.org/10.5281/zenodo.3713432",
               "v1.chen http://doi.org/10.5281/zenodo.3713378"),
-  Location = c("https://data.pnnl.gov/dataset/13224",
+  Location = c("https://doi.org/10.7910/DVN/DYV29J",
                "https://data.pnnl.gov/dataset/13192")
     ) %>% 
   kbl() %>%

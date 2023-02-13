@@ -9,7 +9,7 @@
    id="svg5"
    inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
    sodipodi:docname="figure4ab_validation_withdrawal - Copy.svg"
-   inkscape:export-filename="C:\Z\metarepos\khan-etal_2022_tethysSSPRCP\paper\figures\figure4_validation_withdrawal.png"
+   inkscape:export-filename="C:\Z\metarepos\khan-etal_2022_tethysSSPRCP\paper\figures\figure4ab_validation.png"
    inkscape:export-xdpi="400"
    inkscape:export-ydpi="400"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -27,13 +27,13 @@
      inkscape:pagecheckerboard="1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.13995495"
-     inkscape:cx="1668.394"
-     inkscape:cy="1761.2811"
-     inkscape:window-width="1920"
-     inkscape:window-height="1002"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:zoom="0.19792619"
+     inkscape:cx="1669.8144"
+     inkscape:cy="2291.2582"
+     inkscape:window-width="2400"
+     inkscape:window-height="1272"
+     inkscape:window-x="1213"
+     inkscape:window-y="-1358"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1"
      inkscape:snap-bbox="true"
@@ -89,6 +89,10 @@
        position="172.50002,1131.4342"
        orientation="1,0"
        id="guide1020" />
+    <sodipodi:guide
+       position="65.826582,513.6208"
+       orientation="0,-1"
+       id="guide6504" />
   </sodipodi:namedview>
   <defs
      id="defs2">
@@ -667,7 +671,7 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6389px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke-width:0.264583"
          x="-712.89966"
          y="-446.59851"
-         id="tspan55080-7">Tethys Gridded Raggregated</tspan></text>
+         id="tspan55080-7">Tethys Gridded Reaggregated</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6389px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
@@ -825,5 +829,19 @@
        transform="matrix(0.26458333,0,0,0.26458333,-460,-170.00001)"
        id="text8787"
        style="font-size:85.3333px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect8789)" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.1111px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+       x="-97.472595"
+       y="483.39993"
+       id="text9298-4-2-1-9"
+       inkscape:export-filename="C:\Z\metarepos\khan-etal_2022_tethysSSPRCP\paper\figures\figure4ab_validation.png"
+       inkscape:export-xdpi="400"
+       inkscape:export-ydpi="400"><tspan
+         sodipodi:role="line"
+         id="tspan9296-4-5-1-8"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.1111px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="-97.472595"
+         y="483.39993">By Sector</tspan></text>
   </g>
 </svg>
